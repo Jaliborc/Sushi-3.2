@@ -17,10 +17,8 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Dropdown = LibStub('Poncho-1.0')('Frame', 'SushiDropdown', nil, 'UIDropDownMenuTemplate', SushiTipOwner)
-if not Dropdown then
-	return
-end
+local TipOwner = SushiTipOwner
+local Dropdown = LibStub('Poncho-1.0')('Frame', 'SushiDropdown', nil, 'UIDropDownMenuTemplate', TipOwner)
 
 
 --[[ Builder ]]--
@@ -48,17 +46,17 @@ function Dropdown:OnCreate()
 	self.linesTip = {}
 	
 	UIDropDownMenu_Initialize(self, self.Initialize)
-	SushiTipOwner.OnCreate (self)
+	TipOwner.OnCreate (self)
 end
 
 function Dropdown:OnAcquire()
-	SushiTipOwner.OnAcquire(self)
+	TipOwner.OnAcquire(self)
 	self:SetWidth(190)
 	self:UpdateFonts()
 end
 
 function Dropdown:OnRelease()
-	SushiTipOwner.OnRelease(self)
+	TipOwner.OnRelease(self)
 	self.small = nil
 	self:SetDisabled(nil)
 	self:SetLabel(nil)

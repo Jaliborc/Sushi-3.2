@@ -34,6 +34,7 @@ function Group:OnAcquire ()
 	self.Footer:SetPoint('BOTTOMRIGHT', -4, 4)
 	self:SetPoint('BOTTOMRIGHT', -4, 5)
 	self:SetPoint('TOPLEFT', 4, -11)
+	self:SetResizing('HORIZONTAL')
 	self:SetSize(0, 0)
 end
 

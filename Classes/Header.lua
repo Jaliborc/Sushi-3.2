@@ -17,10 +17,8 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Header = LibStub('Poncho-1.0')('Frame', 'SushiHeader', nil, nil, SushiBase)
-if not Header then
-	return
-end
+local CallHandler = SushiCallHandler
+local Header = LibStub('Poncho-1.0')('Frame', 'SushiHeader', nil, nil, CallHandler)
 
 
 --[[ Events ]]--
@@ -42,14 +40,24 @@ function Header:OnCreate ()
 end
 
 function Header:OnAcquire ()
+	CallHandler.OnAcquire (self)
+	self:SetCall('OnParentResize', self.OnParentResize)
 	self:SetFont('GameFontNormal')
 	self:SetUnderlined(nil)
+	self:OnParentResize()
 	self:SetText(nil)
 end
 
 function Header:OnSizeChanged ()
 	self.Text:SetWidth(self:GetWidth())
 	self:SetHeight(self.Text:GetHeight() + (self:IsUnderlined() and 3 or 0))
+end
+
+function Header:OnParentResize ()
+	local parent = self:GetParent()
+	if parent then
+		self:SetWidth(parent:GetWidth() - 20)
+	end
 end
 
 

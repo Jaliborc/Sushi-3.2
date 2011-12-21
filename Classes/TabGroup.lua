@@ -33,6 +33,7 @@ function Tabs:OnAcquire()
 	Group.OnAcquire (self)
 	self:SetContent(self.UpdateTabs)
 	self:SetOrientation('HORIZONTAL')
+	self:SetResizing('HORIZONTAL')
 	self:SetStyle('Panel')
 	self:SetHeight(40)
 end

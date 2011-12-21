@@ -33,8 +33,8 @@ end
 
 function Group:OnAcquire()
 	CallHandler.OnAcquire(self)
-	self.orientation = 'VERTICAL'
-	self.resize = 'HORIZONTAL'
+	self.orient = 'VERTICAL'
+	self.resize = 'VERTICAL'
 end
 
 function Group:OnRelease()
@@ -150,6 +150,10 @@ end
 function Group:CheckLimit()
 	if self.limit ~= self:GetLimit() then
 		self:UpdateLayout()
+	elseif self:CanLayout() then
+		for child in self:IterateChildren() do
+			child:FireCall('OnParentResize')
+		end
 	end
 end
 
@@ -161,7 +165,7 @@ end
 --[[ Layout ]]--
 
 function Group:UpdateLayout ()
-	if self:GetCall('UpdateChildren') and self:IsVisible() then
+	if self:CanLayout() then
 		self:Layout()
 	end
 end
@@ -178,12 +182,13 @@ function Group:Layout ()
 	
 	for i, child in ipairs(self.layout) do
 		if child ~= 1 then
-			local top, left = child.top or 0, child.left or 0
-			local bottom, right = child.bottom or 0, child.right or 0
-			local width, height = child:GetSize()
+			local top, left = self:Orient(child.top or 0, child.left or 0)
+			local bottom, right = self:Orient(child.bottom or 0, child.right or 0)
+			local width, height = self:Orient(child:GetWidth() + left + right, child:GetHeight() + top + bottom)
 			
-			width, height = self:Orient(width + left + right, height + top + bottom)
-			top, left = self:Orient(top, left)
+			print(child:GetName())
+			print('!width:', width, '!right:', right, '!left:', left)
+			print('!height:', height, '!top:', top, '!bottom:', bottom)
 			
 			if self.limit and (x + width) > self.limit then
 	 			breakLine()
@@ -207,6 +212,10 @@ end
 
 function Group:LayoutChild (child, x, y)
 	child:SetPoint('TOPLEFT', x, - y)
+end
+
+function Group:CanLayout ()
+	return self:GetCall('UpdateChildren') and self:IsVisible()
 end
 
 

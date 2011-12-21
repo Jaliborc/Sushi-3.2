@@ -26,7 +26,7 @@ EditBox.SetValue = EditBox.SetText
 EditBox.GetValue = EditBox.GetText
 EditBox.bottom = -4
 EditBox.right = 20
-EditBox.left = 20
+EditBox.left = 25
 EditBox.top = 10
 
 

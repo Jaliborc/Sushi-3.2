@@ -33,13 +33,13 @@ end
 
 function Group:OnAcquire()
 	CallHandler.OnAcquire(self)
-	self.orient = 'VERTICAL'
-	self.resize = 'VERTICAL'
+	self:SetOrientation('VERTICAL')
+	self:SetResizing('VERTICAL')
+	self:SetSize(200, 200)
 end
 
 function Group:OnRelease()
 	CallHandler.OnRelease(self)
-	self.horizontal = nil
 	self:SetChildren(nil)
 end
 
@@ -52,7 +52,7 @@ function Group:SetChildren (...)
 end
 
 function Group:UpdateChildren()
-	if self:IsVisible() then
+	if self:CanLayout() then
 		self:ReleaseChildren()
 		self:FireCall('UpdateChildren')
 		self:Layout()
@@ -182,13 +182,12 @@ function Group:Layout ()
 	
 	for i, child in ipairs(self.layout) do
 		if child ~= 1 then
-			local top, left = self:Orient(child.top or 0, child.left or 0)
-			local bottom, right = self:Orient(child.bottom or 0, child.right or 0)
-			local width, height = self:Orient(child:GetWidth() + left + right, child:GetHeight() + top + bottom)
+			local top, left = child.top or 0, child.left or 0
+			local bottom, right = child.bottom or 0, child.right or 0
+			local width, height = child:GetSize()
 			
-			print(child:GetName())
-			print('!width:', width, '!right:', right, '!left:', left)
-			print('!height:', height, '!top:', top, '!bottom:', bottom)
+			width, height = self:Orient(width + left + right, height + top + bottom)
+			top, left = self:Orient(top, left)
 			
 			if self.limit and (x + width) > self.limit then
 	 			breakLine()
@@ -205,7 +204,7 @@ function Group:Layout ()
 	x, y = self:Orient(x, y + line)
 	if self.resize == 'HORIZONTAL' then
 		self:SetWidth(x)
-	else
+	elseif self.resize == 'VERTICAL' then
 		self:SetHeight(y)
 	end
 end
@@ -223,6 +222,7 @@ end
 
 Group.Create = Group.CreateChild
 Group.SetContent = Group.SetChildren
+Group.SetResize = Group.SetResizing
 
 Group.CreateBreak = Group.AddBreak
 Group.LineBreak = Group.AddBreak

@@ -44,14 +44,12 @@ function Handler:SetCall (event, method)
 end
 
 function Handler:GetCall (event)
-	return self.calls[event]
+	return self.calls and self.calls[event]
 end
 
 function Handler:FireCall (event, ...)
-	if self.calls and self.calls[event] then
-		self.calls[event](self, ...)
+	local call = self:GetCall(event)
+	if call then
+		call(self, ...)
 	end
 end
-
-Handler.Listen = Handler.SetCall
-Handler.Watch = Handler.SetCall

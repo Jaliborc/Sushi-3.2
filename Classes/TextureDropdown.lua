@@ -20,7 +20,6 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 local Dropdown = SushiDropdown
 local TexDrop = LibStub('Poncho-1.0')('Frame', 'SushiTextureDropdown', nil, nil, Dropdown)
 
--- maxWidth: 270
 local DropList = TexDrop.List or SushiGroup()
 DropList:SetParent(UIParent)
 DropList:SetFrameStrata('FULLSCREEN_DIALOG')
@@ -29,7 +28,11 @@ DropList:SetResizing('VERTICAL')
 DropList:SetToplevel(1)
 DropList:Hide()
 
-DropList:SetBackdrop({
+local BG = DropList.BG or CreateFrame('Frame', nil, DropList)
+BG:SetFrameLevel(DropList:GetFrameLevel())
+BG:SetPoint('BOTTOMLEFT', -11, -11)
+BG:SetPoint('TOPRIGHT', 11, 11)
+BG:SetBackdrop({
 	bgFile = 'Interface\\DialogFrame\\UI-DialogBox-Background-Dark',
 	edgeFile = 'Interface\\DialogFrame\\UI-DialogBox-Border',
 	insets = {left = 11, right = 11, top = 11, bottom = 9},
@@ -42,15 +45,16 @@ DropList:SetContent(function()
 	
 	for value, image, tip in self:IterateLines() do
 		local button = DropList:Create('TextureButton')
-		button:SetSize(height, width)
+		button:SetCall('OnUpdate', nil)
+		button:SetSize(width, height)
 		button:SetTexture(image)
 		button:SetTip(tip)
 		
-		button:SetCall('OnClick', function()
+		button:SetCall('OnInput', function()
 			self:FireCall('OnLineSelected', value)
 			self:FireCall('OnSelection', value)
 			self:FireCall('OnInput', value)
-			self:FireCall('OnUpdate')
+			CloseDropDownMenus()
 		end)
 	end
 end)
@@ -183,3 +187,4 @@ hooksecurefunc('ToggleDropDownMenu', hide)
 hooksecurefunc('CloseDropDownMenus', hide)
 SushiTextureDrop = TexDrop
 TexDrop.List = DropList
+DropList.BG = BG

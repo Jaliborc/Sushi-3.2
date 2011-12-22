@@ -52,3 +52,6 @@ function Handler:FireCall (event, ...)
 		self.calls[event](self, ...)
 	end
 end
+
+Handler.Listen = Handler.SetCall
+Handler.Watch = Handler.SetCall

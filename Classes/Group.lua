@@ -55,14 +55,17 @@ function Group:UpdateChildren()
 	if self:CanLayout() then
 		self:ReleaseChildren()
 		self:FireCall('UpdateChildren')
+		self:FireCall('OnUpdate')
 		self:Layout()
 	end
 end
 
 function Group:ReleaseChildren()
 	for child in self:IterateChildren() do
-		child.top, child.bottom, child.left, child.right = nil
-		child:Release()
+		if child.Release then
+			child.top, child.bottom, child.left, child.right = nil
+			child:Release()
+		end
 	end
 	
 	wipe(self.children)
@@ -111,8 +114,8 @@ function Group:OnChildUpdate ()
 	self:GetParent():UpdateChildren()
 end
 
-function Group:OnChildInput ()
-	self:GetParent():FireCall('OnInput', self)
+function Group:OnChildInput (...)
+	self:GetParent():FireCall('OnInput', self, ...)
 end
 
 
@@ -152,7 +155,9 @@ function Group:CheckLimit()
 		self:UpdateLayout()
 	elseif self:CanLayout() then
 		for child in self:IterateChildren() do
-			child:FireCall('OnParentResize')
+			if child.FireCall then
+				child:FireCall('OnParentResize')
+			end
 		end
 	end
 end
@@ -231,3 +236,4 @@ Group.AppendChild = Group.BindChild
 Group.AddChild = Group.BindChild
 Group.Append = Group.BindChild
 Group.Add = Group.BindChild
+Group.Bind = Group.BindChild

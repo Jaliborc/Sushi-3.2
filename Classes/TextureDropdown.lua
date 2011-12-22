@@ -18,7 +18,7 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
 local Dropdown = SushiDropdown
-local TexDrop = LibStub('Poncho-1.0')('Frame', 'SushiTextureDrop', nil, nil, Dropdown)
+local TexDrop = LibStub('Poncho-1.0')('Frame', 'SushiTextureDropdown', nil, nil, Dropdown)
 
 -- maxWidth: 270
 local DropList = TexDrop.List or SushiGroup()
@@ -138,6 +138,7 @@ function TexDrop:CreateLabelTexture()
 end
 
 function TexDrop:OnAcquire()
+	Dropdown.OnAcquire(self)
 	self:SetSize(120, 70)
 	self:UpdateFonts()
 end
@@ -162,7 +163,7 @@ function TexDrop:OnClick()
 end
 
 function TexDrop:SetValue(value)
-	self.Display:SetTexture(self.linesNames[value])
+	self.Display:SetTexture(self.linesName[value])
 	self.selectedValue = value
 end
 
@@ -180,4 +181,5 @@ end
 
 hooksecurefunc('ToggleDropDownMenu', hide)
 hooksecurefunc('CloseDropDownMenus', hide)
+SushiTextureDrop = TexDrop
 TexDrop.List = DropList

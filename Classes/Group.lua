@@ -111,11 +111,17 @@ end
 --[[ Children Events ]]--
 
 function Group:OnChildUpdate ()
-	self:GetParent():UpdateChildren()
+	local parent = self:GetParent()
+	if parent and parent.UpdateChildren then
+		parent:UpdateChildren()
+	end
 end
 
 function Group:OnChildInput (...)
-	self:GetParent():FireCall('OnInput', self, ...)
+	local parent = self:GetParent()
+	if parent and parent.FireCall then
+		parent:FireCall('OnInput', self, ...)
+	end
 end
 
 

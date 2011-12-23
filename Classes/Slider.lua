@@ -117,13 +117,13 @@ end
 
 function Slider:OnValueChanged(value, dragged)
 	if dragged then
-		self:ChangeValue(value, true)
 		self:SetScript('OnUpdate', self.OnDelayedUpdate)
+		self:SetValue(value)
 	end
 end
 
 function Slider:OnMouseWheel(direction)
-	self:ChangeValue(self:GetValue() + self:GetValueStep() * direction)
+	self:SetValue(self:GetValue() + self:GetValueStep() * direction, true)
 end
 
 function Slider:OnEnter()
@@ -137,13 +137,17 @@ function Slider:OnLeave()
 end
 
 
---[[ Delayed Update ]]--
+--[[ Update ]]--
 
 function Slider:OnDelayedUpdate()
 	if not IsMouseButtonDown() then
-		self:StopUpdate()
-		self:FireCall('OnUpdate')
+		self:Update()
 	end
+end
+
+function Slider:Update()
+	self:StopUpdate()
+	self:FireCall('OnUpdate')
 end
 
 function Slider:StopUpdate()
@@ -156,7 +160,7 @@ end
 function Slider:OnEnterPressed()
 	local value = tonumber(self:GetText():gsub(',', '.'), nil) --2º arg required!
 	if value then
-		self:GetParent():ChangeValue(value)
+		self:GetParent():SetValue(value, true)
 	end
 	self:ClearFocus()
 end
@@ -196,22 +200,21 @@ end
 
 --[[ Value ]]--
 
-function Slider:ChangeValue(value, silent)
+function Slider:SetValue(value, update)
 	local minV, maxV = self:GetMinMaxValues()
 	local value = self:GetRoundedValue(max(min(value, maxV), minV))
 	local changed = self.value ~= value
 	
-	self.value = value
-	self:UpdateValueText()
-	self:SetValue(value)
-	self:StopUpdate()
-	
 	if changed then
+		self.value = value
+		self.__type.SetValue(self, value)
+		self:UpdateValueText()
+		
 		self:FireCall('OnValueChanged', value)
 		self:FireCall('OnInput', value)
 		
-		if not silent then
-			self:FireCall('OnUpdate')
+		if update then
+			self:Update()
 		end
 	end
 end

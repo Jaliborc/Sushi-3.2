@@ -87,18 +87,18 @@ function Group:CreateHeader(text, font)
 	return child
 end
 
-function Group:Create(class, text, arg, parent)
+function Group:Create(class, text, arg, disabled, small)
 	local child = self:CreateChild(class)
 	local arg = self.sets .. (arg or text)
 	local L = self.L
 	
-	child:SetDisabled(parent and not _G[self.sets .. parent])
 	child:SetTip(L[text .. 'Tip'], L[text .. 'TipText'])
 	child:SetLabel(L[text] or text)
+	child:SetDisabled(disabled)
 	child:SetValue(_G[arg])
-	child:SetSmall(parent)
+	child:SetSmall(small)
 	
-	child.left = (child.left or 0) + (parent and 10 or 0)
+	child.left = (child.left or 0) + (small and 10 or 0)
 	child:SetCall('OnInput', function(self, v)
 		_G[arg] = v
 	end)

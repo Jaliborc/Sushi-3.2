@@ -1,5 +1,5 @@
 --[[
-Copyright 2008, 2009, 2010, 2011 João Cardoso
+Copyright 2008-2012 João Cardoso
 Sushi is distributed under the terms of the GNU General Public License (or the Lesser GPL).
 This file is part of Sushi.
 
@@ -61,7 +61,7 @@ function Tabs:GetTab(name)
 end
 
 function Tabs:UpdateTabs()
-	local selection = self:GetSelectedTab()
+	local selection = self:GetSelection()
 	for i, name in pairs(self.tabOrder) do
 		local tab = self:Create(self.style..'Tab')
 		local data = self.tabs[name]
@@ -93,7 +93,7 @@ function Tabs:SelectTab(selection)
 	self:FireCall('OnUpdate')
 end
 
-function Tabs:GetSelectedTab()
+function Tabs:GetSelection()
 	return self.selectedTab
 end
 
@@ -119,6 +119,4 @@ Tabs.Get = Tabs.GetTab
 
 Tabs.Select = Tabs.SelectTab
 Tabs.SetValue = Tabs.SelectTab
-
-Tabs.GetSelection = Tabs.GetSelectedTab
-Tabs.GetValue = Tabs.GetSelectedTab
+Tabs.GetValue = Tabs.GetSelection

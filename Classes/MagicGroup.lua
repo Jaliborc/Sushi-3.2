@@ -1,5 +1,5 @@
 --[[
-Copyright 2008, 2009, 2010, 2011 João Cardoso
+Copyright 2008-2012 João Cardoso
 Sushi is distributed under the terms of the GNU General Public License (or the Lesser GPL).
 This file is part of Sushi.
 
@@ -82,7 +82,6 @@ end
 function Group:CreateHeader(text, font)
 	local child = self:CreateChild('Header')
 	child:SetText(self.L[text] or text)
-	child:SetWidth(591)
 	child:SetFont(font)
 	return child
 end

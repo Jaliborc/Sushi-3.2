@@ -83,6 +83,7 @@ function Group:CreateHeader(text, font, underline)
 	local child = self:CreateChild('Header')
 	child:SetText(self.L[text] or text)
 	child:SetUnderlined(underline)
+	child:SetWidth(591)
 	child:SetFont(font)
 	return child
 end

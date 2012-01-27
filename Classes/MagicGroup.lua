@@ -79,9 +79,10 @@ end
 
 --[[ Create Child ]]--
 
-function Group:CreateHeader(text, font)
+function Group:CreateHeader(text, font, underline)
 	local child = self:CreateChild('Header')
 	child:SetText(self.L[text] or text)
+	child:SetUnderlined(underline)
 	child:SetFont(font)
 	return child
 end

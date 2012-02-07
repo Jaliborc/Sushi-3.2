@@ -24,7 +24,7 @@ end
 
 EditBox.SetValue = EditBox.SetText
 EditBox.GetValue = EditBox.GetText
-EditBox.bottom = -4
+EditBox.bottom = 6
 EditBox.right = 20
 EditBox.left = 25
 EditBox.top = 10
@@ -60,6 +60,8 @@ function EditBox:OnRelease()
 	self:SetLabel(nil)
 	self:SetValue('')
 	self:ClearFocus()
+	
+	SushiTipOwner.OnRelease(self)
 end
 
 

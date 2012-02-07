@@ -40,6 +40,7 @@ function EditBox:OnCreate()
 	self:SetScript('OnEditFocusGained', self.OnEditFocusGained)
 	self:SetScript('OnEscapePressed', self.OnEscapePressed)
 	self:SetScript('OnEnterPressed', self.OnEnterPressed)
+	self:SetAltArrowKeyMode(false)
 	self:SetAutoFocus(false)
 	self:SetHeight(35)
 	self.Label = Label

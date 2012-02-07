@@ -46,8 +46,8 @@ end
 
 --[[ Children Management ]]--
 
-function Group:SetChildren (...)
-	self:SetCall('UpdateChildren', ...)
+function Group:SetChildren (call)
+	self:SetCall('UpdateChildren', call)
 	self:UpdateChildren()
 end
 

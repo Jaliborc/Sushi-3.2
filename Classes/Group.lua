@@ -232,6 +232,8 @@ end
 --[[ Aliases ]]--
 
 Group.Create = Group.CreateChild
+Group.Update = Group.UpdateChildren
+
 Group.SetContent = Group.SetChildren
 Group.SetResize = Group.SetResizing
 

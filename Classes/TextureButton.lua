@@ -18,7 +18,7 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
 local Base = SushiButtonBase
-local Button = LibStub('Poncho-1.0')('Button', 'SushiTextureButton', nil, nil, Base)
+local Button = MakeSushi(1, 'Button', 'TextureButton', nil, nil, Base)
 if not Button then
 	return
 end

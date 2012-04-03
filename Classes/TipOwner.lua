@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Owner = LibStub('Poncho-1.0')(nil, 'SushiTipOwner', nil, nil, SushiCallHandler)
+local Owner = MakeSushi(1, nil, 'TipOwner', nil, nil, SushiCallHandler)
 if not Owner then
 	return
 end

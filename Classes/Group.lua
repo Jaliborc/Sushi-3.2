@@ -18,7 +18,10 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
 local CallHandler = SushiCallHandler
-local Group = LibStub('Poncho-1.0')('Frame', 'SushiGroup', nil, nil, CallHandler)
+local Group = MakeSushi(1, 'Frame', 'Group', nil, nil, CallHandler)
+if not Group then
+	return
+end
 
 
 --[[ Constructor ]]--

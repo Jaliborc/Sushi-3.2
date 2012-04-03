@@ -18,8 +18,12 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
 local TipOwner = SushiTipOwner
-local Button = LibStub('Poncho-1.0')('Button', 'SushiButtonBase', nil, nil, TipOwner)
-Button.sound = 'igMainMenuOptionCheckBoxOn'
+local Button = MakeSushi(1, 'Button', 'ButtonBase', nil, nil, TipOwner)
+if Button then
+	Button.sound = 'igMainMenuOptionCheckBoxOn'
+else
+	return
+end
 
 
 --[[ Events ]]--

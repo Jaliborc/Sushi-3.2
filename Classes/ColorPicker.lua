@@ -18,7 +18,7 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
 local Check = SushiCheck
-local Color = LibStub('Poncho-1.0')('CheckButton', 'SushiColorPicker', nil, nil, Check)
+local Color = MakeSushi(1, 'CheckButton', 'ColorPicker', nil, nil, Check)
 if not Color then
 	return
 end

@@ -29,7 +29,11 @@ API Explained
 ]]--
 
 local TipOwner = SushiTipOwner
-local Slider = LibStub('Poncho-1.0')('Slider', 'SushiSlider', nil, 'OptionsSliderTemplate', TipOwner)
+local Slider = MakeSushi(1, 'Slider', 'Slider', nil, 'OptionsSliderTemplate', TipOwner)
+if not Slider then
+	return
+end
+
 local TestString = UIParent:CreateFontString()
 TestString:SetFontObject('GameFontHighlightSmall')
 

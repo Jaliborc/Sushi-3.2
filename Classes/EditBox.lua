@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local EditBox = LibStub('Poncho-1.0')('EditBox', 'SushiEditBox', nil, 'InputBoxTemplate', SushiTipOwner)
+local EditBox = MakeSushi(1, 'EditBox', 'EditBox', nil, 'InputBoxTemplate', SushiTipOwner)
 if not EditBox then
 	return
 end

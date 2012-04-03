@@ -18,7 +18,10 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
 local Dropdown = SushiDropdown
-local TexDrop = LibStub('Poncho-1.0')('Frame', 'SushiTextureDropdown', nil, nil, Dropdown)
+local TexDrop = MakeSushi(1, 'Frame', 'TextureDropdown', nil, nil, Dropdown)
+if not TexDrop then
+	return
+end
 
 local DropList = TexDrop.List or SushiGroup()
 DropList:SetParent(UIParent)

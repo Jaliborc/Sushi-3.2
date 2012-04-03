@@ -19,7 +19,10 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 
 local Button = SushiButton
 local CreateClass = LibStub('Poncho-1.0')
-local Tab = CreateClass('Button', nil, nil, nil, Button)
+local Tab = MakeSushi(1, 'Button', 'TabButtonBase', nil, nil, Button)
+if not Tab then
+	return
+end
 
 
 --[[ General ]]--

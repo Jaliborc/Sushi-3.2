@@ -18,7 +18,10 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
 local SushiGroup = SushiGroup
-local Group = LibStub('Poncho-1.0')(nil, 'SushiMagicGroup', nil, nil, SushiGroup)
+local Group = MakeSushi(1, nil, 'MagicGroup', nil, nil, SushiGroup)
+if not Group then
+	return
+end
 
 
 --[[ Constructor ]]--

@@ -18,10 +18,13 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
 local Check = SushiCheck
-local Icon = LibStub('Poncho-1.0')('CheckButton', 'SushiIconCheck', nil, nil, Check)
+local Icon = MakeSushi(1, 'CheckButton', 'IconCheck', nil, nil, Check)
+if not Icon then
+	return
+end
 
 
---[[ Constructor ]]--
+--[[ Builder ]]--
 
 function Icon:OnCreate()
 	Check.OnCreate (self)

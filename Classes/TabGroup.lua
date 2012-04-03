@@ -18,7 +18,10 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
 local Group = SushiGroup
-local Tabs = LibStub('Poncho-1.0')('Frame', 'SushiTabGroup', nil, nil, Group)
+local Tabs = MakeSushi(1, 'Frame', 'TabGroup', nil, nil, Group)
+if not Tabs then
+	return
+end
 
 
 --[[ Startup ]]--

@@ -18,7 +18,10 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
 local TipOwner = SushiTipOwner
-local Dropdown = LibStub('Poncho-1.0')('Frame', 'SushiDropdown', nil, 'UIDropDownMenuTemplate', TipOwner)
+local Dropdown = MakeSushi(1, 'Frame', 'Dropdown', nil, 'UIDropDownMenuTemplate', TipOwner)
+if not Dropdown then
+	return
+end
 
 
 --[[ Builder ]]--

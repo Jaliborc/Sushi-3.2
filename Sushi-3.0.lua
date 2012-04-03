@@ -1,7 +1,7 @@
 --[[
 Copyright 2008-2012 João Cardoso
 Sushi is distributed under the terms of the GNU General Public License (or the Lesser GPL).
-This file is part of Sushi List.
+This file is part of Sushi.
 
 Sushi is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,15 +17,13 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Help = MakeSushi(1, 'Button', 'HelpButton', nil, false, SushiButtonBase)
-if not Help then
-	return
-end
-
-function Help:OnCreate()
-	SushiButtonBase.OnCreate(self)
+function MakeSushi(version, type, name, ...)
+	local name = 'Sushi' .. name
+	local class = _G[name] or LibStub('Poncho-1.0')(type, name, ...)
+	local old = rawget(class, 'version') or 0
 	
-	self:SetHighlightTexture('Interface\\FriendsFrame\\InformationIcon-Highlight')
-	self:SetNormalTexture('Interface\\FriendsFrame\\InformationIcon')
-	self:SetSize(16, 16)
+	if version > old then
+		class.version = version
+		return class, old
+	end
 end

@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Button = LibStub('Poncho-1.0')('Button', 'SushiTextButton', nil, 'UIPanelButtonTemplate2', SushiButtonBase)
+local Button = MakeSushi(1, 'Button', 'TextButton', nil, 'UIPanelButtonTemplate2', SushiButtonBase)
 if not Button then
 	return
 end

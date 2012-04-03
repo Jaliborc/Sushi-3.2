@@ -6,4 +6,4 @@
 ## License: GNU General Public License Version 3
 ## Category: Library
 
-Sushi-2.1.xml
+Sushi-3.0.xml

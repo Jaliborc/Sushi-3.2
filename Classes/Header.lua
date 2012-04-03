@@ -18,7 +18,10 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
 local CallHandler = SushiCallHandler
-local Header = LibStub('Poncho-1.0')('Frame', 'SushiHeader', nil, nil, CallHandler)
+local Header = MakeSushi(1, 'Frame', 'Header', nil, nil, CallHandler)
+if not Header then
+	return
+end
 
 
 --[[ Events ]]--

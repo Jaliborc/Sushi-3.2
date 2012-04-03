@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Button = LibStub('Poncho-1.0')('Button', 'SushiGrayButton', nil, nil, SushiButton)
+local Button = MakeSushi(1, 'Button', 'GrayButton', nil, nil, SushiButton)
 if not Button then
 	return
 end

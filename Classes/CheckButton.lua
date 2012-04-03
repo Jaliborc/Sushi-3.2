@@ -18,7 +18,7 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
 local Base = SushiButtonBase
-local Check = LibStub('Poncho-1.0')('CheckButton', 'SushiCheckButton', nil, 'InterfaceOptionsCheckButtonTemplate', Base)
+local Check = MakeSushi(1, 'CheckButton', 'CheckButton', nil, 'InterfaceOptionsCheckButtonTemplate', Base)
 if not Check then
 	return
 end

@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Handler = LibStub('Poncho-1.0')(nil, 'SushiCallHandler', UIParent)
+local Handler = MakeSushi(1, nil, 'CallHandler', UIParent)
 if not Handler then
 	return
 end

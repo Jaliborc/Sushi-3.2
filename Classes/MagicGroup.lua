@@ -17,7 +17,6 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local SushiGroup = SushiGroup
 local Group = MakeSushi(1, nil, 'MagicGroup', nil, nil, SushiGroup)
 if not Group then
 	return

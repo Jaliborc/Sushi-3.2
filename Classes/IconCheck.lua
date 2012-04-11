@@ -28,6 +28,8 @@ end
 
 function Icon:OnCreate()
 	Check.OnCreate (self)
+	
+	self:SetHighlightTexture(nil)
 	self:SetSize(30, 30)
 end
 

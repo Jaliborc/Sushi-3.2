@@ -29,6 +29,7 @@
 	<Script file="Classes\TextureDropdown.lua"/>
 	
 	<!-- Misc -->
+	<Script file="Classes\GlowBox.lua"/>
 	<Script file="Classes\Header.lua"/>
 	<Script file="Classes\Editbox.lua"/>
 	<Script file="Classes\Slider.lua"/>

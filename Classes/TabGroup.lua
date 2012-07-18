@@ -18,7 +18,7 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
 local Group = SushiGroup
-local Tabs = MakeSushi(1, 'Frame', 'TabGroup', nil, nil, Group)
+local Tabs = MakeSushi(2, 'Frame', 'TabGroup', nil, nil, Group)
 if not Tabs then
 	return
 end
@@ -86,7 +86,7 @@ end
 
 --[[ Selection ]]--
 
-function Tabs:SelectTab(selection)
+function Tabs:SetSelection(selection)
 	self.selectedTab = selection
 	self:UpdateChildren()
 	
@@ -120,6 +120,7 @@ Tabs.Append = Tabs.AddTab
 Tabs.Clear = Tabs.ClearTabs
 Tabs.Get = Tabs.GetTab
 
-Tabs.Select = Tabs.SelectTab
-Tabs.SetValue = Tabs.SelectTab
+Tabs.Select = Tabs.SetSelection
+Tabs.SelectTab = Tabs.SetSelection
+Tabs.SetValue = Tabs.SetSelection
 Tabs.GetValue = Tabs.GetSelection

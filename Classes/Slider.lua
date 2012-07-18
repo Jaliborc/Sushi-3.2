@@ -29,7 +29,7 @@ API Explained
 ]]--
 
 local TipOwner = SushiTipOwner
-local Slider = MakeSushi(1, 'Slider', 'Slider', nil, 'OptionsSliderTemplate', TipOwner)
+local Slider = MakeSushi(2, 'Slider', 'Slider', nil, 'OptionsSliderTemplate', TipOwner)
 if not Slider then
 	return
 end
@@ -360,6 +360,7 @@ end
 
 --[[ Finish ]]--
 
+Slider.GetRange = Slider.SetMinMaxValues
 Slider.SetText = Slider.SetLabel
 Slider.GetText = Slider.GetLabel
 Slider.bottom = 7

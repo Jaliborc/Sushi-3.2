@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Group = MakeSushi(1, nil, 'MagicGroup', nil, nil, SushiGroup)
+local Group = MakeSushi(2, nil, 'MagicGroup', nil, nil, SushiGroup)
 if not Group then
 	return
 end
@@ -60,7 +60,7 @@ function Group:SetFooter (footer)
 	self.Footer:SetText(footer)
 end
 
-function Group:SetFooter ()
+function Group:GetFooter ()
 	return self.Footer:GetText()
 end
 

@@ -17,8 +17,8 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Sides = {'Bottom', 'Left', 'Top', 'Right'}
-local GlowBox = MakeSushi(2, 'Frame', 'GlowBox', nil, 'GlowBoxTemplate', SushiCallHandler)
+local Sides = {'BOTTOM', 'LEFT', 'TOP', 'RIGHT'}
+local GlowBox = MakeSushi(3, 'Frame', 'GlowBox', nil, 'GlowBoxTemplate', SushiCallHandler)
 if not GlowBox then
 	return
 end
@@ -42,14 +42,14 @@ function GlowBox:OnCreate()
 	end)
 	
 	self:SetFrameStrata('DIALOG')
-	self:SetSize(200, 100)
+	self:SetSize(220, 100)
 	self:EnableMouse(true)
 	self.text = text
 end
 
 function GlowBox:OnAcquire()
 	SushiCallHandler.OnAcquire(self)
-	self:SetDirection('Bottom')
+	self:SetDirection('BOTTOM')
 	self:SetText('')
 end
 

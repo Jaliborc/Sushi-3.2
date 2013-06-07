@@ -1,5 +1,5 @@
 --[[
-Copyright 2008-2012 João Cardoso
+Copyright 2008-2013 João Cardoso
 Sushi is distributed under the terms of the GNU General Public License (or the Lesser GPL).
 This file is part of Sushi.
 
@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Group = MakeSushi(2, nil, 'MagicGroup', nil, nil, SushiGroup)
+local Group = MakeSushi(3, nil, 'MagicGroup', nil, nil, SushiGroup)
 if not Group then
 	return
 end
@@ -44,13 +44,13 @@ end
 --[[ Addon ]]--
 
 function Group:SetAddon (addon)
-	self.addon = addon
+	self.name = addon
 	self.sets = addon .. '_'
-	self.L = _G[self.sets .. 'Locals']
+	self.L = _G[self.sets .. 'Locals'] or _G[addon].Locals
 end
 
 function Group:GetAddon ()
-	return self.addon
+	return self.name
 end
 
 
@@ -73,7 +73,7 @@ function Group:SetChildren (...)
 end
 
 function Group:CreateMagics()
-	self:CreateHeader(self.addon, 'GameFontNormalLarge')
+	self:CreateHeader(self.name, 'GameFontNormalLarge')
 	self:CreateHeader('Description', 'GameFontHighlightSmall').bottom = 11
 	self:FireCall('MagicChildren')
 end

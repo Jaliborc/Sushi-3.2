@@ -18,7 +18,7 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
 local Base = SushiButtonBase
-local Check = MakeSushi(1, 'CheckButton', 'CheckButton', nil, 'InterfaceOptionsCheckButtonTemplate', Base)
+local Check = MakeSushi(2, 'CheckButton', 'CheckButton', nil, 'InterfaceOptionsCheckButtonTemplate', Base)
 if not Check then
 	return
 end
@@ -43,6 +43,7 @@ end
 function Check:OnRelease ()
 	Base.OnRelease(self)
 	self:SetChecked(nil)
+	self:SetSmall(false)
 end
 
 function Check:OnClick ()

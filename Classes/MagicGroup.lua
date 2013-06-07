@@ -74,7 +74,7 @@ end
 
 function Group:CreateMagics()
 	self:CreateHeader(self.name, 'GameFontNormalLarge')
-	self:CreateHeader('Description', 'GameFontHighlightSmall').bottom = 11
+	self:CreateHeader(self.L['Description'] or select(3, GetAddOnInfo(self.name)), 'GameFontHighlightSmall').bottom = 11
 	self:FireCall('MagicChildren')
 end
 

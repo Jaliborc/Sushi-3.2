@@ -20,9 +20,9 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 function MakeSushi(version, type, name, ...)
 	local name = 'Sushi' .. name
 	local class = _G[name] or LibStub('Poncho-1.0')(type, name, ...)
-	local old = rawget(class, 'version') or 0
+	local old = rawget(class, 'version')
 	
-	if version > old then
+	if not old or version > old then
 		class.version = version
 		return class, old
 	end

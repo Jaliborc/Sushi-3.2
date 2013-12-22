@@ -1,7 +1,11 @@
 local DropButton = MakeSushi(1, 'CheckButton', 'DropdownButton', nil, 'UIDropDownMenuButtonTemplate', SushiButtonBase)
-DropButton.left = 5
-DropButton.top = 1
-DropButton.bottom = 1
+if DropButton then
+	DropButton.left = 5
+	DropButton.top = 1
+	DropButton.bottom = 1
+else
+	return
+end
 
 
 --[[ Startup ]]--

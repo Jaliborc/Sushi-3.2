@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Group = MakeSushi(3, nil, 'MagicGroup', nil, nil, SushiGroup)
+local Group = MakeSushi(4, nil, 'MagicGroup', nil, nil, SushiGroup)
 if not Group then
 	return
 end
@@ -45,8 +45,9 @@ end
 
 function Group:SetAddon (addon)
 	self.name = addon
-	self.sets = addon .. '_'
-	self.L = _G[self.sets .. 'Locals'] or _G[addon].Locals
+	self.prefix = addon .. '_'
+	self.sets = _G[self.prefix .. 'Sets'] or _G[addon].Sets
+	self.L = _G[self.prefix .. 'Locals'] or _G[addon].Locals
 end
 
 function Group:GetAddon ()
@@ -92,18 +93,19 @@ end
 
 function Group:Create(class, text, arg, disabled, small)
 	local child = self:CreateChild(class)
-	local arg = self.sets .. (arg or text)
+	local arg = (self.sets and '' or self.prefix) .. (arg or text)
+	local sets = self.sets or _G
 	local L = self.L
 	
 	child:SetTip(L[text .. 'Tip'], L[text .. 'TipText'])
 	child:SetLabel(L[text] or text)
 	child:SetDisabled(disabled)
-	child:SetValue(_G[arg])
+	child:SetValue(sets[arg])
 	child:SetSmall(small)
 	
 	child.left = (child.left or 0) + (small and 10 or 0)
 	child:SetCall('OnInput', function(self, v)
-		_G[arg] = v
+		sets[arg] = v
 	end)
 	return child
 end

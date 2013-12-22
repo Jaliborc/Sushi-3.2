@@ -29,12 +29,12 @@ end
 --[[ Events ]]--
 
 function Button:OnCreate ()
-	TipOwner.OnCreate (self)
+	TipOwner.OnCreate(self)
 	self:SetScript('OnClick', self.OnClick)
 end
 
 function Button:OnRelease ()
-	TipOwner.OnRelease (self)
+	TipOwner.OnRelease(self)
 	self:SetDisabled(nil)
 end
 

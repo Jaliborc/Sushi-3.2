@@ -8,11 +8,12 @@
 	<!-- Buttons -->
 	<Script file="Classes\ButtonBase.lua"/>
 	
+	<Script file="Classes\DropdownButton.lua"/>
 	<Script file="Classes\TextButton.lua"/>
 	<Script file="Classes\GrayButton.lua"/>
 	<Script file="Classes\HelpButton.lua"/>
-	<Script file="Classes\TextureButton.lua"/>
 	<Script file="Classes\TabButtons.lua"/>
+	<Script file="Classes\TextureButton.lua"/>
 	
 	<!-- CheckButtons -->
 	<Script file="Classes\CheckButton.lua"/>
@@ -25,6 +26,7 @@
 	<Script file="Classes\TabGroup.lua"/>
 	
 	<!-- Dropdowns -->
+	<Script file="Classes\DropdownFrame.lua"/>
 	<Script file="Classes\Dropdown.lua"/>
 	<Script file="Classes\TextureDropdown.lua"/>
 	

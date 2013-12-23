@@ -42,7 +42,9 @@ function Drop:OnAcquire()
 		local lines = type(self.lines) == 'function' and self:lines() or self.lines
 		if type(lines) == 'table' then
 			for i, line in ipairs(lines) do
-				self:AddLine(line)
+				if not line.hidden then
+					self:AddLine(line)
+				end
 			end
 		end
 
@@ -69,6 +71,7 @@ function Drop:AddLine(data)
 	button:SetRadio(data.isRadio)
 	button:SetText(data.text)
 	button:SetCall('OnClick', function()
+		data.checked = not data.checked
 		data:func()
 		self:SetShown(data.keepShownOnClick)
 	end)
@@ -82,6 +85,7 @@ end
 function Drop:Toggle(anchor, children)
 	local target = anchor ~= self.target and anchor
 
+	PlaySound('igMainMenuOptionCheckBoxOn')
 	CloseDropDownMenus()
 	self:CloseAll()
 	self.target = target

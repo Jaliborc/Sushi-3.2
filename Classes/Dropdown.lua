@@ -18,7 +18,7 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
 local TipOwner = SushiTipOwner
-local Dropdown = MakeSushi(1, 'Frame', 'Dropdown', nil, 'UIDropDownMenuTemplate', TipOwner)
+local Dropdown = MakeSushi(2, 'Frame', 'Dropdown', nil, 'UIDropDownMenuTemplate', TipOwner)
 if not Dropdown then
 	return
 end
@@ -36,20 +36,15 @@ function Dropdown:OnCreate()
 	local Right = _G[name .. 'Right']
 	Right:ClearAllPoints()
 	Right:SetPoint('TOPRIGHT', 0, 17)
+	_G[name .. 'Middle']:SetPoint('RIGHT', Right, 'LEFT')
 	
-	local Middle = _G[name .. 'Middle']
-	Middle:SetPoint('RIGHT', Right, 'LEFT')
-	
-	self.Button = _G[name .. 'Button']
-	self.Value = _G[name .. 'Text']
+	self.order, self.names, self.tips = {}, {}, {}
 	self.Label = Label
+	self.Selected = _G[name .. 'Text']
+	self.Button = _G[name .. 'Button']
+	self.Button:SetScript('OnClick', self.ToggleDrop)
 	
-	self.linesOrder = {}
-	self.linesName = {}
-	self.linesTip = {}
-	
-	UIDropDownMenu_Initialize(self, self.Initialize)
-	TipOwner.OnCreate (self)
+	TipOwner.OnCreate(self)
 end
 
 function Dropdown:OnAcquire()
@@ -116,48 +111,54 @@ function Dropdown:UpdateFonts ()
 	end
 	
 	self.Label:SetFontObject(font:format('Normal') .. (self:IsSmall() and 'Small' or ''))
-	self.Value:SetFontObject(font:format('Highlight') .. 'Small')
+	self.Selected:SetFontObject(font:format('Highlight') .. 'Small')
 end
 
 
---[[ Initialize ]]--
+--[[ Selection ]]--
 
 function Dropdown:SetValue (value)
-	UIDropDownMenu_SetSelectedValue(self, value)
-	self.Value:SetText(self.linesName[value])
+	self.Selected:SetText(self.names[value])
+	self.value = value
 end
 
-function Dropdown:Initialize ()
-	for value, name, tip in self:IterateLines() do
-		local line = UIDropDownMenu_CreateInfo()
-		line.checked = self:GetValue() == value
-		line.tooltipTitle = tip and name
-		line.tooltipText = tip
-		line.value = value
-		line.text = name
-		
-		line.func = function()
-			if value ~= self:GetValue() then
-				self:FireCall('OnSelection', value)
-				self:FireCall('OnInput', value)
-				self:FireCall('OnUpdate')
-			end
+function Dropdown:GetValue ()
+	return self.value
+end
+
+function Dropdown:ToggleDrop ()
+	self = self:GetParent()
+	SushiDropFrame:Toggle(self, function(drop)
+		for value, name, tip in self:IterateLines() do
+			drop:AddLine {
+				checked = self:GetValue() == value,
+				tooltipTitle = tip and name,
+				tooltipText = tip,
+				value = value,
+				text = name,
+			
+				func = function()
+					if value ~= self:GetValue() then
+						self:FireCall('OnSelection', value)
+						self:FireCall('OnInput', value)
+						self:FireCall('OnUpdate')
+					end
+				end
+			}
 		end
-		
-		UIDropDownMenu_AddButton(line)
-	end
+	end)
 end
 
 
 --[[ Lines ]]--
 
 function Dropdown:AddLine (value, name, tip)
-	if not self.linesName[value] then
-		tinsert(self.linesOrder, value)
+	if not self.names[value] then
+		tinsert(self.order, value)
 	end
 	
-	self.linesName[value] = name or value
-	self.linesTip[value] = tip
+	self.names[value] = name or value
+	self.tips[value] = tip
 	
 	if value == self:GetValue() then
 		self:SetValue(value)
@@ -165,13 +166,13 @@ function Dropdown:AddLine (value, name, tip)
 end
 
 function Dropdown:GetLine (value)
-	return self.linesName[value], self.linesTip[value]
+	return self.names[value], self.tips[value]
 end
 
 function Dropdown:IterateLines ()
 	local i, value, name, desc = 1
 	return function()
-		value = self.linesOrder[i]
+		value = self.order[i]
 		i = i + 1
 		
 		return value, self:GetLine(value)
@@ -179,19 +180,18 @@ function Dropdown:IterateLines ()
 end
 
 function Dropdown:NumLines ()
-	return #self.linesOrder
+	return #self.order
 end
 	
 function Dropdown:ClearLines ()
-	wipe(self.linesOrder)
-	wipe(self.linesName)
-	wipe(self.linesTip)
+	wipe(self.order)
+	wipe(self.names)
+	wipe(self.tips)
 end
 
 
 --[[ Proprieties ]]--
 
-Dropdown.GetValue = UIDropDownMenu_GetSelectedValue
 Dropdown.SetText = Dropdown.SetLabel
 Dropdown.GetText = Dropdown.GetLabel
 

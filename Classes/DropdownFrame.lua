@@ -42,9 +42,7 @@ function Drop:OnAcquire()
 		local lines = type(self.lines) == 'function' and self:lines() or self.lines
 		if type(lines) == 'table' then
 			for i, line in ipairs(lines) do
-				if not line.hidden then
-					self:AddLine(line)
-				end
+				self:AddLine(line)
 			end
 		end
 
@@ -92,7 +90,7 @@ function Drop:Toggle(anchor, children)
 
 	if target then
 		local frame = self()
-		frame:SetPoint('BOTTOM', anchor, 'TOP')
+		frame:SetPoint('TOP', anchor, 'BOTTOM', 0, -5)
 		frame:SetLines(children)
 	end
 

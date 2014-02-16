@@ -1,4 +1,4 @@
-local Drop, Version = MakeSushi(1, 'Frame', 'DropdownFrame', nil, nil, SushiGroup)
+local Drop, Version = MakeSushi(4, 'Frame', 'DropdownFrame', nil, nil, SushiGroup)
 if not Drop then
 	return
 elseif not Version then
@@ -10,15 +10,20 @@ elseif not Version then
 	hooksecurefunc('CloseDropDownMenus', closeAll)
 end
 
+local function get(value, ...)
+	if type(value) == 'function' then
+		return value(...)
+	end
+	return value
+end
+
 
 --[[ Startup ]]--
 
 function Drop:OnCreate()
 	SushiGroup.OnCreate(self)
-	self:SetFrameStrata('FULLSCREEN_DIALOG')
 	self:SetOrientation('HORIZONTAL')
 	self:SetResizing('VERTICAL')
-	self:SetToplevel(1)
 
 	local dialogBG = CreateFrame('Frame', nil, self)
 	dialogBG:SetFrameLevel(self:GetFrameLevel())
@@ -36,11 +41,12 @@ function Drop:OnAcquire()
 	SushiCallHandler.OnAcquire(self)
 
 	self.lines = nil
+	self:SetFrameStrata('FULLSCREEN_DIALOG')
 	self:SetCall('UpdateChildren', function()
 		self.width = 0
 		
-		local lines = type(self.lines) == 'function' and self:lines() or self.lines
-		if type(lines) == 'table' then
+		local lines = get(self.lines, self)
+		if lines then
 			for i, line in ipairs(lines) do
 				self:AddLine(line)
 			end
@@ -65,11 +71,11 @@ end
 function Drop:AddLine(data)
 	local button = self:Create('DropdownButton')
 	button:SetTip(data.tooltipTitle, data.tooltipText)
-	button:SetChecked(data.checked)
+	button:SetChecked(get(data.checked, data))
 	button:SetRadio(data.isRadio)
 	button:SetText(data.text)
 	button:SetCall('OnClick', function()
-		data.checked = not data.checked
+		data.checked = button:GetChecked()
 		data:func()
 		self:SetShown(data.keepShownOnClick)
 	end)
@@ -80,7 +86,9 @@ end
 
 --[[ Static ]]--
 
-function Drop:Toggle(anchor, children)
+function Drop:Toggle(...)
+	local n = select('#', ...)
+	local anchor = select(n < 3 and 1 or 2, ...)
 	local target = anchor ~= self.target and anchor
 
 	PlaySound('igMainMenuOptionCheckBoxOn')
@@ -89,9 +97,14 @@ function Drop:Toggle(anchor, children)
 	self.target = target
 
 	if target then
-		local frame = self()
-		frame:SetPoint('TOP', anchor, 'BOTTOM', 0, -5)
-		frame:SetLines(children)
+		local frame = self(anchor)
+		if n < 3 then
+			frame:SetPoint('TOP', anchor, 'BOTTOM', 0, -5)
+		else
+			frame:SetPoint(...)
+		end
+
+		frame:SetLines(select(n, ...))
 	end
 
 end

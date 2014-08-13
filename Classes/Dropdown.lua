@@ -18,7 +18,7 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
 local TipOwner = SushiTipOwner
-local Dropdown = MakeSushi(2, 'Frame', 'Dropdown', nil, 'UIDropDownMenuTemplate', TipOwner)
+local Dropdown = MakeSushi(3, 'Frame', 'Dropdown', nil, 'UIDropDownMenuTemplate', TipOwner)
 if not Dropdown then
 	return
 end
@@ -128,7 +128,7 @@ end
 
 function Dropdown:ToggleDrop ()
 	self = self:GetParent()
-	SushiDropFrame:Toggle(self, function(drop)
+	SushiDropFrame:Toggle(self, false, function(drop)
 		for value, name, tip in self:IterateLines() do
 			drop:AddLine {
 				checked = self:GetValue() == value,

@@ -1,6 +1,6 @@
-local DropButton = MakeSushi(1, 'CheckButton', 'DropdownButton', nil, 'UIDropDownMenuButtonTemplate', SushiButtonBase)
+local DropButton = MakeSushi(2, 'CheckButton', 'DropdownButton', nil, 'UIDropDownMenuButtonTemplate', SushiButtonBase)
 if DropButton then
-	DropButton.left = 5
+	DropButton.left = 16
 	DropButton.top = 1
 	DropButton.bottom = 1
 else

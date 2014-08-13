@@ -1,4 +1,4 @@
-local Drop, Version = MakeSushi(4, 'Frame', 'DropdownFrame', nil, nil, SushiGroup)
+local Drop, Version = MakeSushi(5, 'Frame', 'DropdownFrame', nil, nil, SushiGroup)
 if not Drop then
 	return
 elseif not Version then
@@ -24,23 +24,19 @@ function Drop:OnCreate()
 	SushiGroup.OnCreate(self)
 	self:SetOrientation('HORIZONTAL')
 	self:SetResizing('VERTICAL')
+	self:SetClampedToScreen(true)
 
-	local dialogBG = CreateFrame('Frame', nil, self)
-	dialogBG:SetFrameLevel(self:GetFrameLevel())
-	dialogBG:SetPoint('BOTTOMLEFT', -11, -11)
-	dialogBG:SetPoint('TOPRIGHT', 11, 11)
-	dialogBG:SetBackdrop({
-		bgFile = 'Interface\\DialogFrame\\UI-DialogBox-Background-Dark',
-		edgeFile = 'Interface\\DialogFrame\\UI-DialogBox-Border',
-		insets = {left = 11, right = 11, top = 11, bottom = 9},
-		edgeSize = 32, tileSize = 32, tile = true
-	})
+	self.bg = CreateFrame('Frame', nil, self)
+	self.bg:SetFrameLevel(self:GetFrameLevel())
+	self.bg:SetPoint('BOTTOMLEFT', 0, -11)
+	self.bg:SetPoint('TOPRIGHT', 0, 11)
 end
 
 function Drop:OnAcquire()
 	SushiCallHandler.OnAcquire(self)
 
 	self.lines = nil
+	self:SetMenu(false)
 	self:SetFrameStrata('FULLSCREEN_DIALOG')
 	self:SetCall('UpdateChildren', function()
 		self.width = 0
@@ -56,12 +52,32 @@ function Drop:OnAcquire()
 			button:SetWidth(self.width + 25)
 		end
 
-		self:SetWidth(self.width + 30)
+		self:SetWidth(self.width + 52)
 	end)
 end
 
 
 --[[ API ]]--
+
+function Drop:SetMenu(isMenu)
+	if isMenu then
+		self.bg:SetBackdrop {
+			bgFile = 'Interface/Tooltips/UI-Tooltip-Background',
+			edgeFile = 'Interface/Tooltips/UI-Tooltip-Border',
+			insets = {left = 5, right = 5, top = 5, bottom = 5},
+			edgeSize = 16, tileSize = 16, tile = true
+		}
+		self.bg:SetBackdropBorderColor(TOOLTIP_DEFAULT_COLOR.r, TOOLTIP_DEFAULT_COLOR.g, TOOLTIP_DEFAULT_COLOR.b)
+		self.bg:SetBackdropColor(TOOLTIP_DEFAULT_BACKGROUND_COLOR.r, TOOLTIP_DEFAULT_BACKGROUND_COLOR.g, TOOLTIP_DEFAULT_BACKGROUND_COLOR.b)
+	else
+		self.bg:SetBackdrop {
+			bgFile = 'Interface/DialogFrame/UI-DialogBox-Background-Dark',
+			edgeFile = 'Interface/DialogFrame/UI-DialogBox-Border',
+			insets = {left = 11, right = 11, top = 11, bottom = 9},
+			edgeSize = 32, tileSize = 32, tile = true
+		}
+	end
+end
 
 function Drop:SetLines(lines)
 	self.lines = lines
@@ -88,7 +104,7 @@ end
 
 function Drop:Toggle(...)
 	local n = select('#', ...)
-	local anchor = select(n < 3 and 1 or 2, ...)
+	local anchor = select(n < 4 and 1 or 2, ...)
 	local target = anchor ~= self.target and anchor
 
 	PlaySound('igMainMenuOptionCheckBoxOn')
@@ -98,12 +114,13 @@ function Drop:Toggle(...)
 
 	if target then
 		local frame = self(anchor)
-		if n < 3 then
+		if n < 4 then
 			frame:SetPoint('TOP', anchor, 'BOTTOM', 0, -5)
 		else
 			frame:SetPoint(...)
 		end
 
+		frame:SetMenu(select(n-1, ...))
 		frame:SetLines(select(n, ...))
 	end
 

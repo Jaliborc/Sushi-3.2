@@ -36,7 +36,7 @@ end
 
 function Button:SetText (text)
 	self:GetFontString():SetText(text)
-	self:SetWidth(self:GetTextWidth() + 15)
+	self:SetWidth(self:GetTextWidth() + 20)
 end
 
 function Button:SetSmall (small)

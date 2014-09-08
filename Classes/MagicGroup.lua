@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Group = MakeSushi(4, nil, 'MagicGroup', nil, nil, SushiGroup)
+local Group = MakeSushi(5, nil, 'MagicGroup', nil, nil, SushiGroup)
 if not Group then
 	return
 end
@@ -83,7 +83,7 @@ end
 
 function Group:CreateMagics()
 	self:CreateHeader(self.name, 'GameFontNormalLarge')
-	self:CreateHeader(self.L['Description'] or select(3, self:GetAddOnInfo()), 'GameFontHighlightSmall').bottom = 11
+	self:CreateHeader(self.L['Description'] or select(3, self:GetAddonInfo()), 'GameFontHighlightSmall').bottom = 11
 	self:FireCall('MagicChildren')
 end
 

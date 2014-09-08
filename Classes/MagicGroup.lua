@@ -54,6 +54,14 @@ function Group:GetAddon ()
 	return self.name
 end
 
+function Group:GetAddonInfo ()
+	for i = 1, GetNumAddOns() do
+		if GetAddOnInfo(i) ==  self.name then
+			return GetAddOnInfo(i)
+		end
+	end
+end
+
 
 --[[ Footer ]]--
 
@@ -75,7 +83,7 @@ end
 
 function Group:CreateMagics()
 	self:CreateHeader(self.name, 'GameFontNormalLarge')
-	self:CreateHeader(self.L['Description'] or select(3, GetAddOnInfo(self.name)), 'GameFontHighlightSmall').bottom = 11
+	self:CreateHeader(self.L['Description'] or select(3, self:GetAddOnInfo()), 'GameFontHighlightSmall').bottom = 11
 	self:FireCall('MagicChildren')
 end
 

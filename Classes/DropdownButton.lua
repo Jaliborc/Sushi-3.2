@@ -1,4 +1,4 @@
-local DropButton = MakeSushi(2, 'CheckButton', 'DropdownButton', nil, 'UIDropDownMenuButtonTemplate', SushiButtonBase)
+local DropButton = MakeSushi(3, 'CheckButton', 'DropdownButton', nil, 'UIDropDownMenuButtonTemplate', SushiButtonBase)
 if DropButton then
 	DropButton.left = 16
 	DropButton.top = 1
@@ -23,8 +23,9 @@ function DropButton:OnAcquire()
 end
 
 function DropButton:SetTitle(isTitle)
-	self:SetDisabledFontObject(isTitle and GameFontNormalSmallLeft or GameFontDisableSmallLeft)
-	self:SetDisabled(isTitle)
+	local font = isTitle and GameFontNormalSmall or GameFontHighlightSmall
+	self:SetNormalFontObject(font)
+	self:SetHighlightFontObject(font)
 end
 
 

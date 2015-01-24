@@ -1,4 +1,4 @@
-local Drop, Version = MakeSushi(5, 'Frame', 'DropdownFrame', nil, nil, SushiGroup)
+local Drop, Version = MakeSushi(6, 'Frame', 'DropdownFrame', nil, nil, SushiGroup)
 if not Drop then
 	return
 elseif not Version then
@@ -90,10 +90,14 @@ function Drop:AddLine(data)
 	button:SetChecked(get(data.checked, data))
 	button:SetRadio(data.isRadio)
 	button:SetText(data.text)
+	button:SetTitle(data.isTitle)
+	button:SetCheckable(not data.notCheckable)
 	button:SetCall('OnClick', function()
-		data.checked = button:GetChecked()
-		data:func()
-		self:SetShown(data.keepShownOnClick)
+		if not data.disabled or data.isTitle then
+			data.checked = button:GetChecked()
+			data:func()
+			self:SetShown(data.keepShownOnClick)
+		end
 	end)
 
 	self.width = max(self.width, button:GetTextWidth())

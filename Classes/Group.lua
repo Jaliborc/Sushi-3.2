@@ -18,7 +18,7 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
 local CallHandler = SushiCallHandler
-local Group = MakeSushi(1, 'Frame', 'Group', nil, nil, CallHandler)
+local Group = MakeSushi(2, 'Frame', 'Group', nil, nil, CallHandler)
 if not Group then
 	return
 end
@@ -42,8 +42,9 @@ function Group:OnAcquire()
 end
 
 function Group:OnRelease()
+	self:ReleaseChildren()
+	self:SetCall('UpdateChildren', nil)
 	CallHandler.OnRelease(self)
-	self:SetChildren(nil)
 end
 
 
@@ -242,6 +243,7 @@ Group.SetResize = Group.SetResizing
 
 Group.CreateBreak = Group.AddBreak
 Group.LineBreak = Group.AddBreak
+Group.Break = Group.AddBreak
 
 Group.AppendChild = Group.BindChild
 Group.AddChild = Group.BindChild

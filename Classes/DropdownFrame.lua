@@ -127,7 +127,6 @@ function Drop:Toggle(...)
 		frame:SetMenu(select(n-1, ...))
 		frame:SetLines(select(n, ...))
 	end
-
 end
 
 function Drop:CloseAll()

@@ -18,7 +18,7 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
 local Check = SushiCheck
-local Color = MakeSushi(2, 'CheckButton', 'ColorPicker', nil, nil, Check)
+local Color = MakeSushi(3, 'CheckButton', 'ColorPicker', nil, nil, Check)
 if not Color then
 	return
 end
@@ -64,12 +64,8 @@ function Color:OnClick ()
 	local r, g, b, a = self:GetColor()
 	ColorPickerFrame.func, ColorPickerFrame.opacityFunc = nil
 	ColorPickerFrame:SetColorRGB(r or 1, g or 1, b or 1)
-	ColorPickerFrame.opacityFunc = ColorPickerFrame.func
 	ColorPickerFrame.hasOpacity = self:HasAlpha()
 	ColorPickerFrame.opacity = 1 - (a or 1)
-	ColorPickerFrame.cancelFunc = function()
-		self:SaveColor(r, g, b, a)
-	end
 
 	ColorPickerFrame.func = function()
 		local r, g, b = ColorPickerFrame:GetColorRGB()
@@ -78,6 +74,11 @@ function Color:OnClick ()
 		if not ColorPickerFrame:IsVisible() then
 			self:FireCall('OnUpdate')
 		end
+	end
+
+	ColorPickerFrame.opacityFunc = ColorPickerFrame.func
+	ColorPickerFrame.cancelFunc = function()
+		self:SaveColor(r, g, b, a)
 	end
 	
 	ShowUIPanel(ColorPickerFrame)

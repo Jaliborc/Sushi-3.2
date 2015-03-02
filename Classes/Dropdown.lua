@@ -1,5 +1,5 @@
 --[[
-Copyright 2008-2014 João Cardoso
+Copyright 2008-2015 João Cardoso
 Sushi is distributed under the terms of the GNU General Public License (or the Lesser GPL).
 This file is part of Sushi.
 
@@ -18,7 +18,7 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
 local TipOwner = SushiTipOwner
-local Dropdown = MakeSushi(4, 'Frame', 'Dropdown', nil, 'UIDropDownMenuTemplate', TipOwner)
+local Dropdown = MakeSushi(5, 'Frame', 'Dropdown', nil, 'UIDropDownMenuTemplate', TipOwner)
 if not Dropdown then
 	return
 end
@@ -152,7 +152,13 @@ end
 
 --[[ Lines ]]--
 
-function Dropdown:AddLine (value, name, tip)
+function Dropdown:AddLines(...)
+	for i = 1, select('#', ...), 2 do
+		self:AddLine(select(i, ...), select(i+1, ...), nil)
+	end
+end
+
+function Dropdown:AddLine(value, name, tip)
 	if not self.names[value] then
 		tinsert(self.order, value)
 	end

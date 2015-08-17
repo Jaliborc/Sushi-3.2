@@ -186,15 +186,15 @@ function Group:UpdateLayout ()
 end
 
 function Group:Layout ()
-	self.limit = self:GetLimit()
-	x, y = 0, 0
-	line = 0
+	local x, y = 0, 0
+	local line = 0
 	
-	function breakLine()
+	local function breakLine()
 		y = y + line
 		line, x = 0, 0
 	end
-	
+
+	self.limit = self:GetLimit()
 	for i, child in ipairs(self.layout) do
 		if child ~= 1 then
 			local top, left = child.top or 0, child.left or 0

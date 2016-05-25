@@ -1,4 +1,4 @@
-local Drop, Version = MakeSushi(6, 'Frame', 'DropdownFrame', nil, nil, SushiGroup)
+local Drop, Version = MakeSushi(7, 'Frame', 'DropdownFrame', nil, nil, SushiGroup)
 if not Drop then
 	return
 elseif not Version then
@@ -109,24 +109,32 @@ end
 function Drop:Toggle(...)
 	local n = select('#', ...)
 	local anchor = select(n < 4 and 1 or 2, ...)
-	local target = anchor ~= self.target and anchor
+	
+	if anchor ~= self.target then
+		self:Display(...)
+	else
+		CloseDropDownMenus()
+	end
 
 	PlaySound('igMainMenuOptionCheckBoxOn')
+end
+
+function Drop:Display(...)
+	local n = select('#', ...)
+	local anchor = select(n < 4 and 1 or 2, ...)
+
 	CloseDropDownMenus()
-	self:CloseAll()
-	self.target = target
+	self.target = anchor
 
-	if target then
-		local frame = self(anchor)
-		if n < 4 then
-			frame:SetPoint('TOP', anchor, 'BOTTOM', 0, -5)
-		else
-			frame:SetPoint(...)
-		end
-
-		frame:SetMenu(select(n-1, ...))
-		frame:SetLines(select(n, ...))
+	local frame = self(anchor)
+	if n < 4 then
+		frame:SetPoint('TOP', anchor, 'BOTTOM', 0, -5)
+	else
+		frame:SetPoint(...)
 	end
+
+	frame:SetMenu(select(n-1, ...))
+	frame:SetLines(select(n, ...))
 end
 
 function Drop:CloseAll()

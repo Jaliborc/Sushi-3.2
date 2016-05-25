@@ -27,6 +27,7 @@ end
 
 function Handler:OnAcquire ()
 	self.calls = {}
+	self:ClearAllPoints()
 	self:Show()
 end
 

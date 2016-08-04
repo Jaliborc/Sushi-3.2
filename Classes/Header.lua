@@ -18,7 +18,7 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
 local CallHandler = SushiCallHandler
-local Header = MakeSushi(2, 'Frame', 'Header', nil, nil, CallHandler)
+local Header = MakeSushi(3, 'Frame', 'Header', nil, nil, CallHandler)
 if not Header then
 	return
 end
@@ -34,7 +34,7 @@ function Header:OnCreate ()
 	local Underline = self:CreateTexture()
 	Underline:SetPoint('BOTTOMRIGHT')
 	Underline:SetPoint('BOTTOMLEFT')
-	Underline:SetTexture(1,1,1, .2)
+	Underline:SetColorTexture(1,1,1, .2)
 	Underline:SetHeight(1.2)
 
 	self:SetScript('OnSizeChanged', self.OnSizeChanged)

@@ -1,4 +1,4 @@
-local Drop, Version = MakeSushi(7, 'Frame', 'DropdownFrame', nil, nil, SushiGroup)
+local Drop, Version = MakeSushi(8, 'Frame', 'DropdownFrame', nil, nil, SushiGroup)
 if not Drop then
 	return
 elseif not Version then
@@ -24,7 +24,6 @@ function Drop:OnCreate()
 	SushiGroup.OnCreate(self)
 	self:SetOrientation('HORIZONTAL')
 	self:SetResizing('VERTICAL')
-	self:SetClampedToScreen(true)
 
 	self.bg = CreateFrame('Frame', nil, self)
 	self.bg:SetFrameLevel(self:GetFrameLevel())
@@ -37,6 +36,7 @@ function Drop:OnAcquire()
 
 	self.lines = nil
 	self:SetMenu(false)
+	self:SetClampedToScreen(true)
 	self:SetFrameStrata('FULLSCREEN_DIALOG')
 	self:SetCall('UpdateChildren', function()
 		self.width = 0
@@ -54,6 +54,11 @@ function Drop:OnAcquire()
 
 		self:SetWidth(self.width + 52)
 	end)
+end
+
+function Drop:OnRelease()
+	self:SetClampedToScreen(false)
+	SushiCallHandler.OnRelease(self)
 end
 
 

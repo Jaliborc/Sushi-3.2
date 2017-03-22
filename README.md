@@ -37,7 +37,7 @@ For instance, imagine you wish to create a Dropdown. After properly including Su
 		end
 	end)
 
-###Notice!
+### :bulb: Notice!
 
 * All classes are named as in the graph above, but preceded by `Sushi`.
 * All functionality is available as methods, never as attributes.

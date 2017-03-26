@@ -18,10 +18,12 @@
 	<!-- CheckButtons -->
 	<Script file="Classes\CheckButton.lua"/>
 	<Script file="Classes\ColorPicker.lua"/>
+	<Script file="Classes\ExpandCheck.lua"/>
 	<Script file="Classes\IconCheck.lua"/>
 	
 	<!-- Groups -->
 	<Script file="Classes\Group.lua"/>
+	<Script file="Classes\FauxScrollGroup.lua"/>
 	<Script file="Classes\MagicGroup.lua"/>
 	<Script file="Classes\TabGroup.lua"/>
 	

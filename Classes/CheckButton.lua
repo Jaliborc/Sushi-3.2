@@ -49,11 +49,11 @@ end
 function Check:OnClick ()
 	local checked = self:GetChecked()
 	if checked then
-		PlaySound('igMainMenuOptionCheckBoxOn')
-	else
-		PlaySound('igMainMenuOptionCheckBoxOff')
-	end
-	
+	  PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
+  else
+	  PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_OFF)
+  end
+
 	self:FireCall('OnClick', checked)
 	self:FireCall('OnInput', checked)
 	self:FireCall('OnUpdate')

@@ -31,18 +31,18 @@ function Color:OnCreate ()
 	Border:SetTexture('Interface\\ChatFrame\\ChatFrameColorSwatch')
 	Border:SetWidth(23) Border:SetHeight(23)
 	Border:SetPoint('Center')
-	
+
 	local Color = self:CreateTexture(nil, 'OVERLAY')
 	Color:SetTexture('Interface\\ChatFrame\\ChatFrameColorSwatch')
 	Color:SetWidth(19) Color:SetHeight(19)
 	Color:SetPoint('Center')
 	self.Color = Color
-	
+
 	local Glow = self:CreateTexture()
 	Glow:SetTexture('Interface\\Buttons\\UI-CheckBox-Highlight')
 	Glow:SetWidth(21) Glow:SetHeight(23)
 	Glow:SetPoint('Center')
-	
+
 	self:SetHighlightTexture(Glow)
 	self:SetDisabledTexture(nil)
 	self:SetCheckedTexture(nil)
@@ -80,9 +80,9 @@ function Color:OnClick ()
 	ColorPickerFrame.cancelFunc = function()
 		self:SaveColor(r, g, b, a)
 	end
-	
+
 	ShowUIPanel(ColorPickerFrame)
-	PlaySound('igMainMenuOptionCheckBoxOn')
+	PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
 end
 
 

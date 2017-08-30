@@ -20,7 +20,7 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 local TipOwner = SushiTipOwner
 local Button = MakeSushi(1, 'Button', 'ButtonBase', nil, nil, TipOwner)
 if Button then
-	Button.sound = 'igMainMenuOptionCheckBoxOn'
+	Button.sound = SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON
 else
 	return
 end

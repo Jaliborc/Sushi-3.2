@@ -71,7 +71,7 @@ end
 
 --[[ Proprieties ]]--
 
-Tab.sound = 'igCharacterInfoTab'
+Tab.sound = SOUNDKIT.CHARACTER_INFO_TAB
 Tab.SetLabel = Tab.SetText
 Tab.GetLabel = Tab.GetText
 Tab.SetValue = Tab.SetSelected

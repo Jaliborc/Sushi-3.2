@@ -1,4 +1,4 @@
-local Drop, Version = MakeSushi(8, 'Frame', 'DropdownFrame', nil, nil, SushiGroup)
+local Drop, Version = MakeSushi(9, 'Frame', 'DropdownFrame', nil, nil, SushiGroup)
 if not Drop then
 	return
 elseif not Version then
@@ -40,7 +40,7 @@ function Drop:OnAcquire()
 	self:SetFrameStrata('FULLSCREEN_DIALOG')
 	self:SetCall('UpdateChildren', function()
 		self.width = 0
-		
+
 		local lines = get(self.lines, self)
 		if lines then
 			for i, line in ipairs(lines) do
@@ -114,14 +114,14 @@ end
 function Drop:Toggle(...)
 	local n = select('#', ...)
 	local anchor = select(n < 4 and 1 or 2, ...)
-	
+
 	if anchor ~= self.target then
 		self:Display(...)
 	else
 		CloseDropDownMenus()
 	end
 
-	PlaySound('igMainMenuOptionCheckBoxOn')
+	PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
 end
 
 function Drop:Display(...)

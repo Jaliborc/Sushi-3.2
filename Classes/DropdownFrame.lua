@@ -1,4 +1,4 @@
-local Drop, Version = MakeSushi(9, 'Frame', 'DropdownFrame', nil, nil, SushiGroup)
+local Drop, Version = MakeSushi(10, 'Frame', 'DropdownFrame', nil, nil, SushiGroup)
 if not Drop then
 	return
 elseif not Version then
@@ -118,7 +118,7 @@ function Drop:Toggle(...)
 	if anchor ~= self.target then
 		self:Display(...)
 	else
-		CloseDropDownMenus()
+		self:CloseAll()
 	end
 
 	PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)

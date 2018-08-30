@@ -18,31 +18,51 @@ along with Patronize. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
 local Magic = SushiMagicGroup
-local Credits = MakeSushi(1, nil, 'CreditsGroup', nil, nil, Magic)
+local Credits = MakeSushi(2, nil, 'CreditsGroup', nil, nil, Magic)
 if not Credits then
 	return
 end
 
-local COPY_URL = 'Copy the following url into your browser'
-local DEFAULT_FONTS = {
+local PATREON_LOGO = format('|T%s\\Art\\Patreon:13:13:0:0:64:64:10:54:10:54|t ', Sushi_Directory)
+local FONTS = {
 	'GameFontHighlightHuge',
 	'GameFontHighlightLarge',
 	'GameFontHighlight'
 }
 
+local PATRONS = 'Patrons'
+local COPY_URL = 'Copy the following url into your browser'
+local DESCRIPTION = '%s is distributed for free and supported trough donations. These are the people currently supporting development. Become a patron too at |cFFF96854%s|r.'
+
+do
+	local locale = GetLocale():sub(1, 2)
+	if locale == 'cn' then
+	elseif locale == 'de' then
+		PATRONS = 'Schirmherren'
+	elseif locale == 'es' then
+	elseif locale == 'fr' then
+	elseif locale == 'it' then
+		PATRONS = 'Patronos'
+	elseif locale == 'pt' then
+		PATRONS = 'Patronos'
+	elseif locale == 'ru' then
+		PATRONS = 'покровители'
+	elseif locale == 'tw' then
+	end
+end
+
 
 --[[ Constructor ]]--
 
-function Credits:OnAcquire()
+function Credits:OnAcquire ()
 	Magic.OnAcquire(self)
-	self:SetOrientation('HORIZONTAL')
 	self:SetResizing('VERTICAL')
+	self:SetOrientation('HORIZONTAL')
 	self:SetChildren(self.CreatePeople)
-  self.fonts = DEFAULT_FONTS
-  self.people = nil
+  self.fonts, self.people, self.website = FONTS
 end
 
-function Credits:CreatePeople()
+function Credits:CreatePeople ()
   for i, type in ipairs(self.people or {}) do
 		if type.people then
 			self:CreateHeader(type.title, 'GameFontHighlight', true).top = i > 1 and 20 or 0
@@ -54,7 +74,7 @@ function Credits:CreatePeople()
   end
 end
 
-function Credits:CreateHeader(...)
+function Credits:CreateHeader (...)
 	local header = Magic.CreateHeader(self, ...)
 	header:SetHighlightFactor(1.5)
 	header:SetCall('OnClick', function()
@@ -71,28 +91,47 @@ end
 
 --[[ API ]]--
 
-function Credits:SetWebsite(website)
-  self.website = website
-end
-
-function Credits:GetWebsite()
-  return self.website
-end
-
-function Credits:SetPeople(people)
+function Credits:SetPeople (people)
   self.people = people
   self:Update()
 end
 
-function Credits:GetPeople()
+function Credits:GetPeople ()
   return self.people
 end
 
-function Credits:SetFonts(fonts)
+function Credits:SetFonts (fonts)
   self.fonts = fonts
   self:Update()
 end
 
-function Credits:GetFonts()
+function Credits:GetFonts ()
   return self.fonts
+end
+
+function Credits:SetWebsite (website)
+  self.website = website
+end
+
+function Credits:GetWebsite ()
+  return self.website
+end
+
+
+--[[ Overrides ]]--
+
+function Credits:GetTitle ()
+	return self.title or (PATREON_LOGO .. PATRONS)
+end
+
+function Credits:GetSubtitle ()
+	if self.subtitle then
+		return self.subtitle
+	end
+
+	local website = self:GetWebsite() or ''
+	website = website:match('^https?://(.+)$') or website
+	website = website:match('^www\.(.+)$') or website
+
+	return DESCRIPTION:format(self:GetAddon() or '', website)
 end

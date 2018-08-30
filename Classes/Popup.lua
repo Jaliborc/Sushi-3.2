@@ -18,7 +18,7 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
 local CallHandler = SushiCallHandler
-local Popup = MakeSushi(1, 'Frame', 'Popup', nil, 'StaticPopupTemplate', CallHandler)
+local Popup = MakeSushi(2, 'Frame', 'Popup', nil, 'StaticPopupTemplate', CallHandler)
 if not Popup then
 	return
 end
@@ -29,14 +29,18 @@ hooksecurefunc('StaticPopup_CollapseTable', function() Popup:Organize() end)
 
 --[[ Static ]]--
 
-function Popup:Display (input)
-	local info
-	if type(input) == 'string' then
-		info = CopyTable(StaticPopupDialogs[input])
-		info.id = input
+function Popup:Toggle (input)
+	local id = type(input) == 'table' and input.id or input
+	if id and self:IsDisplayed(id) then
+		self:Close(id)
 	else
-		info = input
+		self:Display(input)
 	end
+end
+
+function Popup:Display (input)
+	local info = type(input) == 'table' and input or CopyTable(StaticPopupDialogs[input])
+	info.id = info.id or input
 
   if UnitIsDeadOrGhost('player') and not info.whileDead then
     if info.OnCancel then
@@ -80,8 +84,16 @@ function Popup:Display (input)
   local frame = self()
   frame:SetInfo(info)
   frame:Resize()
-  frame:Focus()
+  frame:SetFocus()
   return frame
+end
+
+function Popup:Close (id)
+	for i, frame in ipairs(self.usedFrames) do
+		if frame.info.id == id then
+			frame:Cancel('closed')
+		end
+	end
 end
 
 function Popup:Organize ()
@@ -519,7 +531,7 @@ function Popup:Resize ()
 	end
 end
 
-function Popup:Focus ()
+function Popup:SetFocus ()
   local info = self.info
   PlaySound(info.sound or SOUNDKIT.IG_MAINMENU_OPEN)
 

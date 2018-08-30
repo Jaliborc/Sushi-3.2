@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Group = MakeSushi(8, nil, 'MagicGroup', nil, nil, SushiGroup)
+local Group = MakeSushi(9, nil, 'MagicGroup', nil, nil, SushiGroup)
 if not Group then
 	return
 end
@@ -27,14 +27,15 @@ end
 
 function Group:CreateOptionsCategory (parent, title)
 	local category = CreateFrame('Frame')
-	category.parent = parent
-	category.name = title
-	category:Hide()
-	InterfaceOptions_AddCategory(category)
-
 	local group = self(category)
 	group.Category = category
 	group:SetTitle(title)
+
+	category:Hide()
+	category.parent = parent
+	category.name = group:GetTitle()
+	InterfaceOptions_AddCategory(category)
+
 	return group
 end
 
@@ -69,11 +70,10 @@ function Group:GetAddon ()
 end
 
 function Group:GetAddonInfo ()
-	if self.addon then
-		for i = 1, GetNumAddOns() do
-			if GetAddOnInfo(i) ==  self.addon then
-				return GetAddOnInfo(i)
-			end
+	local addon = self:GetAddon()
+	for i = 1, GetNumAddOns() do
+		if GetAddOnInfo(i) == addon then
+			return GetAddOnInfo(i)
 		end
 	end
 end
@@ -86,7 +86,7 @@ function Group:SetTitle (title)
 end
 
 function Group:GetTitle ()
-	return self.title
+	return self.title or self:GetAddon()
 end
 
 function Group:SetSubtitle (subtitle)
@@ -94,7 +94,7 @@ function Group:SetSubtitle (subtitle)
 end
 
 function Group:GetSubtitle ()
-	return self.subtitle
+	return self.subtitle or self.L['Description'] or select(3, self:GetAddonInfo())
 end
 
 function Group:SetFooter (footer)
@@ -114,13 +114,12 @@ function Group:SetChildren (...)
 end
 
 function Group:CreateMagics()
-	local title = self.title or self.addon
-	local subtitle = self.subtitle or self.L['Description'] or select(3, self:GetAddonInfo())
-
+	local title = self:GetTitle()
 	if title then
 		self:CreateHeader(title, 'GameFontNormalLarge')
 	end
 
+	local subtitle = self:GetSubtitle()
 	if subtitle then
 		self:CreateHeader(subtitle, 'GameFontHighlightSmall').bottom = 20
 	end

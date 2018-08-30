@@ -28,7 +28,7 @@ function MakeSushi(version, type, name, ...)
 	end
 end
 
-local root = 'Interface\\Addons\\' .. ... .. '\\'
+local root = 'Interface\\AddOns\\' .. ... .. '\\'
 local location = debugstack(1,1,0):match('^(.+)\\Sushi[%d\.\-]+\.lua')
 if location:sub(1,3) == '...' then
 	for i = 4, strlen(location) do

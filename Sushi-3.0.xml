@@ -26,7 +26,7 @@
 	<Script file="Classes\FauxScrollGroup.lua"/>
 	<Script file="Classes\TabGroup.lua"/>
 	<Script file="Classes\MagicGroup.lua"/>
-	<Script file="Classes\CreditGroup.lua"/>
+	<Script file="Classes\CreditsGroup.lua"/>
 
 	<!-- Dropdowns -->
 	<Script file="Classes\DropdownFrame.lua"/>

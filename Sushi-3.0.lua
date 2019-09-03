@@ -28,13 +28,20 @@ function MakeSushi(version, type, name, ...)
 	end
 end
 
-local root = 'Interface\\AddOns\\' .. ... .. '\\'
 local location = debugstack(1,1,0):match('^(.+)\\Sushi[%d\.\-]+\.lua')
-if location:sub(1,3) == '...' then
-	for i = 4, strlen(location) do
-		if root:find(location:sub(4, i) .. '$') then
-			location = root .. location:sub(i+1)
-			break
+local best = strlen(location)
+
+for k = 1, GetNumAddOns() do
+	local addon = GetAddOnInfo(k)
+	local root = 'Interface\\AddOns\\' .. addon .. '\\'
+
+	if location:sub(1,3) == '...' then
+		for i = 4, best do
+			if root:find(location:sub(4, i) .. '$') then
+				location = root .. location:sub(i+1)
+				best = i
+				break
+			end
 		end
 	end
 end

@@ -2,6 +2,8 @@ name: tag
 
 on:
   push:
+    paths:
+      - Sushi-3.0.lua
     branches:
       - master
 

@@ -1,0 +1,20 @@
+name: tag
+
+on:
+  push:
+    paths:
+      - Sushi-3.0.lua
+    branches:
+      - master
+
+jobs:
+  tag:
+      runs-on: ubuntu-latest
+      steps:
+      - uses: actions/checkout@master
+      - uses: jaliborc/action-general-autotag@master
+        with:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          source_file: "Sushi-3.0.lua"
+          extraction_regex: "LibStub:NewLibrary\\(['\\s]+Sushi-3.0['\\s]+,\\s*(\\d+)\\)"
+          tag_format: "3.0.{version}"

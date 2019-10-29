@@ -17,15 +17,17 @@ You should have received a copy of the GNU General Public License
 along with Patronize. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Group = LibStub('Sushi-3.1').MagicGroup:NewSushi('CreditsGroup', 1, 'Frame')
+local Sushi = LibStub('Sushi-3.1')
+local Group = Sushi.MagicGroup:NewSushi('CreditsGroup', 1, 'Frame')
 if not Group then return end
 
 
 --[[ Overrides ]]--
 
 function Group:New(parent, people, title)
-	local f, p = self:Super(Group):New(parent, title)
+	local f, p = self:Super(Group):New(parent, title or self.title)
 	f.people = people
+	f:UpdateChildren()
 	return f, p
 end
 
@@ -50,7 +52,9 @@ function Group:SetChildren(call)
 			end
 		end
 
-		call(self)
+		if call then
+			call(self)
+		end
 	end)
 end
 
@@ -74,13 +78,12 @@ function Group:GetSubtitle()
 	website = website:match('^https?://(.+)$') or website
 	website = website:match('^www\.(.+)$') or website
 
-	return self.subtitle:format(self:GetAddon() or '', website)
+	return self.subtitle:format(self:GetProduct() or '', website)
 end
 
-function Group:GetAddon()
+function Group:GetProduct()
 	local panel = self:GetParent()
-	local parent = panel and panel.parent
-	return parent and parent.name
+	return panel and panel.parent
 end
 
 
@@ -103,8 +106,8 @@ do
 	end
 end
 
-Group.orientation, Group.resizing = 'HORIZONTAL', 'VERTICAL'
-Group.title = format('|T%s\\art\\Patreon:13:13:0:0:64:64:10:54:10:54|t ', Sushi.InstallLocation) .. Group.title
+Group.orientation = 'HORIZONTAL'
+Group.title = Group.title .. format(' |T%s\\art\\Patreon:13:13:0:0:64:64:10:54:10:54|t', Sushi.InstallLocation)
 Group.subtitle = '%s is distributed for free and supported trough donations. These are the people currently supporting development. Become a patron too at |cFFF96854%s|r.'
 
 Group.DialogMessage = 'Copy the following url into your browser'

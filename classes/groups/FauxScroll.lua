@@ -17,68 +17,69 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Group = MakeSushi(1, nil, 'FauxScrollGroup', nil, nil, SushiGroup)
-if not Group then
-	return
-end
+local Group = LibStub('Sushi-3.1').Group:NewSushi('FauxScroll', 1, 'Frame', nil, true)
+if not Group then return end
 
 
---[[ Constructor ]]--
+--[[ Overrides ]]--
 
-function Group:OnCreate ()
-	local scroll = CreateFrame('ScrollFrame', '$parentScrollFrame', self, 'FauxScrollFrameTemplate')
+function Group:Construct()
+	local f = self:Super(Group):Construct()
+	local scroll = CreateFrame('ScrollFrame', '$parentScroll', f, 'FauxScrollFrameTemplate')
 	scroll:SetPoint('TOPLEFT')
 	scroll:SetPoint('BOTTOMRIGHT', -25, 0)
 	scroll:SetScript('OnVerticalScroll', function(scroll, v)
-		FauxScrollFrame_OnVerticalScroll(scroll, v, self.entryHeight)
-		self:Update()
+		FauxScrollFrame_OnVerticalScroll(scroll, v, f.entryHeight)
+		f:Update()
 	end)
-		
+
 	local bg = scroll.ScrollBar:CreateTexture()
 	bg:SetColorTexture(0, 0, 0, .3)
 	bg:SetAllPoints()
 
-	SushiGroup.OnCreate (self)
-	self.ScrollFrame = scroll
+	f.Scroll = scroll
+	return f
 end
 
-function Group:OnAcquire ()
-	self.numEntries, self.maxEntries, self.entryHeight = 1, 10, 20
-	SushiGroup.OnAcquire (self)
+function Group:New(parent, maxEntries, entryHeight, children)
+	local f = self:Super(Group):New(parent)
+	f.maxEntries, f.entryHeight = maxEntries, entryHeight
+	f:SetChildren(children)
+	return f
 end
 
-function Group:Layout ()
-	FauxScrollFrame_Update(self.ScrollFrame, self.numEntries, self.maxEntries, self.entryHeight)
-	SushiGroup.Layout (self)
+function Group:Layout()
+	FauxScrollFrame_Update(self.Scroll, self.numEntries, self.maxEntries, self.entryHeight)
+	self:Super(Group):Layout()
 end
 
 
 --[[ State ]]--
 
-function Group:FirstEntry ()
+function Group:FirstEntry()
 	return self:GetOffset() + 1
 end
 
-function Group:LastEntry ()
+function Group:LastEntry()
 	return min(self:GetOffset() + self.maxEntries, self.numEntries)
 end
 
-function Group:GetOffset ()
-	return FauxScrollFrame_GetOffset(self.ScrollFrame)
+function Group:GetOffset()
+	return FauxScrollFrame_GetOffset(self.Scroll)
 end
 
 
 --[[ Parameters ]]--
 
-function Group:SetMaxDisplayed (max)
+function Group:SetMaxDisplayed(max)
 	self.maxEntries = max
 end
 
-function Group:GetMaxDisplayed ()
+function Group:GetMaxDisplayed()
 	return self.maxEntries
 end
 
-function Group:SetEntrySize (height)
+function Group:SetEntrySize(height)
 	self.entryHeight = height
 end
 
@@ -86,10 +87,17 @@ function Group:GetEntrySize()
 	return self.entryHeight
 end
 
-function Group:SetNumEntries (num)
+function Group:SetNumEntries(num)
 	self.numEntries = num
 end
 
-function Group:NumEntries ()
+function Group:NumEntries()
 	return self.numEntries
 end
+
+
+--[[ Proprieties ]]--
+
+Group.numEntries = 1
+Group.maxEntries = 10
+Group.entryHeight = 20

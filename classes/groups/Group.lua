@@ -77,8 +77,8 @@ end
 
 --[[ Children ]]--
 
-function Group:SetChildren(method)
-	self:SetCall('OnChildren', method)
+function Group:SetChildren(call)
+	self:SetCall('OnChildren', call)
 	self:UpdateChildren()
 end
 
@@ -181,7 +181,7 @@ function Group:Layout()
 	end
 end
 
-function Group:CanLayout ()
+function Group:CanLayout()
 	return self:GetCall('OnChildren') and self:IsVisible()
 end
 
@@ -194,7 +194,7 @@ function Group:SetOrientation(orientation)
 end
 
 function Group:GetOrientation()
-	return self.orientation or 'VERTICAL'
+	return self.orientation
 end
 
 function Group:Orient(a, b)
@@ -213,7 +213,7 @@ function Group:SetResizing(resizing)
 end
 
 function Group:GetResizing()
-	return self.resizing or 'VERTICAL'
+	return self.resizing
 end
 
 function Group:GetLimit()
@@ -223,5 +223,6 @@ end
 
 --[[ Proprieties ]]--
 
+Group.orientation, Group.resizing = 'VERTICAL', 'VERTICAL'
 Group.Update = Group.UpdateChildren
 Group.Break = {}

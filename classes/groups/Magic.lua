@@ -22,7 +22,7 @@ if not Group then return end
 
 local function NewCategory(parent, name)
 	local f = CreateFrame('Frame', nil, InterfaceOptionsFrame)
-	f.parent, f.name = parent, name
+	f.parent, f.name = parent and parent.name, name
 	f:Hide()
 
 	InterfaceOptions_AddCategory(f)
@@ -40,6 +40,7 @@ function Group:Construct()
 end
 
 function Group:New(category, subcategory)
+	assert(category, 'First parameter to `MagicGroup:New` is not optional')
 	if type(category) == 'string' then
 		category = NewCategory(nil, category)
 	elseif subcategory then
@@ -47,7 +48,7 @@ function Group:New(category, subcategory)
 	end
 
 	local f = self:Super(Group):New(category)
-	f.resizing, f.title = 'HORIZONTAL', category.name
+	f.name = category.name
 	f:SetPoint('BOTTOMRIGHT', -4, 5)
 	f:SetPoint('TOPLEFT', 4, -11)
 	f:SetFooter(nil)
@@ -68,7 +69,9 @@ function Group:SetChildren(call)
 			self:Add('Header', self:GetSubtitle(), 'GameFontHighlightSmall').bottom = 20
 		end
 
-		call(self)
+		if call then
+			call(self)
+		end
 	end)
 end
 
@@ -76,11 +79,11 @@ end
 --[[ API ]]--
 
 function Group:SetTitle(title)
-	self.title = title
+	self.name = title
 end
 
 function Group:GetTitle()
-	return self.title
+	return self.name
 end
 
 function Group:SetSubtitle(subtitle)

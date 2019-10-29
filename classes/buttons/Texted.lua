@@ -23,10 +23,15 @@ if not Button then return end
 
 --[[ API ]]--
 
+function Button:New(parent, text)
+  local b = self:Super(Button):New(parent)
+	b:SetText(text)
+	return b
+end
+
 function Button:Reset()
 	self:Super(Button):Reset()
 	self:SetSmall(nil)
-	self:SetText(nil)
 end
 
 function Button:SetText(text)

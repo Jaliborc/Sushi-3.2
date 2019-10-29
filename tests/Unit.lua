@@ -19,7 +19,7 @@ function Tests:ResetKeys()
 end
 
 function Tests:GroupResize()
-  local group = Sushi.Group(nil, function()
+  local group = Sushi.Group(nil, function(group)
     group:Add('HelpButton')
     group:AddBreak()
 

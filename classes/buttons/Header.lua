@@ -26,8 +26,8 @@ if not Header then return end
 function Header:New(parent, text, font, underlined)
 	local f = self:Super(Header):New(parent)
 	f:SetCall('OnParentResize', f.UpdateWidth)
-	f:SetFont(font or 'GameFontNormal')
 	f:SetUnderlined(underlined)
+	f:SetFont(font)
 	f:SetText(text)
 	f:UpdateWidth()
 	return f
@@ -46,7 +46,6 @@ function Header:Construct()
 	line:SetHeight(1.2)
 
 	f.String, f.Line = string, line
-	f:SetScript('OnSizeChanged', f.UpdateHeight)
 	return f
 end
 
@@ -63,22 +62,13 @@ function Header:OnLeave()
 end
 
 
---[[ Update ]]--
-
-function Header:UpdateHeight()
-	self.String:SetWidth(self:GetWidth())
-	self:SetHeight(self.String:GetHeight() + (self:IsUnderlined() and 3 or 0))
-end
-
-function Header:UpdateWidth()
-	local parent = self:GetParent()
-	if parent then
-		self:SetWidth(parent:GetWidth() - 20)
-	end
-end
-
-
 --[[ API ]]--
+
+function Header:SetWidth(width)
+	self.manual = true
+	self:Super(Header):SetWidth(width)
+	self:UpdateHeight()
+end
 
 function Header:SetText(text)
 	self.text = text
@@ -91,7 +81,7 @@ function Header:GetText()
 end
 
 function Header:SetFont(font)
-	self.String:SetFontObject(font)
+	self.String:SetFontObject(font or 'GameFontNormal')
 	self:UpdateHeight()
 end
 
@@ -109,11 +99,26 @@ function Header:IsUnderlined()
 end
 
 function Header:SetHighlightFactor(factor)
-	self.highlightFactor = factor
+	self.highlight = factor
 end
 
 function Header:GetHighlightFactor()
-	return self.highlightFactor or 1
+	return self.highlight
+end
+
+
+--[[ Resize ]]--
+
+function Header:UpdateWidth()
+	if not self.manual and self:GetParent() then
+		self:Super(Header):SetWidth(self:GetParent():GetWidth() - 20)
+		self:UpdateHeight()
+	end
+end
+
+function Header:UpdateHeight()
+	self.String:SetWidth(self:GetWidth())
+	self:SetHeight(self.String:GetHeight() + (self:IsUnderlined() and 3 or 0))
 end
 
 
@@ -121,6 +126,7 @@ end
 
 Header.SetLabel = Header.SetText
 Header.GetLabel = Header.GetText
+Header.highlight = 1
 Header.bottom = 5
 Header.right = 12
 Header.left = 12

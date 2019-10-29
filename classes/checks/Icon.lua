@@ -36,6 +36,12 @@ function Icon:Construct()
 	return b
 end
 
+function Icon:New(parent, icon, text)
+	local b = self:Super(Icon):New(parent, text)
+	b:SetIcon(icon)
+	return b
+end
+
 function Icon:SetIcon(icon)
 	self.Icon:SetTexture(icon)
 end

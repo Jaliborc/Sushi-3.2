@@ -26,8 +26,8 @@
   <!-- Groups -->
   <Script file="groups\Group.lua"/>
   <Script file="groups\Magic.lua"/>
-  <!--<Script file="groups\FauxScroll.lua"/>
-  <Script file="groups\Credits.lua"/>-->
+  <Script file="groups\Credits.lua"/>
+  <Script file="groups\FauxScroll.lua"/>
 
   <!-- Dropdowns -->
   <!--<Script file="dropdowns\Button.lua"/>

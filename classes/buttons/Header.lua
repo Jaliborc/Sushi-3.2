@@ -1,0 +1,127 @@
+--[[
+Copyright 2008-2019 João Cardoso
+Sushi is distributed under the terms of the GNU General Public License (or the Lesser GPL).
+This file is part of Sushi.
+
+Sushi is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Sushi is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Sushi. If not, see <http://www.gnu.org/licenses/>.
+--]]
+
+local Header = LibStub('Sushi-3.1').Clickable:NewSushi('Header', 1, 'Button')
+if not Header then return end
+
+
+--[[ Overrides ]]--
+
+function Header:New(parent, text, font, underlined)
+	local f = self:Super(Header):New(parent)
+	f:SetCall('OnParentResize', f.UpdateWidth)
+	f:SetFont(font or 'GameFontNormal')
+	f:SetUnderlined(underlined)
+	f:SetText(text)
+	f:UpdateWidth()
+	return f
+end
+
+function Header:Construct()
+	local f = self:Super(Header):Construct()
+	local string = f:CreateFontString()
+	string:SetPoint('TOPLEFT')
+	string:SetJustifyH('LEFT')
+
+	local line = f:CreateTexture()
+	line:SetColorTexture(1,1,1, .2)
+	line:SetPoint('BOTTOMRIGHT')
+	line:SetPoint('BOTTOMLEFT')
+	line:SetHeight(1.2)
+
+	f.String, f.Line = string, line
+	f:SetScript('OnSizeChanged', f.UpdateHeight)
+	return f
+end
+
+function Header:OnEnter()
+	self:Super(Header):OnEnter()
+	self.String:SetText(self:GetText():gsub('|c(' .. strrep('%x', 8) .. ')', function(value)
+		return '|c' .. value:gsub('(%x%x)', function(v) return format('%x', min(255, tonumber(v, 16) * self:GetHighlightFactor())) end)
+	end))
+end
+
+function Header:OnLeave()
+	self:Super(Header):OnLeave()
+	self.String:SetText(self:GetText())
+end
+
+
+--[[ Update ]]--
+
+function Header:UpdateHeight()
+	self.String:SetWidth(self:GetWidth())
+	self:SetHeight(self.String:GetHeight() + (self:IsUnderlined() and 3 or 0))
+end
+
+function Header:UpdateWidth()
+	local parent = self:GetParent()
+	if parent then
+		self:SetWidth(parent:GetWidth() - 20)
+	end
+end
+
+
+--[[ API ]]--
+
+function Header:SetText(text)
+	self.text = text
+	self.String:SetText(text)
+	self:UpdateHeight()
+end
+
+function Header:GetText()
+	return self.text
+end
+
+function Header:SetFont(font)
+	self.String:SetFontObject(font)
+	self:UpdateHeight()
+end
+
+function Header:GetFont()
+	return self.String:GetFontObject()
+end
+
+function Header:SetUnderlined(enable)
+	self.Line:SetShown(enable)
+	self:UpdateHeight()
+end
+
+function Header:IsUnderlined()
+	return self.Line:IsShown()
+end
+
+function Header:SetHighlightFactor(factor)
+	self.highlightFactor = factor
+end
+
+function Header:GetHighlightFactor()
+	return self.highlightFactor or 1
+end
+
+
+--[[ Proprieties ]]--
+
+Header.SetLabel = Header.SetText
+Header.GetLabel = Header.GetText
+Header.bottom = 5
+Header.right = 12
+Header.left = 12
+Header.top = 5

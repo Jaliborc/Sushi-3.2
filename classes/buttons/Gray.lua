@@ -17,33 +17,27 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-function MakeSushi(version, type, name, ...)
-	local name = 'Sushi' .. name
-	local class = _G[name] or LibStub('Poncho-1.0')(type, name, ...)
-	local old = rawget(class, 'version')
+local Button = LibStub('Sushi-3.1').RedButton:NewSushi('GrayButton', 1)
+if not Button then return end
 
-	if not old or version > old then
-		class.version = version
-		return class, old
+function Button:Construct()
+	local button = self:Super(Button):Construct()
+	button:SetScript('OnMouseDown', button.OnMouseDown)
+	button:SetScript('OnMouseUp', button.OnMouseUp)
+	button:SetScript('OnShow', button.OnMouseUp)
+
+	if button:IsVisible() then
+		button:OnMouseUp()
 	end
+
+	return button
 end
 
-local location = debugstack(1,1,0):match('^(.+)\\Sushi[%d\.\-]+\.lua')
-local best = strlen(location)
-
-for k = 1, GetNumAddOns() do
-	local addon = GetAddOnInfo(k)
-	local root = 'Interface\\AddOns\\' .. addon .. '\\'
-
-	if location:sub(1,3) == '...' then
-		for i = 4, best do
-			if root:find(location:sub(4, i) .. '$') then
-				location = root .. location:sub(i+1)
-				best = i
-				break
-			end
-		end
-	end
+function Button:OnMouseDown()
+	self.Left:SetTexture('Interface/Buttons/UI-Panel-Button-Disabled-Down')
+	self.Middle:SetTexture('Interface/Buttons/UI-Panel-Button-Disabled-Down')
+	self.Right:SetTexture('Interface/Buttons/UI-Panel-Button-Disabled-Down')
 end
 
-Sushi_Directory = location
+Button.NormalFont = 'GameFontHighlight'
+Button.OnMouseUp = UIPanelButton_OnDisable

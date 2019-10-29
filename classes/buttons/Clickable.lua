@@ -17,41 +17,27 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local TipOwner = SushiTipOwner
-local Button = MakeSushi(2, 'Button', 'ButtonBase', nil, nil, TipOwner)
-if Button then
-	Button.sound = SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON
-else
-	return
+local Button = LibStub('Sushi-3.1').Tipped:NewSushi('Clickable', 1)
+if not Button then return end
+
+function Button:Construct()
+	local button = self:Super(Button):Construct()
+	button:SetScript('OnClick', button.OnClick)
+	return button
 end
 
-
---[[ Events ]]--
-
-function Button:OnCreate ()
-	TipOwner.OnCreate(self)
-	self:SetScript('OnClick', self.OnClick)
+function Button:Reset()
+	self:Super(Button):Reset()
+	self:SetEnabled(true)
 end
 
-function Button:OnRelease ()
-	TipOwner.OnRelease(self)
-	self:SetDisabled(nil)
-end
+function Button:OnClick(button)
+	local value = self.GetValue and self:GetValue()
+	PlaySound(self.Sound)
 
-function Button:OnClick ()
-	PlaySound(self.sound)
-	self:FireCall('OnClick')
-	self:FireCall('OnInput')
+	self:FireCall('OnClick', button, value)
+	self:FireCall('OnInput', value)
 	self:FireCall('OnUpdate')
 end
 
-
---[[ API ]]--
-
-function Button:SetDisabled (disabled)
-	if not disabled then
-		self:Enable()
-	else
-		self:Disable()
-	end
-end
+Button.Sound = SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON

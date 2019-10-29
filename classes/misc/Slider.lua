@@ -17,101 +17,76 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
---[[
-API Explained
-	:SetRange (maxValue, minValue)
-	:SetStep (step, [minStep]) -- if minStep is set, step is only used for the mousewheel
-	:SetPattern (pattern) -- where %s is the value
-	
-	:SetText/:SetLabel (label)
-	:SetRangeText (minText, maxText)
-	:SetValueText (valueText)  -- replaces the pattern with the given text
-]]--
+local Slider = LibStub('Sushi-3.1').TipOwner:NewSushi('Slider', 1, 'Slider', 'OptionsSliderTemplate', true)
+if not Slider then return end
 
-local TipOwner = SushiTipOwner
-local Slider = MakeSushi(2, 'Slider', 'Slider', nil, 'OptionsSliderTemplate', TipOwner)
-if not Slider then
-	return
-end
-
-local TestString = UIParent:CreateFontString()
+local TestString = Slider.TestString or UIParent:CreateFontString()
 TestString:SetFontObject('GameFontHighlightSmall')
 
 
---[[ Builder ]]--
+--[[ Factory ]]--
 
-function Slider:OnCreate()
-	local name = self:GetName()
-	TipOwner.OnCreate(self)
-	
-	local Label = _G[name .. 'Text']
-	Label:SetPoint('BOTTOM',  self, 'TOP')
-	
-	local High = _G[name .. 'High']
-	High:SetPoint('TOPRIGHT', self, 'BOTTOMRIGHT', 0, 1)
-	
-	local Low = _G[name .. 'Low']
-	Low:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, 1)
-	
-	local EditBox = CreateFrame('EditBox', nil, self)
-	EditBox:SetJustifyH('CENTER')
-	EditBox:SetAutoFocus(false)
-	EditBox:SetHeight(18)
-	
-	EditBox:SetScript('OnTextChanged', function() self:UpdateEditWidth() end)
-	EditBox:SetScript('OnEnter', function() self:OnEnter() end)
-	EditBox:SetScript('OnLeave', function() self:OnLeave() end)
-	EditBox:SetScript('OnEscapePressed', self.OnEscapePressed)
-	EditBox:SetScript('OnEnterPressed', self.OnEnterPressed)
-	
-	local EditBG = CreateFrame('Frame', nil, EditBox)
-	EditBG:SetPoint('TOP', self, 'BOTTOM', 0, 3)
-	EditBG:SetHeight(18)
-	EditBG:SetBackdrop({
+function Slider:New(value, low, high, step, pattern)
+	local slider = self:Super(Slider):New()
+	slider:SetPattern(pattern or '%s')
+	slider:SetRange(low or 1, high or 100)
+	slider:SetValue(value or 1)
+	slider:SetStep(step or 1)
+	slider:UpdateFonts()
+	return slider
+end
+
+function Slider:Construct()
+	local slider = self:Super(Slider):Construct()
+	local name = slider:GetName()
+
+	local editBox = CreateFrame('EditBox', nil, slider)
+	editBox:SetScript('OnTextChanged', function() slider:UpdateEditWidth() end)
+	editBox:SetScript('OnEnter', function() slider:OnEnter() end)
+	editBox:SetScript('OnLeave', function() slider:OnLeave() end)
+	editBox:SetScript('OnEscapePressed', slider.OnEscapePressed)
+	editBox:SetScript('OnEnterPressed', slider.OnEnterPressed)
+	editBox:SetJustifyH('CENTER')
+	editBox:SetAutoFocus(false)
+	editBox:SetHeight(18)
+
+	local editBG = CreateFrame('Frame', nil, editBox)
+	editBG:SetPoint('TOP', slider, 'BOTTOM', 0, 3)
+	editBG:SetHeight(18)
+	editBG:SetBackdrop({
 		bgFile = 'Interface/Tooltips/UI-Tooltip-Background',
 		edgeFile = 'Interface/Tooltips/UI-Tooltip-Border',
 		insets = {left = 2, right = 2, top = 2, bottom = 2},
 		edgeSize = 11,
 	})
-	
-	EditBG:SetBackdropBorderColor(0,0,0, 0.3)
-	EditBG:SetBackdropColor(0,0,0, 0.25)
-	
-	local Prefix = EditBox:CreateFontString()
-	Prefix:SetPoint('LEFT', EditBG, 3, 0)
-	Prefix:SetFontObject(GameFontHighlightSmall)
+	editBG:SetBackdropBorderColor(0,0,0, 0.3)
+	editBG:SetBackdropColor(0,0,0, 0.25)
 
-	local Suffix = EditBox:CreateFontString()
-	Suffix:SetPoint('RIGHT', EditBG, -3, 0)
-	Suffix:SetFontObject(GameFontHighlightSmall)
-	
-	self:SetScript('OnValueChanged', self.OnValueChanged)
-	self:SetScript('OnShow', self.UpdateEditBackground)
-	self:SetScript('OnMouseWheel', self.OnMouseWheel)
-	self:SetScript('OnHide', self.StopUpdate)
-	self:EnableMouseWheel(true)
-	
-	self.EditBox = EditBox
-	self.EditBG = EditBG
-	self.Suffix = Suffix
-	self.Prefix = Prefix
-	self.Label = Label
-	self.High = High
-	self.Low = Low
+	local prefix = editBox:CreateFontString()
+	prefix:SetPoint('LEFT', editBG, 3, 0)
+	prefix:SetFontObject(GameFontHighlightSmall)
+
+	local suffix = editBox:CreateFontString()
+	suffix:SetPoint('RIGHT', editBG, -3, 0)
+	suffix:SetFontObject(GameFontHighlightSmall)
+
+	slider.EditBox, slider.EditBG, slider.Suffix, slider.Prefix = editBox, editBG, suffix, prefix
+	slider.Label slider.High, slider.Low = _G[name .. 'Text'], _G[name .. 'High'], _G[name .. 'Low']
+	slider.High:SetPoint('TOPRIGHT', slider, 'BOTTOMRIGHT', 0, 1)
+	slider.Low:SetPoint('TOPLEFT', slider, 'BOTTOMLEFT', 0, 1)
+	slider.Label:SetPoint('BOTTOM',  slider, 'TOP')
+
+	slider:SetScript('OnValueChanged', slider.OnValueChanged)
+	slider:SetScript('OnShow', slider.UpdateEditBackground)
+	slider:SetScript('OnMouseWheel', slider.OnMouseWheel)
+	slider:SetScript('OnHide', slider.StopUpdate)
+	slider:EnableMouseWheel(true)
+	return slider
 end
 
-function Slider:OnAcquire()
-	TipOwner.OnAcquire(self)
-	self:UpdateFonts()
-	self:SetPattern('%s')
-	self:SetRange(1, 100)
-	self:SetStep(1)
-	self:SetValue(1)
-end
-
-function Slider:OnRelease()
-	TipOwner.OnRelease(self)
+function Slider:Reset()
 	self.valueText, self.lowText, self.highText, self.disabled, self.small = nil
+	self:Super(Slider):Reset()
 	self:SetWidth(144)
 	self:SetLabel(nil)
 end
@@ -131,12 +106,12 @@ function Slider:OnMouseWheel(direction)
 end
 
 function Slider:OnEnter()
-	TipOwner.OnEnter(self)
+	self:Super(Slider):OnEnter()
 	self:UpdateEditBackground()
 end
 
 function Slider:OnLeave()
-	TipOwner.OnLeave(self)
+	self:Super(Slider):OnLeave()
 	self:UpdateEditBackground()
 end
 
@@ -179,12 +154,12 @@ function Slider:UpdateEditWidth()
 	local high = self.High:GetWidth()
 	local prefix = self.Prefix:GetWidth()
 	local suffix = self.Suffix:GetWidth()
-	
+
 	TestString:SetText(self.EditBox:GetText())
 	local width = TestString:GetStringWidth()
 	local maxWidth = self:GetWidth() - max(low, high) * 2
 	local off = prefix + suffix + 6
-	
+
 	self.EditBG:SetWidth(max(min(width + off, maxWidth), 15))
 	self.EditBox:SetPoint('TOP', self.EditBG, (prefix - suffix) / 2, 0)
 	self.EditBox:SetWidth(min(width + 15, maxWidth - off))
@@ -193,38 +168,36 @@ end
 function Slider:UpdateEditBackground(focusLost)
 	local focus = GetMouseFocus()
 	local hasFocus = (focus == self or focus == self.EditBox) or (self.EditBox:HasFocus() and not focusLost)
-	
-	if not hasFocus or self.valueText or self:IsDisabled() then
-		self.EditBG:Hide()
-	else
-		self.EditBG:Show()
-	end
+
+	self.EditBG:SetShown(hasFocus and not self.valueText and self:IsEnabled())
 end
 
 
 --[[ Value ]]--
 
 function Slider:SetValue(value, update)
-	local minV, maxV = self:GetMinMaxValues()
-	local value = self:GetRoundedValue(max(min(value, maxV), minV))
-	
+	local minV, maxV = self:GetRange()
+	local maxStep, minStep = self:GetStep()
+
+	local step = minStep or maxStep
+	local value = floor(max(min(value, maxV), minV) / step + 0.5) * step
+
 	if self.value ~= value then
 		self.value = value
-		self.__type.SetValue(self, value)
+		self:Super(Slider):SetValue(value)
 		self:UpdateValueText()
-		
+
 		self:FireCall('OnValueChanged', value)
 		self:FireCall('OnInput', value)
-		
+
 		if update then
 			self:Update()
 		end
 	end
 end
 
-function Slider:GetRoundedValue(value)
-	local step = self.minStep or self.step
-	return floor((value or 0) / step + 0.5) * step
+function Slider:GetValue()
+	return self.value
 end
 
 
@@ -233,14 +206,14 @@ end
 function Slider:SetValueText(text)
 	self.valueText = text
 	self:UpdateValueText()
-	
+
 	if text then
 		self.EditBox:SetCursorPosition(0)
 	end
 end
 
 function Slider:UpdateValueText()
-	self.EditBox:SetText(self.valueText or self:GetRoundedValue(self.value))
+	self.EditBox:SetText(self:GetValueText() or self:GetValue())
 end
 
 function Slider:GetValueText()
@@ -261,10 +234,11 @@ function Slider:SetRangeText(low, high)
 end
 
 function Slider:UpdateRangeText()
-	local min, max = self:GetMinMaxValues()
-	
-	self.High:SetText(self.highText or max)
-	self.Low:SetText(self.lowText or min)
+	local minText, maxText = self:GetRangeText()
+	local min, max = self:GetRange()
+
+	self.High:SetText(maxText or max)
+	self.Low:SetText(minText or min)
 	self:UpdateEditWidth()
 end
 
@@ -290,10 +264,10 @@ end
 
 function Slider:SetPattern(pattern)
 	local prefix, suffix = strmatch(pattern, '(.*)%%s(.*)')
+
+	self.pattern = pattern
 	self.Prefix:SetText(prefix)
 	self.Suffix:SetText(suffix)
-	
-	self.pattern = pattern
 	self:UpdateEditWidth()
 end
 
@@ -315,20 +289,13 @@ end
 
 --[[ Font ]]--
 
-function Slider:SetDisabled(disabled)
-	if disabled then
+function Slider:SetEnabled(enabled)
+	if not enabled then
 		self.EditBox:ClearFocus()
-		self:Disable()
-	else
-		self:Enable()
 	end
-	
-	self.disabled = disabled
-	self:UpdateFonts()
-end
 
-function Slider:IsDisabled()
-	return self.disabled
+	self:Super(Slider):SetEnabled(enabled)
+	self:UpdateFonts()
 end
 
 function Slider:SetSmall(small)
@@ -341,27 +308,23 @@ function Slider:IsSmall()
 end
 
 function Slider:UpdateFonts()
-	local font
-	if not self:IsDisabled() then
-		font = 'GameFont%s'
-	else
-		font = 'GameFontDisable'
-	end
-	
-	self.Label:SetFontObject(font:format('Normal') .. (self:IsSmall() and 'Small' or ''))
-	
-	font = font:format('Highlight') .. 'Small'
-	self.EditBox:SetFontObject(font)
-	self.High:SetFontObject(font)
-	self.Low:SetFontObject(font)
+	local small = self:IsSmall() and 'Small' or ''
+	local label = self:IsEnabled() and 'GameFont%s' or 'GameFontDisable'
+	local bottom = label:format('Highlight') .. 'Small'
+
+	self.Label:SetFontObject(label:format('Normal') .. small)
+	self.EditBox:SetFontObject(bottom)
+	self.High:SetFontObject(bottom)
+	self.Low:SetFontObject(bottom)
 end
 
 
 --[[ Finish ]]--
 
-Slider.GetRange = Slider.SetMinMaxValues
+Slider.GetRange = Slider.GetMinMaxValues
 Slider.SetText = Slider.SetLabel
 Slider.GetText = Slider.GetLabel
+Slider.TestString = TestString
 Slider.bottom = 7
 Slider.right = 16
 Slider.left = 14

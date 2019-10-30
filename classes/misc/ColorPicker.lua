@@ -1,6 +1,6 @@
 --[[
 Copyright 2008-2019 João Cardoso
-Sushi is distributed under the terms of the GNU General Public License (or the Lesser GPL).
+Sushi is distributed under the terms of the GNU General Public License(or the Lesser GPL).
 This file is part of Sushi.
 
 Sushi is free software: you can redistribute it and/or modify
@@ -17,103 +17,97 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Check = SushiCheck
-local Color = MakeSushi(5, 'CheckButton', 'ColorPicker', nil, nil, Check)
-if not Color then
-	return
+local Color = LibStub('Sushi-3.1').TextedClickable:NewSushi('ColorPicker', 1, 'Button')
+if not Color then	return end
+
+
+--[[ Overrides ]]--
+
+function Color:Construct()
+	local b = self:Super(Color):Construct()
+	local text = b:CreateFontString(nil, nil, self.NormalFont)
+	text:SetPoint('LEFT', 28, 1)
+
+	local border = b:CreateTexture(nil, 'BORDER')
+	border:SetTexture('Interface/ChatFrame/ChatFrameColorSwatch')
+	border:SetPoint('LEFT')
+	border:SetSize(23, 23)
+
+	local square = b:CreateTexture(nil, 'OVERLAY')
+	square:SetTexture('Interface/ChatFrame/ChatFrameColorSwatch')
+	square:SetPoint('CENTER', border)
+	square:SetSize(19, 19)
+
+	local glow = b:CreateTexture()
+	glow:SetTexture('Interface/Buttons/UI-CheckBox-Highlight')
+	glow:SetPoint('CENTER', border)
+	glow:SetBlendMode('ADD')
+	glow:SetSize(21, 23)
+
+	b.Square = square
+	b:SetFontString(text)
+	b:SetNormalTexture(border)
+	b:SetHighlightTexture(glow)
+	return b
 end
 
-
---[[ Builder ]]--
-
-function Color:OnCreate ()
-	local Border = self:CreateTexture(nil, 'BORDER')
-	Border:SetTexture('Interface\\ChatFrame\\ChatFrameColorSwatch')
-	Border:SetWidth(23) Border:SetHeight(23)
-	Border:SetPoint('Center')
-
-	local Color = self:CreateTexture(nil, 'OVERLAY')
-	Color:SetTexture('Interface\\ChatFrame\\ChatFrameColorSwatch')
-	Color:SetWidth(19) Color:SetHeight(19)
-	Color:SetPoint('Center')
-	self.Color = Color
-
-	local Glow = self:CreateTexture()
-	Glow:SetTexture('Interface\\Buttons\\UI-CheckBox-Highlight')
-	Glow:SetWidth(21) Glow:SetHeight(23)
-	Glow:SetPoint('Center')
-
-	self:SetHighlightTexture(Glow)
-	self:SetDisabledTexture(nil)
-	self:SetCheckedTexture(nil)
-	self:SetPushedTexture(nil)
-	self:SetNormalTexture(nil)
-	Check.OnCreate(self)
-end
-
-function Color:OnRelease ()
-	Check.OnRelease(self)
-	self:SetColor(1, 1, 1)
-	self:EnableAlpha(nil)
-end
-
-
---[[ Scripts ]]--
-
-function Color:OnClick ()
-	local r, g, b, a = self:GetColor()
-	ColorPickerFrame.func, ColorPickerFrame.opacityFunc = nil
-	ColorPickerFrame:SetColorRGB(r or 1, g or 1, b or 1)
-	ColorPickerFrame.hasOpacity = self:HasAlpha()
-	ColorPickerFrame.opacity = 1 - (a or 1)
+function Color:OnClick()
+	local r,g,b,a = self:GetValue()
+	local set = function(...)
+		self:SetValue(...)
+		self:FireCall('OnColorChanged', ...)
+		self:FireCall('OnInput', ...)
+	end
 
 	ColorPickerFrame.func = function()
-		local r, g, b = ColorPickerFrame:GetColorRGB()
-		self:SaveColor(r, g, b, 1 - OpacitySliderFrame:GetValue())
+		local r,g,b = ColorPickerFrame:GetColorRGB()
+		set(r,g,b, 1 - OpacitySliderFrame:GetValue())
 
 		if not ColorPickerFrame:IsVisible() then
 			self:FireCall('OnUpdate')
 		end
 	end
 
+	ColorPickerFrame.opacity = 1 - a
+	ColorPickerFrame.hasOpacity = self:HasAlpha()
 	ColorPickerFrame.opacityFunc = ColorPickerFrame.func
-	ColorPickerFrame.cancelFunc = function()
-		self:SaveColor(r, g, b, a)
-	end
+	ColorPickerFrame.cancelFunc = function() set(r,g,b,a) end
+	ColorPickerFrame:SetColorRGB(r,g,b)
+	ColorPickerFrame:Show()
 
-	ColorPickerFrame:Show() --ShowUIPanel(ColorPickerFrame)
 	PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
 end
 
 
---[[ Color ]]--
+--[[ API ]]--
 
-function Color:SetColor (...)
-	self.r, self.g, self.b, self.a = ...
-	self.Color:SetVertexColor(self.r or 1, self.g or 1, self.b or 1)
+function Color:SetValue(r,g,b,a)
+	self.a = a
+	self.Square:SetVertexColor(r or 1, g or 1, b or 1)
 end
 
-function Color:SaveColor (...)
-	self:SetColor(...)
-	self:FireCall('OnColorChanged', ...)
-	self:FireCall('OnInput', ...)
+function Color:GetValue()
+	local r,g,b = self.Square:GetVertexColor()
+	return r,g,b, self.a
 end
 
-function Color:GetColor ()
-	return self.r, self.g, self.b, self.a
-end
-
-
---[[ Alpha ]]--
-
-function Color:EnableAlpha (enable)
+function Color:EnableAlpha(enable)
 	self.hasAlpha = enable
 end
 
-function Color:HasAlpha ()
+function Color:HasAlpha()
 	return self.hasAlpha
 end
 
 
-Color.SetValue = Color.SetColor
-Color.GetValue = Color.GetColor
+--[[ Proprieties ]]--
+
+Check.NormalFont = 'GameFontHighlight'
+Color.SetColor = Color.SetValue
+Color.GetColor = Color.GetValue
+Check.MinWidth = 150
+Check.WidthOff = 28
+Check.bottom = 8
+Check.right = 10
+Check.left = 10
+Color.a = 1

@@ -57,7 +57,6 @@ function Check:Construct()
 	b:SetCheckedTexture(checked)
 	b:SetHighlightTexture(highlight)
 	b:SetDisabledCheckedTexture(disabled)
-
 	return b
 end
 

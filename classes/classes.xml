@@ -17,8 +17,12 @@
   <Script file="checks\Icon.lua"/>
   <Script file="checks\Color.lua"/>
 
+  <!-- EditBoxes -->
+  <Script file="edits\Editable.lua"/>
+  <Script file="edits\Box.lua"/>
+  <Script file="edits\Dark.lua"/>
+
   <!-- Misc -->
-  <Script file="misc\Editbox.lua"/>
   <Script file="misc\Glowbox.lua"/>
   <!--<Script file="misc\Slider.lua"/>
   <Script file="misc\Popup.lua"/>-->

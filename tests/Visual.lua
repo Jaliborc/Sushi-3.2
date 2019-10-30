@@ -4,6 +4,7 @@ Panel:Hide()
 Panel.name = 'Sushi-3.1'
 InterfaceOptions_AddCategory(Panel)
 
+-- Singletons
 local helpButton = Sushi.HelpButton(Panel)
 helpButton:SetPoint('TOPLEFT', 10, -10)
 helpButton:SetTip('Help', 'An help button.')
@@ -21,22 +22,37 @@ grayButton:SetPoint('LEFT', redButton, 'RIGHT', 5, 0)
 local check = Sushi.Check(Panel, 'Check Button')
 check:SetPoint('LEFT', grayButton, 'RIGHT', 5, 0)
 
+local check2 = Sushi.Check(Panel)
+check2:SetText('A really long disabled button')
+check2:SetPoint('TOPLEFT', 10, -36)
+check2:SetEnabled(false)
+check2:SetChecked(true)
+
+local color = Sushi.ColorPicker(Panel, 'Color Picker', 1,0,0, 1)
+color:SetPoint('TOPLEFT', check, 'BOTTOMLEFT', 0, -5)
+
 local expand = Sushi.ExpandCheck(Panel, 'Expand Check')
 expand:SetPoint('LEFT', check, 'RIGHT', 5, 0)
+
+local icon = Sushi.IconCheck(Panel, 'Interface/Icons/ability_bullrush', 'Icon Check')
+icon:SetPoint('TOPLEFT', color, 'TOPRIGHT', 5, 0)
 
 local glow = Sushi.Glowbox(Panel, 'This is a glow box.')
 glow:SetPoint('BOTTOM', expand, 'TOP', 0, 30)
 
-local check2 = Sushi.Check(Panel)
-check2:SetPoint('TOPLEFT', helpButton, 'BOTTOMLEFT', 0, -5)
-check2:SetText('A really really long disabled button')
-check2:SetEnabled(false)
-check2:SetChecked(true)
+local box = Sushi.BoxEdit(Panel, 'Box Edit', 'Some user text')
+box:SetPoint('TOPLEFT', 20, -75)
+box:SetCall('OnInput', function(box, value)
+  print('Box edit changed value to ' .. value)
+end)
 
-local icon = Sushi.IconCheck(Panel, 'Interface/Icons/ability_bullrush', 'Icon Check')
-icon:SetPoint('TOPLEFT', check2, 'TOPRIGHT', 5, 0)
+local dark = Sushi.DarkEdit(Panel)
+dark:SetPoint('TOPLEFT', box, 'TOPRIGHT', 5, 0)
+dark:SetValue('User percentage')
+dark:SetPattern('%s%')
 
-local group = Sushi.Group(Panel)
+-- Groups
+--[[local group = Sushi.Group(Panel)
 group:SetPoint('TOPLEFT', icon, 'TOPRIGHT', 5, 0)
 group:SetChildren(function()
   for i = 1, 4 do
@@ -46,8 +62,8 @@ group:SetChildren(function()
   end
 end)
 
-local header1 = Sushi.Header(group, 'This is a parent-resized header')
-header1:SetPoint('TOPLEFT', group, 'BOTTOMLEFT', 0, -5)
+local header1 = Sushi.Header(check2, 'This is a parent-resized header')
+header1:SetPoint('TOPLEFT', check2, 'BOTTOMLEFT', 0, -5)
 
 local header2 = Sushi.Header(group, 'This is not')
 header2:SetPoint('TOPLEFT', header1, 'BOTTOMLEFT', 0, -5)
@@ -77,13 +93,4 @@ faux:SetChildren(function()
   for i = faux:FirstEntry(), faux:LastEntry() do
     faux:Add('RedButton', 'Faux scroll entry #' .. tostring(i))
   end
-end)
-
-local edit = Sushi.Editbox(Panel, 'Editbox', 'Some user text')
-edit:SetPoint('TOPLEFT', placeholder, 'TOPRIGHT', 10, -30)
-edit:SetCall('OnInput', function(edit, value)
-  print('Editbox changed value to ' .. value)
-end)
-
-local color = Sushi.ColorPicker(Panel, 'Color Picker', 1,0,0, 1)
-color:SetPoint('TOPLEFT', faux, 'TOPRIGHT', 5, 0)
+end)]]--

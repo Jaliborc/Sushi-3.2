@@ -21,9 +21,9 @@ local Callable = LibStub('Sushi-3.1').Base:NewSushi('Callable', 1)
 if not Callable then return end
 
 function Callable:New(...)
-	local frame = self:Super(Callable):New(...)
-	frame.calls = {}
-	return frame
+	local f = self:Super(Callable):New(...)
+	f.calls = {}
+	return f
 end
 
 function Callable:SetCall(event, method)

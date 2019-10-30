@@ -17,37 +17,37 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Button = LibStub('Sushi-3.1').Clickable:NewSushi('TextedClickable', 1)
-if not Button then return end
+local Texted = LibStub('Sushi-3.1').Clickable:NewSushi('TextedClickable', 1)
+if not Texted then return end
 
 
 --[[ API ]]--
 
-function Button:New(parent, text)
-  local b = self:Super(Button):New(parent)
+function Texted:New(parent, text)
+  local b = self:Super(Texted):New(parent)
 	b:SetText(text)
 	return b
 end
 
-function Button:Reset()
-	self:Super(Button):Reset()
+function Texted:Reset()
+	self:Super(Texted):Reset()
 	self:SetSmall(nil)
 end
 
-function Button:SetText(text)
+function Texted:SetText(text)
 	self:GetFontString():SetText(text)
 	self:SetWidth(max(self.MinWidth, self:GetTextWidth() + self.WidthOff))
 end
 
-function Button:SetLabel(label)
+function Texted:SetLabel(label)
   self:SetText(label)
 end
 
-function Button:GetLabel()
+function Texted:GetLabel()
   return self:GetText()
 end
 
-function Button:SetSmall(small)
+function Texted:SetSmall(small)
 	local suffix = small and 'Small' or ''
 
 	self:SetHighlightFontObject(self.HighlightFont .. suffix)
@@ -55,14 +55,14 @@ function Button:SetSmall(small)
 	self:SetNormalFontObject(self.NormalFont .. suffix)
 end
 
-function Button:IsSmall()
+function Texted:IsSmall()
 	return self:GetNormalFontObject() == self.NormalFont
 end
 
 
 --[[ Proprieties ]]--
 
-Button.HighlightFont = 'GameFontHighlight'
-Button.DisableFont = 'GameFontDisable'
-Button.NormalFont = 'GameFontNormal'
-Button.MinWidth = 0
+Texted.HighlightFont = 'GameFontHighlight'
+Texted.DisableFont = 'GameFontDisable'
+Texted.NormalFont = 'GameFontNormal'
+Texted.MinWidth = 0

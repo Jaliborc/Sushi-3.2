@@ -17,21 +17,21 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Button = LibStub('Sushi-3.1').Tipped:NewSushi('Clickable', 1)
-if not Button then return end
+local Clickable = LibStub('Sushi-3.1').Tipped:NewSushi('Clickable', 1)
+if not Clickable then return end
 
-function Button:Construct()
-	local button = self:Super(Button):Construct()
-	button:SetScript('OnClick', button.OnClick)
-	return button
+function Clickable:Construct()
+	local b = self:Super(Clickable):Construct()
+	b:SetScript('OnClick', b.OnClick)
+	return b
 end
 
-function Button:Reset()
-	self:Super(Button):Reset()
+function Clickable:Reset()
+	self:Super(Clickable):Reset()
 	self:SetEnabled(true)
 end
 
-function Button:OnClick(button)
+function Clickable:OnClick(button)
 	local value = self.GetValue and self:GetValue()
 	PlaySound(self.Sound)
 
@@ -40,4 +40,4 @@ function Button:OnClick(button)
 	self:FireCall('OnUpdate')
 end
 
-Button.Sound = SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON
+Clickable.Sound = SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON

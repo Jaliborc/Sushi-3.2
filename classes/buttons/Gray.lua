@@ -17,27 +17,26 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Button = LibStub('Sushi-3.1').RedButton:NewSushi('GrayButton', 1)
-if not Button then return end
+local Gray = LibStub('Sushi-3.1').RedButton:NewSushi('GrayButton', 1)
+if not Gray then return end
 
-function Button:Construct()
-	local button = self:Super(Button):Construct()
-	button:SetScript('OnMouseDown', button.OnMouseDown)
-	button:SetScript('OnMouseUp', button.OnMouseUp)
-	button:SetScript('OnShow', button.OnMouseUp)
+function Gray:Construct()
+	local b = self:Super(Gray):Construct()
+	b:SetScript('OnMouseDown', b.OnMouseDown)
+	b:SetScript('OnMouseUp', b.OnMouseUp)
+	b:SetScript('OnShow', b.OnMouseUp)
 
-	if button:IsVisible() then
-		button:OnMouseUp()
+	if b:IsVisible() then
+		b:OnMouseUp()
 	end
-
-	return button
+	return b
 end
 
-function Button:OnMouseDown()
+function Gray:OnMouseDown()
 	self.Left:SetTexture('Interface/Buttons/UI-Panel-Button-Disabled-Down')
 	self.Middle:SetTexture('Interface/Buttons/UI-Panel-Button-Disabled-Down')
 	self.Right:SetTexture('Interface/Buttons/UI-Panel-Button-Disabled-Down')
 end
 
-Button.NormalFont = 'GameFontHighlight'
-Button.OnMouseUp = UIPanelButton_OnDisable
+Gray.NormalFont = 'GameFontHighlight'
+Gray.OnMouseUp = UIPanelButton_OnDisable

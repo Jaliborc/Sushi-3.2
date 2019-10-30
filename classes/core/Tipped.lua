@@ -17,20 +17,20 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Owner = LibStub('Sushi-3.1').Callable:NewSushi('Tipped', 1)
-if not Owner then return end
+local Tipped = LibStub('Sushi-3.1').Callable:NewSushi('Tipped', 1)
+if not Tipped then return end
 
 
 --[[ Events ]]--
 
-function Owner:Construct()
-	local frame = self:Super(Owner):Construct()
-	frame:SetScript('OnEnter', frame.OnEnter)
-	frame:SetScript('OnLeave', frame.OnLeave)
-	return frame
+function Tipped:Construct()
+	local f = self:Super(Tipped):Construct()
+	f:SetScript('OnEnter', f.OnEnter)
+	f:SetScript('OnLeave', f.OnLeave)
+	return f
 end
 
-function Owner:OnEnter()
+function Tipped:OnEnter()
 	local h1, p = self:GetTooltip()
 	if h1 then
 		GameTooltip:SetOwner(self, self:GetTooltipAnchor())
@@ -44,7 +44,7 @@ function Owner:OnEnter()
 	end
 end
 
-function Owner:OnLeave()
+function Tipped:OnLeave()
 	if GameTooltip:GetOwner() == self then
 		GameTooltip:Hide()
 	end
@@ -53,15 +53,15 @@ end
 
 --[[ API ]]--
 
-function Owner:SetTooltip(h1, p)
+function Tipped:SetTooltip(h1, p)
 	self.h1, self.p = h1, p
 end
 
-function Owner:GetTooltip()
+function Tipped:GetTooltip()
 	return self.h1, self.p
 end
 
-function Owner:GetTooltipAnchor()
+function Tipped:GetTooltipAnchor()
 	local x = self:GetRight() > (GetScreenWidth() / 2)
 	return x and 'ANCHOR_LEFT' or 'ANCHOR_RIGHT'
 end
@@ -69,6 +69,6 @@ end
 
 --[[ Proprieties ]]--
 
-Owner.SetTip = Owner.SetTooltip
-Owner.GetTip = Owner.GetTooltip
-Owner.GetTipAnchor = Owner.GetTooltipAnchor
+Tipped.SetTip = Tipped.SetTooltip
+Tipped.GetTip = Tipped.GetTooltip
+Tipped.GetTipAnchor = Tipped.GetTooltipAnchor

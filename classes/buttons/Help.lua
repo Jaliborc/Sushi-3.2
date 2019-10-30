@@ -21,9 +21,9 @@ local Help = LibStub('Sushi-3.1').Clickable:NewSushi('HelpButton', 1, 'Button')
 if not Help then return end
 
 function Help:Construct()
-	local frame = self:Super(Help):Construct()
-	frame:SetHighlightTexture('Interface\\FriendsFrame\\InformationIcon-Highlight')
-	frame:SetNormalTexture('Interface\\FriendsFrame\\InformationIcon')
-	frame:SetSize(16, 16)
-	return frame
+	local b = self:Super(Help):Construct()
+	b:SetHighlightTexture('Interface\\FriendsFrame\\InformationIcon-Highlight')
+	b:SetNormalTexture('Interface\\FriendsFrame\\InformationIcon')
+	b:SetSize(16, 16)
+	return b
 end

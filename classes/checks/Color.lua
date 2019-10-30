@@ -30,8 +30,8 @@ function Color:Construct()
 
 	local color = b:CreateTexture(nil, 'BACKGROUND')
 	color:SetAtlas('Forge-ColorSwatch')
-	color:SetPoint('LEFT')
-	color:SetSize(20, 20)
+	color:SetPoint('LEFT', 2, 1)
+	color:SetSize(20, 19)
 
 	local bg = b:CreateTexture(nil, 'BORDER')
 	bg:SetAtlas('Forge-ColorSwatchBackground')

@@ -17,119 +17,109 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local EditBox = MakeSushi(1, 'EditBox', 'EditBox', nil, 'InputBoxTemplate', SushiTipOwner)
-if not EditBox then
-	return
+local Edit = LibStub('Sushi-3.1').Tipped:NewSushi('Editbox', 1, 'EditBox', 'InputBoxTemplate')
+if not Edit then return end
+
+
+--[[ Construct ]]--
+
+function Edit:Construct()
+	local f = self:Super(Edit):Construct()
+	local label = f:CreateFontString()
+	label:SetPoint('BOTTOMLEFT', f, 'TOPLEFT', -7, -4)
+	label:SetJustifyH('Left')
+
+	f.Label = label
+	f:SetScript('OnEditFocusLost', f.OnEditFocusLost)
+	f:SetScript('OnEnterPressed', f.OnEnterPressed)
+	f:SetAltArrowKeyMode(false)
+	f:SetAutoFocus(false)
+	f:SetSize(150, 35)
+	f:UpdateFonts()
+	return f
 end
 
-EditBox.SetValue = EditBox.SetText
-EditBox.GetValue = EditBox.GetText
-EditBox.bottom = 6
-EditBox.right = 20
-EditBox.left = 25
-EditBox.top = 10
-
-
---[[ Builder ]]--
-
-function EditBox:OnCreate()
-	local Label = self:CreateFontString()
-	Label:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', -7, -4)
-	Label:SetJustifyH('Left')
-	
-	self:SetScript('OnEditFocusGained', self.OnEditFocusGained)
-	self:SetScript('OnEscapePressed', self.OnEscapePressed)
-	self:SetScript('OnEnterPressed', self.OnEnterPressed)
-	self:SetAltArrowKeyMode(false)
-	self:SetAutoFocus(false)
-	self:SetHeight(35)
-	self.Label = Label
-	
-	SushiTipOwner.OnCreate(self)
+function Edit:New(parent, label, value)
+	local f = self:Super(Edit):New(parent)
+	f:SetLabel(label)
+	f:SetValue(value)
+	return f
 end
 
-function EditBox:OnAcquire()
-	SushiTipOwner.OnAcquire(self)
-	self:SetWidth(150)
-	self:UpdateFonts()
-end
-
-function EditBox:OnRelease()
-	self.disabled, self.small = nil
+function Edit:Reset()
+	self:Super(Edit):Reset()
+	self:SetEnabled(true)
 	self:SetPassword(nil)
 	self:SetNumeric(nil)
-	self:SetLabel(nil)
-	self:SetValue('')
 	self:ClearFocus()
-	
-	SushiTipOwner.OnRelease(self)
 end
 
 
 --[[ Events ]]--
 
-function EditBox:OnEditFocusGained()
-	self.value = self:GetValue()
+function Edit:OnEditFocusLost()
+	self:SetText(self:GetValue())
+	self:HighlightText(0, 0)
 end
 
-function EditBox:OnEnterPressed()
-	local value = self:GetValue()
-	self:FireCall('OnTextChanged', value)
-	self:FireCall('OnInput', value)
+function Edit:OnEnterPressed()
+	self:SetValue(self:GetText())
+	self:FireCall('OnTextChanged', self:GetValue())
+	self:FireCall('OnInput', self:GetValue())
 	self:FireCall('OnUpdate')
 	self:ClearFocus()
 end
 
-function EditBox:OnEscapePressed()
-	self:SetValue(self.value or '')
-	self:ClearFocus()
+
+--[[ API ]]--
+
+function Edit:SetValue(value)
+	self.value = value
+
+	if not self:HasFocus() then
+		self:SetText(self:GetValue())
+	end
 end
 
+function Edit:GetValue()
+	return self.value
+end
 
---[[ Label ]]--
-
-function EditBox:SetLabel(label)
+function Edit:SetLabel(label)
 	self.Label:SetText(label)
 end
 
-function EditBox:GetLabel()
+function Edit:GetLabel()
 	return self.Label:GetText()
 end
 
-
---[[ Font ]]--
-
-function EditBox:SetDisabled(disabled)
-	if disabled then
-		self:ClearFocus()
-	end
-	
-	self.disabled = disabled
-	self:EnableMouse(not disabled)
+function Edit:SetEnabled(enabled)
+	self:Super(Edit):SetEnabled(enabled)
 	self:UpdateFonts()
 end
 
-function EditBox:IsDisabled()
-	return self.disabled
-end
-
-function EditBox:SetSmall(small)
+function Edit:SetSmall(small)
 	self.small = small
 	self:UpdateFonts()
 end
 
-function EditBox:IsSmall()
+function Edit:IsSmall()
 	return self.small
 end
 
-function EditBox:UpdateFonts()
-	local font = 'GameFont'
-	if not self:IsDisabled() then
-		font = font .. '%s'
-	else
-		font = font .. 'Disable'
-	end
-	
-	self.Label:SetFontObject(font:format('Normal') .. (self:IsSmall() and 'Small' or ''))
+function Edit:UpdateFonts()
+	local font = 'GameFont' .. (self:IsEnabled() and '%s' or 'Disable')
+	local small = self:IsSmall() and 'Small' or ''
+
+	self.Label:SetFontObject(font:format('Normal') .. small)
 	self:SetFontObject(font:format('Highlight') .. 'Small')
 end
+
+
+--[[ Proprieties ]]--
+
+Edit.value = ''
+Edit.bottom = 6
+Edit.right = 20
+Edit.left = 25
+Edit.top = 10

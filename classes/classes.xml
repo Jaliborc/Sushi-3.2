@@ -17,8 +17,8 @@
   <Script file="checks\Icon.lua"/>
 
   <!-- Misc -->
-  <!--<Script file="misc\ColorPicker.lua"/>
-  <Script file="misc\Editbox.lua"/>-->
+  <!--<Script file="misc\ColorPicker.lua"/>-->
+  <Script file="misc\Editbox.lua"/>
   <Script file="misc\GlowBox.lua"/>
   <!--<Script file="misc\Slider.lua"/>
   <Script file="misc\Popup.lua"/>-->

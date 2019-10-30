@@ -44,12 +44,6 @@ function Base:NewSushi(name, version, type, template, global)
 	return class, old
 end
 
-function Base:New(parent)
-	local f = self:Super(Base):New(parent)
-	f:SetParent(parent)
-	return f
-end
-
 function Base:Reset()
 	self:Super(Base):Reset()
 
@@ -58,7 +52,6 @@ function Base:Reset()
 			self[k] = nil
 		end
 	end
-
 end
 
 Lib.Base = Base

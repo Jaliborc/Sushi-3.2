@@ -58,14 +58,14 @@ placeholder:SetPoint('TOPLEFT', check2, 'BOTTOMLEFT', 0, 10)
 placeholder:SetSize(150, 70)
 placeholder.name = 'Magic Group'
 
-local magic3 = Sushi.MagicGroup(placeholder)
-magic3:SetSubtitle('Parented to an existing frame')
+local magic1 = Sushi.MagicGroup(placeholder)
+magic1:SetSubtitle('Parented to an existing frame')
 
-local magic1 = Sushi.MagicGroup('Sushi-3.1 Magic Group')
-local magic2 = Sushi.MagicGroup(magic1, 'Subcategory')
-magic2:SetFooter('This is a footer')
+local magic2 = Sushi.MagicGroup('Sushi-3.1 Magic Group')
+local magic3 = Sushi.MagicGroup(magic2, 'Subcategory')
+magic3:SetFooter('This is a footer')
 
-local credits = Sushi.CreditsGroup(magic1, {
+local credits = Sushi.CreditsGroup(magic2, {
   {title = 'Fruits', people = {'Banana', 'Strawberry'}}
 })
 
@@ -77,4 +77,10 @@ faux:SetChildren(function()
   for i = faux:FirstEntry(), faux:LastEntry() do
     faux:Add('RedButton', 'Faux scroll entry #' .. tostring(i))
   end
+end)
+
+local edit = Sushi.Editbox(Panel, 'Editbox', 'Some user text')
+edit:SetPoint('TOPLEFT', placeholder, 'TOPRIGHT', 10, -30)
+edit:SetCall('OnInput', function(edit, value)
+  print('Editbox changed value to ' .. value)
 end)

@@ -24,7 +24,7 @@ check:SetPoint('LEFT', grayButton, 'RIGHT', 5, 0)
 local expand = Sushi.ExpandCheck(Panel, 'Expand Check')
 expand:SetPoint('LEFT', check, 'RIGHT', 5, 0)
 
-local glow = Sushi.GlowBox(Panel, 'This is a glow box.')
+local glow = Sushi.Glowbox(Panel, 'This is a glow box.')
 glow:SetPoint('BOTTOM', expand, 'TOP', 0, 30)
 
 local check2 = Sushi.Check(Panel)
@@ -84,3 +84,6 @@ edit:SetPoint('TOPLEFT', placeholder, 'TOPRIGHT', 10, -30)
 edit:SetCall('OnInput', function(edit, value)
   print('Editbox changed value to ' .. value)
 end)
+
+local color = Sushi.ColorPicker(Panel, 'Color Picker', 1,0,0, 1)
+color:SetPoint('TOPLEFT', faux, 'TOPRIGHT', 5, 0)

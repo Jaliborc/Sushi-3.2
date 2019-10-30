@@ -50,7 +50,7 @@ function Check:Construct()
 	highlight:SetAllPoints(normal)
 	highlight:SetBlendMode('ADD')
 
-	b:SetSize(26, 26)
+	b:SetHeight(26)
 	b:SetFontString(text)
 	b:SetNormalTexture(normal)
 	b:SetPushedTexture(pushed)

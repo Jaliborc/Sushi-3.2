@@ -28,26 +28,40 @@ function Color:Construct()
 	local text = b:CreateFontString(nil, nil, self.NormalFont)
 	text:SetPoint('LEFT', 28, 1)
 
-	local border = b:CreateTexture(nil, 'BORDER')
-	border:SetTexture('Interface/ChatFrame/ChatFrameColorSwatch')
-	border:SetPoint('LEFT')
-	border:SetSize(23, 23)
+	local color = b:CreateTexture(nil, 'BACKGROUND')
+	color:SetAtlas('Forge-ColorSwatch')
+	color:SetPoint('LEFT')
+	color:SetSize(20, 20)
 
-	local square = b:CreateTexture(nil, 'OVERLAY')
-	square:SetTexture('Interface/ChatFrame/ChatFrameColorSwatch')
-	square:SetPoint('CENTER', border)
-	square:SetSize(19, 19)
+	local bg = b:CreateTexture(nil, 'BORDER')
+	bg:SetAtlas('Forge-ColorSwatchBackground')
+	bg:SetAllPoints(color)
+
+	local border = b:CreateTexture(nil, 'ARTWORK')
+	border:SetAtlas('Forge-ColorSwatchBorder')
+	border:SetAllPoints(color)
 
 	local glow = b:CreateTexture()
-	glow:SetTexture('Interface/Buttons/UI-CheckBox-Highlight')
-	glow:SetPoint('CENTER', border)
-	glow:SetBlendMode('ADD')
-	glow:SetSize(21, 23)
+	glow:SetAtlas('Forge-ColorSwatchHighlight')
+	glow:SetAllPoints(color)
 
-	b.Square = square
+	local pushed = b:CreateTexture()
+	pushed:SetAtlas('Forge-ColorSwatchSelection')
+	pushed:SetAllPoints(color)
+
+	b.Color = color
+	b:SetHeight(26)
 	b:SetFontString(text)
 	b:SetNormalTexture(border)
 	b:SetHighlightTexture(glow)
+	b:SetPushedTexture(pushed)
+	return b
+end
+
+function Color:New(parent, text, r,g,b, a)
+	local b = self:Super(Color):New(parent, text)
+	b:SetValue(r,g,b, a)
+	b:EnableAlpha(a)
 	return b
 end
 
@@ -57,17 +71,19 @@ function Color:OnClick()
 		self:SetValue(...)
 		self:FireCall('OnColorChanged', ...)
 		self:FireCall('OnInput', ...)
+
+		if not ColorPickerFrame:IsShown() then
+			self:SetButtonState('NORMAL')
+			self:FireCall('OnUpdate')
+		end
 	end
 
 	ColorPickerFrame.func = function()
 		local r,g,b = ColorPickerFrame:GetColorRGB()
 		set(r,g,b, 1 - OpacitySliderFrame:GetValue())
-
-		if not ColorPickerFrame:IsVisible() then
-			self:FireCall('OnUpdate')
-		end
 	end
 
+	ColorPickerFrame.target = self
 	ColorPickerFrame.opacity = 1 - a
 	ColorPickerFrame.hasOpacity = self:HasAlpha()
 	ColorPickerFrame.opacityFunc = ColorPickerFrame.func
@@ -75,7 +91,8 @@ function Color:OnClick()
 	ColorPickerFrame:SetColorRGB(r,g,b)
 	ColorPickerFrame:Show()
 
-	PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
+	self:SetButtonState('PUSHED', true)
+	PlaySound(self.Sound)
 end
 
 
@@ -83,11 +100,11 @@ end
 
 function Color:SetValue(r,g,b,a)
 	self.a = a
-	self.Square:SetVertexColor(r or 1, g or 1, b or 1)
+	self.Color:SetVertexColor(r or 1, g or 1, b or 1)
 end
 
 function Color:GetValue()
-	local r,g,b = self.Square:GetVertexColor()
+	local r,g,b = self.Color:GetVertexColor()
 	return r,g,b, self.a
 end
 
@@ -102,12 +119,12 @@ end
 
 --[[ Proprieties ]]--
 
-Check.NormalFont = 'GameFontHighlight'
+Color.NormalFont = 'GameFontHighlight'
 Color.SetColor = Color.SetValue
 Color.GetColor = Color.GetValue
-Check.MinWidth = 150
-Check.WidthOff = 28
-Check.bottom = 8
-Check.right = 10
-Check.left = 10
+Color.MinWidth = 150
+Color.WidthOff = 28
+Color.bottom = 8
+Color.right = 10
+Color.left = 10
 Color.a = 1

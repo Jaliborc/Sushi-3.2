@@ -51,7 +51,7 @@ end
 
 function Editable:OnEnterPressed()
 	self:SetValue(self:GetText())
-	self:FireCall('OnTextChanged', self:GetValue())
+	self:FireCall('OnText', self:GetValue())
 	self:FireCall('OnInput', self:GetValue())
 	self:FireCall('OnUpdate')
 	self:ClearFocus()

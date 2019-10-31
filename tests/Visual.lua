@@ -46,10 +46,22 @@ box:SetCall('OnInput', function(box, value)
   print('Box edit changed value to ' .. value)
 end)
 
-local dark = Sushi.DarkEdit(Panel)
-dark:SetPoint('TOPLEFT', box, 'TOPRIGHT', 5, 0)
-dark:SetValue('User percentage')
-dark:SetPattern('%s%')
+local dark = Sushi.DarkEdit(Panel, 'Dark Edits')
+dark:SetPoint('LEFT', box, 'RIGHT', 10, 15)
+
+local dark2 = Sushi.DarkEdit(Panel, 5, '%s%')
+dark2:SetPoint('TOPLEFT', dark, 'BOTTOMLEFT')
+
+local dark3 = Sushi.DarkEdit(Panel, 3, '-%s')
+dark3:SetPoint('LEFT', dark2, 'RIGHT', 15, 0)
+
+local dark4 = Sushi.DarkEdit(Panel, 20, '[%s]')
+dark4:SetPoint('LEFT', dark3, 'RIGHT', 5, 0)
+dark4:SetEnabled(false)
+
+local slider = Sushi.Slider(Panel, 'Slider', 30)
+slider:SetPoint('TOPLEFT', 20, -130)
+slider:SetRange(0, 100, 'None')
 
 -- Groups
 --[[local group = Sushi.Group(Panel)

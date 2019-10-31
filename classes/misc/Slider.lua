@@ -18,7 +18,7 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
 local Sushi = LibStub('Sushi-3.1')
-local Slider = Sushi.TipOwner:NewSushi('Slider', 1, 'Slider', 'OptionsSliderTemplate', true)
+local Slider = Sushi.Tipped:NewSushi('Slider', 1, 'Slider', 'OptionsSliderTemplate', true)
 if not Slider then return end
 
 
@@ -26,39 +26,106 @@ if not Slider then return end
 
 function Slider:Construct()
 	local f = self:Super(Slider):Construct()
-	local name = f:GetName()
-
-	local edit = Sushi.DarkEdit(f)
-	edit.OnEnter = function() f:OnEnter() end
-	edit.OnLeave = function() f:OnLeave() end
-
-	f.Edit, f.Bg, f.Suffix, f.Prefix = edit, bg, suffix, prefix
-	f.Label f.High, f.Low = _G[name .. 'Text'], _G[name .. 'High'], _G[name .. 'Low']
-	f.High:SetPoint('TOPRIGHT', f, 'BOTTOMRIGHT', 0, 1)
-	f.Low:SetPoint('TOPLEFT', f, 'BOTTOMLEFT', 0, 1)
-	f.Label:SetPoint('BOTTOM',  f, 'TOP')
-
 	f:SetScript('OnValueChanged', f.OnValueChanged)
 	f:SetScript('OnMouseWheel', f.OnMouseWheel)
+	f:SetScript('OnMouseUp', f.OnMouseUp)
+	f.Text:SetFontObject(f.NormalFont)
+	f:SetObeyStepOnDrag(true)
 	f:EnableMouseWheel(true)
 	return f
 end
 
 function Slider:New(parent, label, value, low, high, step)
-	local f = self:Super(Slider):New()
-	--[[f:SetRange(low or 1, high or 100)
+	local f = self:Super(Slider):New(parent)
+	f.Edit = Sushi.DarkEdit(f)
+	f.Edit:SetPoint('TOP', f, 'BOTTOM', 0, 7)
+	f.Edit:SetCall('OnInput', function(edit, value)
+		f:SetValue(value)
+	end)
+
+	f:SetRange(low or 1, high or 100)
 	f:SetValue(value or 1)
 	f:SetStep(step or 1)
-	f:SetPattern('%s')
 	f:SetLabel(label)
-	f:UpdateFonts()]]--
 	return f
+end
+
+function Slider:Reset()
+	self:Super(Slider):Reset()
+	self:SetEnabled(true)
+	self.Edit:Release()
+	self.Edit = nil
+end
+
+
+--[[ Events ]]--
+
+function Slider:OnMouseWheel(direction)
+	self:SetValue(self:GetValue() + self:GetStep() * direction, true)
+	self:FireCall('OnUpdate')
+end
+
+function Slider:OnValueChanged(value, manual)
+	self.Edit:SetValue(value)
+
+	if manual then
+		self:FireCall('OnValue', value)
+		self:FireCall('OnInput', value)
+	end
+end
+
+function Slider:OnMouseUp()
+	self:FireCall('OnUpdate')
+end
+
+
+--[[ API ]]--
+
+function Slider:SetLabel(label)
+	self.Text:SetText(label)
+end
+
+function Slider:GetLabel()
+	return self.Text:GetText()
+end
+
+function Slider:SetRange(min, max, minText, maxText)
+	self:SetMinMaxValues(min, max)
+	self.Low:SetText(minText or min)
+	self.High:SetText(maxText or max)
+end
+
+function Slider:GetRange()
+	local min, max = self:GetMinMaxValues()
+	return min, max, self.Low:GetText(), self.High:GetText()
+end
+
+function Slider:SetEnabled(enabled)
+	self:Super(Slider):SetEnabled(enabled)
+	self.Edit:SetEnabled(enabled)
+	self.Text:SetFontObject(enabled and self.NormalFont or self.DisabledFont)
+	self.High:SetFontObject(self.Edit:GetFontObject())
+	self.Low:SetFontObject(self.Edit:GetFontObject())
+end
+
+function Slider:SetPattern(...)
+	self.Edit:SetPattern(...)
+end
+
+function Slider:GetPattern(...)
+	return self.Edit:GetPattern()
 end
 
 
 --[[ Proprieties ]]--
 
-Slider.top, Slider.bottom, Slider.left, Slider.right = 17, 7, 14, 16
-Slider.GetRange = Slider.GetMinMaxValues
+Slider.NormalFont = 'GameFontNormal'
+Slider.DisabledFont = 'GameFontDisable'
+Slider.SetStep = Slider.SetValueStep
+Slider.GetStep = Slider.GetValueStep
 Slider.SetText = Slider.SetLabel
 Slider.GetText = Slider.GetLabel
+Slider.bottom = 7
+Slider.right = 16
+Slider.left = 14
+Slider.top = 17

@@ -25,43 +25,79 @@ if not Dark then return end
 
 function Dark:Construct()
   local f = self:Super(Dark):Construct()
+  local bg = CreateFrame('Frame', nil, f)
+  bg:SetBackdrop(f.Backdrop)
+  bg:SetBackdropColor(0,0,0, 0.25)
+  bg:SetBackdropBorderColor(0,0,0, 0.3)
+  bg:SetFrameLevel(f:GetFrameLevel())
+  bg:Hide()
+
   local left = f:CreateFontString(nil, nil, self.NormalFont)
-  left:SetPoint('LEFT', 3, 0)
+  left:SetPoint('LEFT', bg, 3, 0)
   local right = f:CreateFontString(nil, nil, self.NormalFont)
-  right:SetPoint('RIGHT', -3, 0)
+  right:SetPoint('RIGHT', bg, -3, 0)
 
   f:SetHeight(18)
   f:SetJustifyH('CENTER')
-  f:SetScript('OnTextChanged', f.Resize)
-  f:SetBackdrop(f.Backdrop)
-  f:SetBackdropColor(0,0,0, 0.25)
-  f:SetBackdropBorderColor(0,0,0, 0.3)
-  f.Left, f.Right = left, right
+  f:SetScript('OnTextChanged', f.OnTextChanged)
+  f.Bg, f.Left, f.Right = bg, left, right
   return f
+end
+
+function Dark:New(parent, value, pattern)
+	local f = self:Super(Dark):New(parent)
+	f:SetPattern(pattern or '%s')
+	f:SetValue(value)
+	return f
+end
+
+
+--[[ API ]]--
+
+function Dark:OnEnter()
+  self:Super(Dark):OnEnter()
+  self.Bg:SetShown(self:IsEnabled())
+end
+
+function Dark:OnLeave()
+  self:Super(Dark):OnLeave()
+  self.Bg:Hide()
+end
+
+function Dark:OnTextChanged()
+  self.Ruler:SetFontObject(self:GetFontObject())
+  self.Ruler:SetText(self:GetText())
+  self:SetWidth(min(self.Ruler:GetStringWidth() + self.WidthOff, self.MaxWidth))
+end
+
+function Dark:SetFontObject(font)
+	self:Super(Dark):SetFontObject(font)
+  
+  if self.Right then
+    self.Right:SetFontObject(font)
+    self.Left:SetFontObject(font)
+  end
 end
 
 function Dark:SetPattern(pattern)
   local left, right = strmatch(pattern, '(.*)%%s(.*)')
 
-  self.Right:SetText(right)
   self.Left:SetText(left)
+  self.Right:SetText(right)
+  self.Bg:SetPoint('BOTTOMRIGHT', self.Right:GetWidth(), 0)
+  self.Bg:SetPoint('TOPLEFT', -self.Left:GetWidth(), 0)
 end
 
 function Dark:GetPattern()
   return self.Left:GetText() .. '%s' .. self.Right:GetText()
 end
 
-function Dark:Resize()
-  self.MeasureString:SetFontObject(self:GetFontObject())
-  self.MeasureString:SetText(self:GetText())
-  self:SetWidth(self.MeasureString:GetStringWidth() + self.WidthOff)
-end
-
 
 --[[ Proprieties ]]--
 
-Dark.MeasureString = Dark.MeasureString or UIParent:CreateFontString()
-Dark.WidthOff = 15
+Dark.Ruler = Dark.Ruler or UIParent:CreateFontString()
+Dark.MaxWidth = 150
+Dark.WidthOff = 10
 Dark.Backdrop = {
 	bgFile = 'Interface/Tooltips/UI-Tooltip-Background',
 	edgeFile = 'Interface/Tooltips/UI-Tooltip-Border',

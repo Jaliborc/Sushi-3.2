@@ -24,8 +24,8 @@
 
   <!-- Misc -->
   <Script file="misc\Glowbox.lua"/>
-  <!--<Script file="misc\Slider.lua"/>
-  <Script file="misc\Popup.lua"/>-->
+  <Script file="misc\Slider.lua"/>
+  <!--<Script file="misc\Popup.lua"/>-->
 
   <!-- Groups -->
   <Script file="groups\Group.lua"/>

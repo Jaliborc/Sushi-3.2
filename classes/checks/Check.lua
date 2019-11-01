@@ -60,6 +60,11 @@ function Check:Construct()
 	return b
 end
 
+function Check:Reset()
+	self:Super(Check):Reset()
+	self:SetChecked(false)
+end
+
 
 --[[ Proprieties ]]--
 

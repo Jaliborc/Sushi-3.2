@@ -41,6 +41,26 @@ end
 
 function Choice:OnClick()
 	-- Sushi.Dropdown { }
+
+	--[[
+	for value, name, tip in self:IterateLines() do
+		drop:AddLine {
+			isRadio = true,
+			checked = self:GetValue() == value,
+			tooltipTitle = tip and name,
+			tooltipText = tip,
+			text = name,
+
+			func = function()
+				if value ~= self:GetValue() then
+					self:FireCall('OnSelection', value)
+					self:FireCall('OnInput', value)
+					self:FireCall('OnUpdate')
+				end
+			end
+		}
+	end
+	]]
 end
 
 

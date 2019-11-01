@@ -1,7 +1,7 @@
 if not WoWUnit then return end
 
-local Tests = WoWUnit('Sushi-3.1')
 local Sushi = LibStub('Sushi-3.1')
+local Tests = WoWUnit('Sushi-3.1')
 local AreEqual, IsFalse, IsTrue = WoWUnit.AreEqual, WoWUnit.IsFalse, WoWUnit.IsTrue
 
 function Tests:CallableReset()
@@ -16,6 +16,12 @@ function Tests:CallableReset()
   AreEqual(f.default, 1)
   AreEqual(f.var, nil)
   AreEqual(f.Static, 3)
+end
+
+function Tests:GroupAdd()
+  local group = Sushi.Group()
+  group:Add('HelpButton')
+  group:Add(CreateFrame('Frame', nil, group))
 end
 
 function Tests:GroupResize()

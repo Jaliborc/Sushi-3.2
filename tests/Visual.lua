@@ -74,25 +74,35 @@ choice:AddChoices { {key = 1, text = 'Hi'}, {key = 2, text = 'Hey'}, {key = 3, t
 choice:SetPoint('TOPLEFT', slider, 'TOPRIGHT', 5, -2)
 
 -- Groups
---[[local group = Sushi.Group(Panel)
-group:SetPoint('TOPLEFT', icon, 'TOPRIGHT', 5, 0)
+local group = Sushi.Group(Panel)
+group:SetPoint('TOPLEFT', 20, -175)
 group:SetChildren(function()
-  for i = 1, 4 do
-    group:Add('HelpButton')
-    group:Add('HelpButton')
+  for i = 1, 12 do
+    group:Add('HelpButton').left = 0
+    group:Add('HelpButton').left = 0
     group:AddBreak()
   end
 end)
 
-local header1 = Sushi.Header(check2, 'This is a parent-resized header')
-header1:SetPoint('TOPLEFT', check2, 'BOTTOMLEFT', 0, -5)
+local header1 = Sushi.Header(group, 'This is a parent-resized header')
+header1:SetPoint('TOPLEFT', group, 'BOTTOMLEFT', 0, -5)
 
 local header2 = Sushi.Header(group, 'This is not')
 header2:SetPoint('TOPLEFT', header1, 'BOTTOMLEFT', 0, -5)
 header2:SetWidth(100)
 
+local faux = Sushi.FauxScroll(Panel, 3, 22)
+faux:SetPoint('TOPLEFT', group, 'TOPRIGHT')
+faux:SetChildren(function()
+  faux:SetNumEntries(5)
+
+  for i = faux:FirstEntry(), faux:LastEntry() do
+    faux:Add('RedButton', 'Faux scroll entry #' .. tostring(i))
+  end
+end)
+
 local placeholder = CreateFrame('Frame', nil, Panel)
-placeholder:SetPoint('TOPLEFT', check2, 'BOTTOMLEFT', 0, 10)
+placeholder:SetPoint('TOPLEFT', faux, 'TOPRIGHT')
 placeholder:SetSize(150, 70)
 placeholder.name = 'Magic Group'
 
@@ -107,12 +117,10 @@ local credits = Sushi.CreditsGroup(magic2, {
   {title = 'Fruits', people = {'Banana', 'Strawberry'}}
 })
 
-local faux = Sushi.FauxScroll(Panel, 3, 22)
-faux:SetPoint('TOPLEFT', placeholder, 'BOTTOMLEFT')
-faux:SetChildren(function()
-  faux:SetNumEntries(5)
-
-  for i = faux:FirstEntry(), faux:LastEntry() do
-    faux:Add('RedButton', 'Faux scroll entry #' .. tostring(i))
+local drop = Sushi.Dropdown(Panel)
+drop:SetPoint('TOPLEFT', 20, -300)
+drop:SetChildren(function()
+  for i = 1, 5 do
+    drop:Add('RedButton', 'Red Button')
   end
-end)]]--
+end)

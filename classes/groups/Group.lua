@@ -35,7 +35,7 @@ end
 
 function Group:New(parent, children)
 	local f = self:Super(Group):New(parent)
-	f:SetSize(200, 200)
+	f:SetSize(self.Size, self.Size)
 	f:SetChildren(children)
 	return f
 end
@@ -93,18 +93,13 @@ end
 
 function Group:Add(object, ...)
 	local kind = type(object)
-	assert(kind == 'string' or kind == 'table', 'Bad argument #1 to `:Add` (string or table expected)')
+	assert(kind == 'string' or kind == 'table', 'Bad argument #1 to `:Add` (string or frame expected)')
 
 	if kind == 'string' then
 		local class = Lib[object]
 		assert(class, 'Sushi-3.1 class `' .. object .. '` was not found.')
-		assert(type(class) == 'table', 'Provided class name `' .. object .. '` is a reserved keyword')
-		object = class
-	end
-
-	if object.New then
-		object = object:New(self, ...)
-		assert(object, 'Provided class did not generate instance')
+		assert(type(class) == 'table', 'Sushi-3.1 class name `' .. object .. '` is a reserved keyword')
+		object = class(self, ...)
 	end
 
 	if object.SetCall then
@@ -175,9 +170,9 @@ function Group:Layout()
 
 	x, y = self:Orient(max(x, w), y + h)
 	if self:GetResizing() == 'HORIZONTAL' then
-		self:SetWidth(x)
+		self:SetSize(x, max(y, self:GetHeight()))
 	elseif self:GetResizing() == 'VERTICAL' then
-		self:SetHeight(y)
+		self:SetSize(max(x, self:GetWidth()), y)
 	end
 end
 
@@ -225,4 +220,5 @@ end
 
 Group.orientation, Group.resizing = 'VERTICAL', 'VERTICAL'
 Group.Update = Group.UpdateChildren
+Group.Size = 200
 Group.Break = {}

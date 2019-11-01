@@ -6,15 +6,20 @@ InterfaceOptions_AddCategory(Panel)
 
 -- Singletons
 local helpButton = Sushi.HelpButton(Panel)
-helpButton:SetPoint('TOPLEFT', 10, -10)
 helpButton:SetTip('Help', 'An help button.')
-helpButton:SetCall('OnClick', function()
-  print('clicked help button')
-end)
+helpButton:SetPoint('TOPLEFT', 10, -10)
 helpButton:SetText('Hello')
 
 local redButton = Sushi.RedButton(Panel, 'Red Button')
 redButton:SetPoint('LEFT', helpButton, 'RIGHT', 5, 0)
+redButton:SetCall('OnClick', function()
+  Sushi.Popup {text = 'This is a Popup message.', button1 = OKAY, whileDead = 1, hideOnEscape = 1, exclusive = 1}
+  Sushi.Popup {
+    text = 'This is another Popup.', button1 = OKAY, whileDead = 1, hideOnEscape = 1,
+    hasEditBox = 1, editBoxWidth = 260, editBoxText = 'With an editbox', autoHighlight = 1,
+    id = 'Unit Test'
+  }
+end)
 
 local grayButton = Sushi.GrayButton(Panel, 'Gray Button')
 grayButton:SetPoint('LEFT', redButton, 'RIGHT', 5, 0)

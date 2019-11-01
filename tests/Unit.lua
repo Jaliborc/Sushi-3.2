@@ -4,8 +4,8 @@ local Tests = WoWUnit('Sushi-3.1')
 local Sushi = LibStub('Sushi-3.1')
 local AreEqual, IsFalse, IsTrue = WoWUnit.AreEqual, WoWUnit.IsFalse, WoWUnit.IsTrue
 
-function Tests:ResetKeys()
-  local c = Sushi.Base:NewClass('Frame')
+function Tests:CallableReset()
+  local c = Sushi.Callable:NewClass('Frame')
   c.default = 1
 
   local f = c()

@@ -44,15 +44,5 @@ function Base:NewSushi(name, version, type, template, global)
 	return class, old
 end
 
-function Base:Reset()
-	self:Super(Base):Reset()
-
-	for k, v in pairs(self) do
-		if type(k) == 'string' and k:sub(1, 1):find('%l') then
-			self[k] = nil
-		end
-	end
-end
-
 Lib.Base = Base
 Lib.InstallLocation = Install

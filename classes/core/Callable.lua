@@ -26,6 +26,16 @@ function Callable:New(...)
 	return f
 end
 
+function Callable:Reset()
+	self:Super(Callable):Reset()
+
+	for k, v in pairs(self) do
+		if type(k) == 'string' and k:sub(1, 1):find('%l') then
+			self[k] = nil
+		end
+	end
+end
+
 function Callable:SetCall(event, method)
 	self.calls[event] = method
 end

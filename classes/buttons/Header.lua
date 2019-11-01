@@ -37,7 +37,6 @@ function Header:Construct()
 	local f = self:Super(Header):Construct()
 	local string = f:CreateFontString()
 	string:SetPoint('TOPLEFT')
-	string:SetJustifyH('LEFT')
 
 	local line = f:CreateTexture()
 	line:SetColorTexture(1,1,1, .2)
@@ -81,7 +80,7 @@ function Header:GetText()
 end
 
 function Header:SetFont(font)
-	self.String:SetFontObject(font or 'GameFontNormal')
+	self.String:SetFontObject(font or 'GameFontNormalLeft')
 	self:UpdateHeight()
 end
 

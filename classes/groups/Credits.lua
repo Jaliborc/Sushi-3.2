@@ -36,10 +36,12 @@ function Group:SetChildren(call)
 		local subtitle = self.Children[2]
 		subtitle:SetHighlightFactor(1.5)
 		subtitle:SetCall('OnClick', function()
-			--[[Sushi.Popup:New {
-				text = self.DialogMessage, button1 = OKAY, whileDead = 1, exclusive = 1, hideOnEscape = 1,
-				hasEditBox = 1, editBoxWidth = 260, editBoxText = self.website, autoHighlight = 1
-			}]]--
+			if self.external then
+				Sushi.Popup {
+					text = self.DialogMessage, button1 = OKAY, whileDead = 1, exclusive = 1, hideOnEscape = 1,
+					hasEditBox = 1, editBoxWidth = 260, editBoxText = self.external, autoHighlight = 1
+				}
+			end
 		end)
 
 		for i, section in ipairs(self:GetPeople()) do
@@ -69,16 +71,16 @@ function Group:GetPeople()
   return self.people or {}
 end
 
-function Group:SetSubtitle(subtitle, website)
-	self.subtitle, self.website = subtitle, website
+function Group:SetSubtitle(subtitle, external)
+	self.subtitle, self.external = subtitle, external
 end
 
 function Group:GetSubtitle()
-	local website = self.website or ''
-	website = website:match('^https?://(.+)$') or website
-	website = website:match('^www\.(.+)$') or website
+	local external = self.external or ''
+	external = external:match('^https?://(.+)$') or external
+	external = external:match('^www\.(.+)$') or external
 
-	return self.subtitle:format(self:GetProduct() or '', website)
+	return self.subtitle:format(self:GetProduct() or '', external), self.external
 end
 
 function Group:GetProduct()

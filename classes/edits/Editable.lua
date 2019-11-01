@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Editable = LibStub('Sushi-3.1').Tipped:NewSushi('Editable', 1)
+local Editable = LibStub('Sushi-3.1').Labeled:NewSushi('Editable', 1)
 if not Editable then return end
 
 
@@ -25,12 +25,19 @@ if not Editable then return end
 
 function Editable:Construct()
 	local f = self:Super(Editable):Construct()
+	f.Label = f:CreateFontString(nil, nil, self.LabelFont)
   f:SetScript('OnEditFocusLost', f.OnEditFocusLost)
   f:SetScript('OnEnterPressed', f.OnEnterPressed)
   f:SetFontObject(f.NormalFont)
   f:SetAltArrowKeyMode(false)
   f:SetAutoFocus(false)
   return f
+end
+
+function Editable:New(parent, label, value)
+	local f = self:Super(Editable):New(parent, label)
+	f:SetValue(value)
+	return f
 end
 
 function Editable:Reset()

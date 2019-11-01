@@ -51,11 +51,12 @@ box:SetCall('OnInput', function(box, value)
   print('Box edit changed value to ' .. value)
 end)
 
-local dark = Sushi.DarkEdit(Panel, 'Dark Edits')
-dark:SetPoint('LEFT', box, 'RIGHT', 10, 15)
+local dark = Sushi.DarkEdit(Panel, 'More user text')
+dark:SetPoint('LEFT', box, 'RIGHT', 10, 2)
+dark:SetLabel('Dark Edits')
 
 local dark2 = Sushi.DarkEdit(Panel, 5, '%s%')
-dark2:SetPoint('TOPLEFT', dark, 'BOTTOMLEFT')
+dark2:SetPoint('LEFT', dark, 'RIGHT')
 
 local dark3 = Sushi.DarkEdit(Panel, 3, '-%s')
 dark3:SetPoint('LEFT', dark2, 'RIGHT', 15, 0)
@@ -67,6 +68,10 @@ dark4:SetEnabled(false)
 local slider = Sushi.Slider(Panel, 'Slider', 30)
 slider:SetPoint('TOPLEFT', 20, -130)
 slider:SetRange(0, 100, 'None')
+
+local choice = Sushi.DropChoice(Panel, 'Dropdown Choice', 2)
+choice:AddChoices { {key = 1, text = 'Hi'}, {key = 2, text = 'Hey'}, {key = 3, text = 'Hello'} }
+choice:SetPoint('TOPLEFT', slider, 'TOPRIGHT', 5, -2)
 
 -- Groups
 --[[local group = Sushi.Group(Panel)

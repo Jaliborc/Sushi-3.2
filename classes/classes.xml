@@ -2,6 +2,7 @@
   <!-- Core -->
   <Script file="core\Callable.lua"/>
   <Script file="core\Tipped.lua"/>
+  <Script file="core\Labeled.lua"/>
 
   <!-- Buttons -->
   <Script file="buttons\Clickable.lua"/>
@@ -34,7 +35,7 @@
   <Script file="groups\FauxScroll.lua"/>
 
   <!-- Dropdowns -->
-  <!--<Script file="dropdowns\Button.lua"/>
-  <Script file="dropdowns\Frame.lua"/>
-  <Script file="dropdowns\Dropdown.lua"/>-->
+  <!--<Script file="drops\Button.lua"/>
+  <Script file="drops\Dropdown.lua"/>-->
+  <Script file="drops\Choice.lua"/>
 </Ui>

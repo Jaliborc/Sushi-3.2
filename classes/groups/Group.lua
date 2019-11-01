@@ -22,7 +22,7 @@ local Group = Lib.Callable:NewSushi('Group', 1, 'Frame')
 if not Group then return end
 
 
---[[ Constructor ]]--
+--[[ Construct ]]--
 
 function Group:Construct()
 	local f = self:Super(Group):Construct()

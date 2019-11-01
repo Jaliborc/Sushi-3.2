@@ -18,7 +18,7 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
 local Sushi = LibStub('Sushi-3.1')
-local Slider = Sushi.Tipped:NewSushi('Slider', 1, 'Slider', 'OptionsSliderTemplate', true)
+local Slider = Sushi.Labeled:NewSushi('Slider', 1, 'Slider', 'OptionsSliderTemplate', true)
 if not Slider then return end
 
 
@@ -32,29 +32,29 @@ function Slider:Construct()
 	f.Text:SetFontObject(f.NormalFont)
 	f:SetObeyStepOnDrag(true)
 	f:EnableMouseWheel(true)
+	f.Label = f.Text
 	return f
 end
 
-function Slider:New(parent, label, value, low, high, step)
-	local f = self:Super(Slider):New(parent)
+function Slider:New(parent, label, value, low,high, step)
+	local f = self:Super(Slider):New(parent, label)
 	f.Edit = Sushi.DarkEdit(f)
+	f.Edit:SetNumeric(true)
 	f.Edit:SetPoint('TOP', f, 'BOTTOM', 0, 7)
 	f.Edit:SetCall('OnInput', function(edit, value)
-		f:SetValue(value)
+		f:SetValue(value, true)
 	end)
 
 	f:SetRange(low or 1, high or 100)
 	f:SetValue(value or 1)
 	f:SetStep(step or 1)
-	f:SetLabel(label)
 	return f
 end
 
 function Slider:Reset()
 	self:Super(Slider):Reset()
-	self:SetEnabled(true)
 	self.Edit:Release()
-	self.Edit = nil
+	self:SetWidth(144)
 end
 
 
@@ -81,14 +81,6 @@ end
 
 --[[ API ]]--
 
-function Slider:SetLabel(label)
-	self.Text:SetText(label)
-end
-
-function Slider:GetLabel()
-	return self.Text:GetText()
-end
-
 function Slider:SetRange(min, max, minText, maxText)
 	self:SetMinMaxValues(min, max)
 	self.Low:SetText(minText or min)
@@ -103,7 +95,6 @@ end
 function Slider:SetEnabled(enabled)
 	self:Super(Slider):SetEnabled(enabled)
 	self.Edit:SetEnabled(enabled)
-	self.Text:SetFontObject(enabled and self.NormalFont or self.DisabledFont)
 	self.High:SetFontObject(self.Edit:GetFontObject())
 	self.Low:SetFontObject(self.Edit:GetFontObject())
 end
@@ -112,7 +103,7 @@ function Slider:SetPattern(...)
 	self.Edit:SetPattern(...)
 end
 
-function Slider:GetPattern(...)
+function Slider:GetPattern()
 	return self.Edit:GetPattern()
 end
 

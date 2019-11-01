@@ -62,7 +62,7 @@ function Tipped:GetTooltip()
 end
 
 function Tipped:GetTooltipAnchor()
-	local x = self:GetRight() > (GetScreenWidth() / 2)
+	local x = self:GetRight() / GetScreenWidth() > 0.8
 	return x and 'ANCHOR_LEFT' or 'ANCHOR_RIGHT'
 end
 

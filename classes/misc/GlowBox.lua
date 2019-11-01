@@ -27,14 +27,14 @@ local function RotateTexture(texture, i)
 end
 
 
---[[ Constructor ]]--
+--[[ Construct ]]--
 
 function Box:Construct()
 	local f = self:Super(Box):Construct()
-	local string = f:CreateFontString(nil, nil, 'GameFontHighlightLeft')
-	string:SetPoint('TOPLEFT', 15, -15)
-	string:SetWidth(200)
-	string:SetSpacing(4)
+	local text = f:CreateFontString(nil, nil, 'GameFontHighlightLeft')
+	text:SetPoint('TOPLEFT', 15, -15)
+	text:SetWidth(200)
+	text:SetSpacing(4)
 
 	local close = CreateFrame('Button', nil, f, 'UIPanelCloseButton')
 	close:SetPoint('TOPRIGHT', 6, 5)
@@ -58,7 +58,7 @@ function Box:Construct()
 		RotateTexture(arrow.Glow, i)
 	end
 
-	f.String, f.Close = string, close
+	f.Text, f.Close = text, close
 	f:SetFrameStrata('DIALOG')
 	f:EnableMouse(true)
 	f:SetSize(220, 100)
@@ -90,10 +90,10 @@ function Box:GetDirection()
 end
 
 function Box:SetText(text)
-	self.String:SetText(text)
-	self:SetHeight(self.String:GetHeight() + 30)
+	self.Text:SetText(text)
+	self:SetHeight(self.Text:GetHeight() + 30)
 end
 
 function Box:GetText()
-	return self.String:GetText()
+	return self.Text:GetText()
 end

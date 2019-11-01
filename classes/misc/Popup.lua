@@ -45,8 +45,8 @@ function Popup:Construct()
 end
 
 function Popup:Toggle(input)
-	local f = self:Get(type(input) == 'table' and input.id or input)
-	return f and f:Release() or self:New(input)
+	local f = self:GetActive(type(input) == 'table' and input.id or input)
+	return f and (f:Release() or true) or self:New(input)
 end
 
 function Popup:New(input)
@@ -57,18 +57,16 @@ function Popup:New(input)
     return info.OnCancel and info.OnCancel(nil, 'dead')
   elseif InCinematic() and not info.interruptCinematic then
 		return info.OnCancel and info.OnCancel(nil, 'cinematic')
-	elseif id and self:Get(id) then
+	elseif id and self:GetActive(id) then
 		return info.OnCancel and info.OnCancel(nil, 'duplicate')
 	elseif #self.Layout >= self.Max then
 		return info.OnCancel and info.OnCancel(nil, 'overflow')
 	elseif info.exclusive then
-  	for i, f in self:Iterate() do
-			f:Release('override', true)
+  	for i, f in ipairs(CopyTable(self.Layout)) do
+			f:Release('override')
 		end
-
-		wipe(self.Layout)
 	elseif info.cancels then
-		local f = self:Get(info.cancels)
+		local f = self:GetActive(info.cancels)
 		if f then
 			f:Release('override')
 		end
@@ -83,35 +81,23 @@ function Popup:New(input)
   return f
 end
 
-function Popup:Release(reason, keep)
-	if not keep then
-		local _, i = self:Get(self)
+function Popup:Release(reason)
+	local _, i = self:GetActive(self)
+	if i then
 		tremove(self.Layout, i)
-	end
 
-	if self.info.OnCancel then
-		self.info.OnCancel(self, reason or 'closed')
-	end
-
-	self:Super(Popup):Release()
-	self:Organize()
-	self:Hide()
-end
-
-function Popup:Get(target)
-	for i, f in self:Iterate() do
-		if f == target or f.id == target then
-			return f, i
+		if self.info.OnCancel then
+			self.info.OnCancel(self, reason or 'closed')
 		end
-	end
-end
 
-function Popup:Iterate()
-	return ipairs(self.Layout)
+		self:Super(Popup):Release()
+		self:Organize()
+		self:Hide()
+	end
 end
 
 function Popup:Organize()
-	for i, f in self:Iterate() do
+	for i, f in self:IterateActive() do
 		local anchor = i == 1 and StaticPopup_DisplayedFrames[#StaticPopup_DisplayedFrames] or self.Layout[i-1]
 		if anchor then
 			f:SetPoint('TOP', anchor, 'BOTTOM')
@@ -119,6 +105,18 @@ function Popup:Organize()
 			f:SetPoint('TOP', UIParent, 'TOP', 0, -135)
 		end
 	end
+end
+
+function Popup:GetActive(target)
+	for i, f in self:IterateActive() do
+		if f == target or f.id == target then
+			return f, i
+		end
+	end
+end
+
+function Popup:IterateActive()
+	return ipairs(self.Layout)
 end
 
 
@@ -129,7 +127,7 @@ function Popup:OnUpdate(elapsed)
 		local timeleft = self.timeleft - elapsed
 		if timeleft <= 0 then
 			if not self.info.timeoutInformationalOnly then
-				return self:Cancel('timeout')
+				return self:Release('timeout')
 			end
 		else
 			self.timeleft = timeleft
@@ -168,9 +166,9 @@ end
 
 function Popup:OnKeyDown(key)
 	if GetBindingFromClick(key) == 'TOGGLEGAMEMENU' then
-		for i, frame in self:Iterate() do
-			if frame.info.hideOnEscape then
-				frame:Cancel('escape')
+		for i, f in self:IterateActive() do
+			if f.info.hideOnEscape then
+				f:Release('escape')
 			end
 		end
 	elseif GetBindingFromClick(key) == 'SCREENSHOT' then

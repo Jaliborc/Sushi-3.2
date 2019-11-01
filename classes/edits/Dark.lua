@@ -40,14 +40,14 @@ function Dark:Construct()
   f:SetHeight(18)
   f:SetJustifyH('CENTER')
   f:SetScript('OnTextChanged', f.OnTextChanged)
+  f.Label:SetPoint('BOTTOMLEFT', f, 'TOPLEFT', 5, 0)
   f.Bg, f.Left, f.Right = bg, left, right
   return f
 end
 
 function Dark:New(parent, value, pattern)
-	local f = self:Super(Dark):New(parent)
+	local f = self:Super(Dark):New(parent, nil, value)
 	f:SetPattern(pattern or '%s')
-	f:SetValue(value)
 	return f
 end
 
@@ -72,7 +72,7 @@ end
 
 function Dark:SetFontObject(font)
 	self:Super(Dark):SetFontObject(font)
-  
+
   if self.Right then
     self.Right:SetFontObject(font)
     self.Left:SetFontObject(font)

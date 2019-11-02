@@ -35,7 +35,7 @@
   <Script file="groups\FauxScroll.lua"/>
 
   <!-- Dropdowns -->
-  <!--<Script file="drops\Button.lua"/>-->
+  <Script file="drops\Button.lua"/>
   <Script file="drops\Dropdown.lua"/>
   <Script file="drops\Choice.lua"/>
 </Ui>

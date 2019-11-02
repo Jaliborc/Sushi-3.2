@@ -77,8 +77,8 @@ end
 
 function Group:GetSubtitle()
 	local external = self.external or ''
-	external = external:match('^https?://(.+)$') or external
-	external = external:match('^www\.(.+)$') or external
+	external = external:match('^https?://(.-)/?$') or external
+	external = external:match('^www\.(.-)$') or external
 
 	return self.subtitle:format(self:GetProduct() or '', external), self.external
 end
@@ -114,7 +114,7 @@ Group.subtitle = '%s is distributed for free and supported trough donations. The
 
 Group.DialogMessage = 'Copy the following url into your browser'
 Group.Fonts = {
-	'GameFontHighlightHuge',
-	'GameFontHighlightLarge',
-	'GameFontHighlight'
+	GameFontHighlightHuge,
+	GameFontHighlightLarge,
+	GameFontHighlight
 }

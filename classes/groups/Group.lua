@@ -100,6 +100,8 @@ function Group:Add(object, ...)
 		assert(class, 'Sushi-3.1 class `' .. object .. '` was not found.')
 		assert(type(class) == 'table', 'Sushi-3.1 class name `' .. object .. '` is a reserved keyword')
 		object = class(self, ...)
+	elseif object.SetParent then
+		object:SetParent(self)
 	end
 
 	if object.SetCall then
@@ -159,8 +161,11 @@ function Group:Layout()
 	 			breakLine()
 	 		end
 
-			local a,b = self:Orient(x + left, y + top)
-			child:SetPoint('TOPLEFT', a, -b)
+			if child.SetPoint then
+				local a,b = self:Orient(x + left, y + top)
+				child:SetPoint('TOPLEFT', a, -b)
+			end
+
 			h = max(h, height)
 			x = x + width
 		else

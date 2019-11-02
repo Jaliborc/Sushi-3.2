@@ -62,11 +62,11 @@ end
 function Group:SetChildren(call)
 	self:Super(Group):SetChildren(function(self)
 		if self:GetTitle() then
-			self:Add('Header', self:GetTitle(), 'GameFontNormalLarge')
+			self:Add('Header', self:GetTitle(), GameFontNormalLarge)
 		end
 
 		if self:GetSubtitle() then
-			self:Add('Header', self:GetSubtitle(), 'GameFontHighlightSmall').bottom = 20
+			self:Add('Header', self:GetSubtitle(), GameFontHighlightSmall).bottom = 20
 		end
 
 		if call then

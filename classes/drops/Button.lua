@@ -17,94 +17,81 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Button = LibStub('Sushi-3.1').Clickable:NewSushi('DropButton', 1, 'Button', 'UIDropDownMenuButtonTemplate', true)
+local Button = LibStub('Sushi-3.1').Clickable:NewSushi('DropButton', 1, 'CheckButton', 'UIDropDownMenuButtonTemplate', true)
 if not Button then return end
 
-Button.left = 16
-Button.top = 1
-Button.bottom = 1
 
-
---[[ Startup ]]--
+--[[ Construct ]]--
 
 function Button:Construct()
 	local b = self:Super(Button):Construct()
-	b.Check = _G[b:GetName() .. 'Check']
-	b.Color = _G[b:GetName() .. 'ColorSwatch']
-	b.Color.Bg = _G[b.Color:GetName() .. 'SwatchBG']
-	b.Arrow = _G[b:GetName() .. 'ExpandArrow']
-	b.Uncheck = _G[b:GetName() .. 'UnCheck']
-	b.Uncheck:Hide()
+	local name = b:GetName()
+
+	b.Arrow = _G[name .. 'ExpandArrow']
+	b.Color = _G[name .. 'ColorSwatch']
+	b.Color.Bg = _G[name .. 'ColorSwatchSwatchBG']
+
+	b:SetScript('OnEnable', nil)
+	b:SetScript('OnDisable', nil)
+	b:SetHighlightTexture(b.Highlight)
+	b:SetCheckedTexture(_G[name .. 'Check'])
+	b:SetNormalTexture(_G[name .. 'UnCheck'])
 	return b
 end
 
-function Button:New(...)
-	local b = self:Super(Button):New(...)
-	b:SetTitleMode(false)
-	b:SetCheckable(true)
-	b:SetChecked(true)
+function Button:New(parent, data)
+	local data = data or {}
+	local b = self:Super(Button):New(parent)
+
+	local uncheckable = data.isTitle or data.notCheckable
+	local uv = data.isNotRadio and 0 or 0.5
+
+	b.Color:SetShown(data.hasColorSwatch)
+	b.Arrow:SetEnabled(not data.disabled)
+	b.Arrow:SetShown(data.menuTable or data.hasArrow)
+
+	b:GetNormalTexture():SetTexCoord(0.5, 1, uv, uv+0.5)
+	b:GetCheckedTexture():SetTexCoord(0, 0.5, uv, uv+0.5)
+	b:GetCheckedTexture():SetAlpha(uncheckable and 0 or 1)
+	b:GetNormalTexture():SetAlpha(uncheckable and 0 or 1)
+	b:GetFontString():SetPoint('LEFT', uncheckable and 0 or 20, 0)
+
+	b.data = data
+	b:SetText(data.text)
+	b:SetChecked(data.checked)
+	b:SetTip(data.tooltipTitle, data.tooltipText)
+	b:SetEnabled(not data.disabled and not data.isTitle)
+	b:SetNormalFontObject(data.fontObject or data.isTitle and GameFontNormalSmallLeft or GameFontHighlightSmallLeft)
+	b:SetDisabledFontObject(data.fontObject or data.isTitle and GameFontNormalSmallLeft or GameFontDisableSmallLeft)
+
+	b:SetCall('OnClick', data.func and function() data:func() end)
+	b:SetCall('OnParentResize', b.UpdateWidth)
+	b:UpdateWidth()
 	return b
 end
 
 function Button:OnClick()
-	self:SetChecked(not self:GetChecked())
+	self.data.checked = self:GetChecked()
 	self:Super(Button):OnClick()
 end
 
 
---[[ Text ]]--
+--[[ API ]]--
 
-function Button:SetTitleMode(isTitle)
-	local font = isTitle and GameFontNormalSmall or GameFontHighlightSmall
-	self:SetHighlightFontObject(font)
-	self:SetNormalFontObject(font)
-	self:EnableMouse(not isTitle)
-end
-
-function Button:IsTitle()
-	return not self:IsMouseEnabled()
-end
-
-
---[[ Checking ]]--
-
-function Button:SetCheckable(checkable)
-	local name = self:GetName()
-	self:GetFontString():SetPoint('LEFT', checkable and 20 or 0, 0)
-	self.Check:SetShown(checkable)
+function Button:UpdateWidth()
+	self:SetWidth(max(
+		self:GetParent():GetWidth() - self.left - self.right,
+		self:GetTextWidth() + (self:IsCheckable() and 20 or 0)
+	))
 end
 
 function Button:IsCheckable()
-	return self.Check:IsShown()
+	return self:GetCheckedTexture():GetAlpha() > 0
 end
 
-function Button:SetChecked(checked)
-	--if checked then
-	--	self:LockHighlight()
-	--else
---		self:UnlockHighlight()
-	--end
 
-	self.checked = checked
-	self:UpdateCheckTexture()
-end
+--[[ Proprieties ]]--
 
-function Button:GetChecked()
-	return self.checked
-end
-
-function Button:SetRadio(isRadio)
-	self.radio = isRadio
-	self:UpdateCheckTexture()
-end
-
-function Button:IsRadio()
-	return self.radio
-end
-
-function Button:UpdateCheckTexture()
-	local y = self:IsRadio() and 0.5 or 0
-	local x = self:GetChecked() and 0 or 0.5
-
-	self.Check:SetTexCoord(x, x+0.5, y, y+0.5)
-end
+Button.SetLabel, Button.GetLabel = Button.SetText, Button.GetText
+Button.left, Button.right = 16, 16
+Button.top, Button.bottom = 1, 1

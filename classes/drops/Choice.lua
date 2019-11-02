@@ -77,11 +77,11 @@ end
 
 function Choice:AddChoices(key, text, tip)
 	if type(key) == 'table' then
-		local info = key
-		if info.key then
-			tinsert(self.choices, info)
+		local data = key
+		if data.key then
+			tinsert(self.choices, data)
 		else
-			for i, choice in ipairs(info) do
+			for i, choice in ipairs(data) do
 				tinsert(self.choices, choice)
 			end
 		end

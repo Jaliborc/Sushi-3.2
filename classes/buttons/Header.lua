@@ -24,29 +24,29 @@ if not Header then return end
 --[[ Overrides ]]--
 
 function Header:New(parent, text, font, underlined)
-	local f = self:Super(Header):New(parent)
-	f:SetCall('OnParentResize', f.UpdateWidth)
-	f:SetUnderlined(underlined)
-	f:SetFont(font)
-	f:SetText(text)
-	f:UpdateWidth()
-	return f
+	local b = self:Super(Header):New(parent)
+	b:SetCall('OnParentResize', b.UpdateWidth)
+	b:SetUnderlined(underlined)
+	b:SetFont(font)
+	b:SetText(text)
+	b:UpdateWidth()
+	return b
 end
 
 function Header:Construct()
-	local f = self:Super(Header):Construct()
-	local string = f:CreateFontString()
+	local b = self:Super(Header):Construct()
+	local string = b:CreateFontString()
 	string:SetJustifyH('LEFT')
 	string:SetPoint('TOPLEFT')
 
-	local line = f:CreateTexture()
+	local line = b:CreateTexture()
 	line:SetColorTexture(1,1,1, .2)
 	line:SetPoint('BOTTOMRIGHT')
 	line:SetPoint('BOTTOMLEFT')
 	line:SetHeight(1.2)
 
-	f.String, f.Line = string, line
-	return f
+	b.String, b.Line = string, line
+	return b
 end
 
 function Header:OnEnter()
@@ -81,7 +81,7 @@ function Header:GetText()
 end
 
 function Header:SetFont(font)
-	self.String:SetFontObject(font or 'GameFontNormal')
+	self.String:SetFontObject(font or GameFontNormal)
 	self:UpdateHeight()
 end
 
@@ -111,7 +111,7 @@ end
 
 function Header:UpdateWidth()
 	if not self.manual and self:GetParent() then
-		self:Super(Header):SetWidth(self:GetParent():GetWidth() - 20)
+		self:Super(Header):SetWidth(self:GetParent():GetWidth() - self.left - self.right)
 		self:UpdateHeight()
 	end
 end

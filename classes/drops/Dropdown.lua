@@ -37,6 +37,7 @@ end
 function Drop:New(...)
   local f = self:Super(Drop):New(...)
   f:SetFrameStrata('FULLSCREEN_DIALOG')
+  f:SetClampedToScreen(true)
   f:SetBackdrop('Tooltip')
   return f
 end
@@ -44,12 +45,12 @@ end
 
 --[[ API ]]--
 
-function Drop:SetChildren(info)
-	self:Super(Drop):SetChildren(type(info) == 'table' and function(self)
-    for i, line in ipairs(info) do
+function Drop:SetChildren(data)
+	self:Super(Drop):SetChildren(type(data) == 'table' and function(self)
+    for i, line in ipairs(data) do
       self:Add(line)
     end
-	end or info)
+	end or data)
 end
 
 function Drop:Add(object, ...)
@@ -62,7 +63,7 @@ function Drop:Add(object, ...)
       return lines
     end
 
-    return self:Add('DropButton', object)
+    return self:Add(self.ButtonClass, object, ...)
   end
 
   return self:Super(Drop):Add(object, ...)
@@ -81,6 +82,7 @@ end
 --[[ Proprieties ]]--
 
 Drop.Size = 10
+Drop.ButtonClass = 'DropButton'
 Drop.Backdrops = {
   Tooltip = GAME_TOOLTIP_BACKDROP_STYLE_DEFAULT,
   Azerite = GAME_TOOLTIP_BACKDROP_STYLE_AZERITE_ITEM,

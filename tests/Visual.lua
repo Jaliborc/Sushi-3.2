@@ -45,14 +45,14 @@ icon:SetPoint('TOPLEFT', color, 'TOPRIGHT', 5, 0)
 local glow = Sushi.Glowbox(Panel, 'This is a glow box.')
 glow:SetPoint('BOTTOM', expand, 'TOP', 0, 30)
 
-local box = Sushi.BoxEdit(Panel, 'Box Edit', 'Some user text')
-box:SetPoint('TOPLEFT', 20, -75)
-box:SetCall('OnInput', function(box, value)
+local boxEdit = Sushi.BoxEdit(Panel, 'Box Edit', 'Some user text')
+boxEdit:SetPoint('TOPLEFT', 20, -75)
+boxEdit:SetCall('OnInput', function(boxEdit, value)
   print('Box edit changed value to ' .. value)
 end)
 
 local dark = Sushi.DarkEdit(Panel, 'More user text')
-dark:SetPoint('LEFT', box, 'RIGHT', 10, 2)
+dark:SetPoint('LEFT', boxEdit, 'RIGHT', 10, 2)
 dark:SetLabel('Dark Edits')
 
 local dark2 = Sushi.DarkEdit(Panel, 5, '%s%')
@@ -70,7 +70,7 @@ slider:SetPoint('TOPLEFT', 20, -130)
 slider:SetRange(0, 100, 'None')
 
 local choice = Sushi.DropChoice(Panel, 'Dropdown Choice', 2)
-choice:AddChoices { {key = 1, text = 'Hi'}, {key = 2, text = 'Hey'}, {key = 3, text = 'Hello'} }
+choice:AddChoices{ {key = 1, text = 'Hi'}, {key = 2, text = 'Hey'}, {key = 3, text = 'Hello'} }
 choice:SetPoint('TOPLEFT', slider, 'TOPRIGHT', 5, -2)
 
 -- Groups
@@ -113,14 +113,27 @@ local magic2 = Sushi.MagicGroup('Sushi-3.1 Magic Group')
 local magic3 = Sushi.MagicGroup(magic2, 'Subcategory')
 magic3:SetFooter('This is a footer')
 
-local credits = Sushi.CreditsGroup(magic2, {
-  {title = 'Fruits', people = {'Banana', 'Strawberry'}}
-})
+local credits = Sushi.CreditsGroup(magic2, { {title = 'Fruits', people = {'Banana', 'Strawberry'}} })
+credits:SetSubtitle(nil, 'https://www.google.com/')
+
+local dropTitle = Sushi.DropButton(Panel, {text = 'Drop Buttons', isTitle = true})
+dropTitle:SetPoint('TOPLEFT', 20, -280)
+
+local dropButton1 = Sushi.DropButton(Panel, {text = 'Uncheckable', notCheckable = true})
+dropButton1:SetPoint('TOPLEFT', dropTitle, 'BOTTOMLEFT', 0, 0)
+
+local dropButton2 = Sushi.DropButton(Panel, {text = 'Disabled', disabled = true})
+dropButton2:SetPoint('TOPLEFT', dropButton1, 'BOTTOMLEFT', 0, 0)
+
+local dropButton3 = Sushi.DropButton(Panel, {text = 'Not Radio', isNotRadio = true, func = print})
+dropButton3:SetPoint('TOPLEFT', dropButton2, 'BOTTOMLEFT', 0, 0)
 
 local drop = Sushi.Dropdown(Panel)
-drop:SetPoint('TOPLEFT', 20, -300)
+drop:SetPoint('TOPLEFT', dropTitle, 'TOPRIGHT', 15, 0)
 drop:SetChildren(function()
-  for i = 1, 5 do
-    drop:Add('RedButton', 'Red Button')
-  end
+  drop:Add{ text = 'Dropdown', isTitle = true }
+  drop:Add{ text = 'It Can', isNotRadio = true }
+  drop:Add{ text = 'Do All That', isNotRadio = true, checked = true }
+  drop:Add{ text = 'Dropdowns Do', isNotRadio = true }.bottom = 8
+  drop:Add('RedButton', 'And More').left = 23
 end)

@@ -37,16 +37,19 @@ function Callable:Reset()
 end
 
 function Callable:SetCall(event, method)
-	self.calls[event] = method
+	self.calls[event] = self.calls[event] or {}
+	tinsert(self.calls[event], method)
 end
 
-function Callable:GetCall(event)
+function Callable:GetCalls(event)
 	return self.calls and self.calls[event]
 end
 
-function Callable:FireCall(event, ...)
-	local call = self:GetCall(event)
+function Callable:FireCalls(event, ...)
+	local call = self:GetCalls(event)
 	if call then
-		call(self, ...)
+		for i, method in ipairs(call) do
+			method(self, ...)
+		end
 	end
 end

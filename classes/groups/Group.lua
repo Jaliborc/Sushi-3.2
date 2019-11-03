@@ -52,25 +52,7 @@ function Group:OnSizeChanged()
 	if self.limit ~= self:GetLimit() then
 		self:Layout()
 	elseif self:CanLayout() then
-		for i, child in self:IterateChildren() do
-			if child.FireCall then
-				child:FireCall('OnParentResize')
-			end
-		end
-	end
-end
-
-function Group:OnChildUpdate()
-	local parent = self:GetParent()
-	if parent and parent.UpdateChildren then
-		parent:UpdateChildren()
-	end
-end
-
-function Group:OnChildInput(...)
-	local parent = self:GetParent()
-	if parent and parent.FireCall then
-		parent:FireCall('OnInput', self, ...)
+		self:FireCalls('OnResize')
 	end
 end
 
@@ -85,8 +67,8 @@ end
 function Group:UpdateChildren()
 	if self:CanLayout() then
 		self:ReleaseChildren()
-		self:FireCall('OnChildren')
-		self:FireCall('OnUpdate')
+		self:FireCalls('OnChildren')
+		self:FireCalls('OnUpdate')
 		self:Layout()
 	end
 end
@@ -105,8 +87,7 @@ function Group:Add(object, ...)
 	end
 
 	if object.SetCall then
-		object:SetCall('OnUpdate', self.OnChildUpdate)
-		object:SetCall('OnInput', self.OnChildInput)
+		object:SetCall('OnUpdate', function() self:UpdateChildren() end)
 	end
 
 	tinsert(self.Children, object)
@@ -182,7 +163,7 @@ function Group:Layout()
 end
 
 function Group:CanLayout()
-	return self:GetCall('OnChildren') and self:IsVisible()
+	return self:GetCalls('OnChildren') and self:IsVisible()
 end
 
 

@@ -39,7 +39,7 @@ function Box:Construct()
 	local close = CreateFrame('Button', nil, f, 'UIPanelCloseButton')
 	close:SetPoint('TOPRIGHT', 6, 5)
 	close:SetScript('OnClick', function()
-		f:FireCall('OnClose')
+		f:FireCalls('OnClose')
 		f:Hide()
 	end)
 

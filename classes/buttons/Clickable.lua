@@ -35,9 +35,9 @@ function Clickable:OnClick(button)
 	local value = self.GetValue and self:GetValue()
 	PlaySound(self.Sound)
 
-	self:FireCall('OnClick', button, value)
-	self:FireCall('OnInput', value)
-	self:FireCall('OnUpdate')
+	self:FireCalls('OnClick', button, value)
+	self:FireCalls('OnInput', value)
+	self:FireCalls('OnUpdate')
 end
 
 Clickable.Sound = SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON

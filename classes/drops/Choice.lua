@@ -17,7 +17,8 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Choice = LibStub('Sushi-3.1').Labeled:NewSushi('DropChoice', 1, 'Button', 'UIDropDownMenuTemplate', true)
+local Sushi = LibStub('Sushi-3.1')
+local Choice = Sushi.Labeled:NewSushi('DropChoice', 1, 'Button', 'UIDropDownMenuTemplate', true)
 if not Choice then return end
 
 
@@ -40,27 +41,29 @@ function Choice:New(parent, label, value)
 end
 
 function Choice:OnClick()
-	-- Sushi.Dropdown { }
-
-	--[[
-	for value, name, tip in self:IterateLines() do
-		drop:AddLine {
-			isRadio = true,
-			checked = self:GetValue() == value,
-			tooltipTitle = tip and name,
-			tooltipText = tip,
-			text = name,
-
-			func = function()
-				if value ~= self:GetValue() then
-					self:FireCall('OnSelection', value)
-					self:FireCall('OnInput', value)
-					self:FireCall('OnUpdate')
-				end
+	local drop = Sushi.Dropdown:Toggle(self)
+	if drop then
+		drop:SetPoint('TOPRIGHT', -10, -40)
+		drop:SetChildren(function()
+			for i, choice in ipairs(self:GetChoices()) do
+				drop:Add {
+					isRadio = true,
+					checked = choice.key == self:GetValue(),
+					tooltipTitle = choice.tip and choice.text,
+					tooltipText = choice.tip,
+					text = choice.text,
+					func = function()
+						if choice.key ~= self:GetValue() then
+							self:SetValue(choice.key)
+							self:FireCalls('OnValue', choice.key)
+							self:FireCalls('OnInput', choice.key)
+							self:FireCalls('OnUpdate')
+						end
+					end
+				}
 			end
-		}
+		end)
 	end
-	]]
 end
 
 

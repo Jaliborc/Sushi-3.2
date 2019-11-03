@@ -43,30 +43,24 @@ function Button:New(parent, data)
 	local data = data or {}
 	local b = self:Super(Button):New(parent)
 
-	local uncheckable = data.isTitle or data.notCheckable
-	local uv = data.isNotRadio and 0 or 0.5
-
 	b.Color:SetShown(data.hasColorSwatch)
 	b.Arrow:SetEnabled(not data.disabled)
 	b.Arrow:SetShown(data.menuTable or data.hasArrow)
-
-	b:GetNormalTexture():SetTexCoord(0.5, 1, uv, uv+0.5)
-	b:GetCheckedTexture():SetTexCoord(0, 0.5, uv, uv+0.5)
-	b:GetCheckedTexture():SetAlpha(uncheckable and 0 or 1)
-	b:GetNormalTexture():SetAlpha(uncheckable and 0 or 1)
-	b:GetFontString():SetPoint('LEFT', uncheckable and 0 or 20, 0)
 
 	b.data = data
 	b:SetText(data.text)
 	b:SetChecked(data.checked)
 	b:SetTip(data.tooltipTitle, data.tooltipText)
 	b:SetEnabled(not data.disabled and not data.isTitle)
+	b:SetCall('OnClick', data.func and function() data:func() end)
+	b:SetCheckable(not data.isTitle and not data.notCheckable, not data.isNotRadio)
 	b:SetNormalFontObject(data.fontObject or data.isTitle and GameFontNormalSmallLeft or GameFontHighlightSmallLeft)
 	b:SetDisabledFontObject(data.fontObject or data.isTitle and GameFontNormalSmallLeft or GameFontDisableSmallLeft)
 
-	b:SetCall('OnClick', data.func and function() data:func() end)
-	b:SetCall('OnParentResize', b.UpdateWidth)
-	b:UpdateWidth()
+	if parent.SetCall then
+		parent:SetCall('OnResize', function() b:UpdateWidth() end)
+	end
+
 	return b
 end
 
@@ -78,15 +72,32 @@ end
 
 --[[ API ]]--
 
+function Button:SetText(text)
+	self:Super(Button):SetText(text)
+	self:UpdateWidth()
+end
+
+function Button:SetCheckable(checkable, radio)
+	local uv = radio and 0.5 or 0
+
+	self:GetNormalTexture():SetTexCoord(0.5, 1, uv, uv+0.5)
+	self:GetNormalTexture():SetAlpha(checkable and 1 or 0)
+	self:GetCheckedTexture():SetTexCoord(0, 0.5, uv, uv+0.5)
+	self:GetCheckedTexture():SetAlpha(checkable and 1 or 0)
+	self:GetFontString():SetPoint('LEFT', checkable and 20 or 0, 0)
+	self:UpdateWidth()
+end
+
+function Button:IsCheckable()
+	local normal = self:GetNormalTexture()
+	return normal:GetAlpha() > 0, select(3, normal:GetTexCoord()) > 0
+end
+
 function Button:UpdateWidth()
 	self:SetWidth(max(
 		self:GetParent():GetWidth() - self.left - self.right,
 		self:GetTextWidth() + (self:IsCheckable() and 20 or 0)
 	))
-end
-
-function Button:IsCheckable()
-	return self:GetCheckedTexture():GetAlpha() > 0
 end
 
 

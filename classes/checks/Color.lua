@@ -69,12 +69,12 @@ function Color:OnClick()
 	local r,g,b,a = self:GetValue()
 	local set = function(...)
 		self:SetValue(...)
-		self:FireCall('OnColorChanged', ...)
-		self:FireCall('OnInput', ...)
+		self:FireCalls('OnColor', ...)
+		self:FireCalls('OnInput', ...)
 
 		if not ColorPickerFrame:IsShown() then
 			self:SetButtonState('NORMAL')
-			self:FireCall('OnUpdate')
+			self:FireCalls('OnUpdate')
 		end
 	end
 

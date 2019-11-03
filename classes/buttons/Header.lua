@@ -21,17 +21,7 @@ local Header = LibStub('Sushi-3.1').Clickable:NewSushi('Header', 1, 'Button')
 if not Header then return end
 
 
---[[ Overrides ]]--
-
-function Header:New(parent, text, font, underlined)
-	local b = self:Super(Header):New(parent)
-	b:SetCall('OnParentResize', b.UpdateWidth)
-	b:SetUnderlined(underlined)
-	b:SetFont(font)
-	b:SetText(text)
-	b:UpdateWidth()
-	return b
-end
+--[[ Construct ]]--
 
 function Header:Construct()
 	local b = self:Super(Header):Construct()
@@ -45,20 +35,35 @@ function Header:Construct()
 	line:SetPoint('BOTTOMLEFT')
 	line:SetHeight(1.2)
 
-	b.String, b.Line = string, line
+	b.Line = line
+	b:SetFontString(string)
+	return b
+end
+
+function Header:New(parent, text, font, underlined)
+	local b = self:Super(Header):New(parent)
+	b:SetUnderlined(underlined)
+	b:SetNormalFontObject(font)
+	b:SetText(text)
+	b:UpdateWidth()
+
+	if parent.SetCall then
+		parent:SetCall('OnResize', function() b:UpdateWidth() end)
+	end
+
 	return b
 end
 
 function Header:OnEnter()
 	self:Super(Header):OnEnter()
-	self.String:SetText(self:GetText():gsub('|c(' .. strrep('%x', 8) .. ')', function(value)
+	self:GetFontString():SetText(self:GetText():gsub('|c(' .. strrep('%x', 8) .. ')', function(value)
 		return '|c' .. value:gsub('(%x%x)', function(v) return format('%x', min(255, tonumber(v, 16) * self:GetHighlightFactor())) end)
 	end))
 end
 
 function Header:OnLeave()
 	self:Super(Header):OnLeave()
-	self.String:SetText(self:GetText())
+	self:GetFontString():SetText(self:GetText())
 end
 
 
@@ -72,7 +77,7 @@ end
 
 function Header:SetText(text)
 	self.text = text
-	self.String:SetText(text)
+	self:GetFontString():SetText(text)
 	self:UpdateHeight()
 end
 
@@ -80,13 +85,9 @@ function Header:GetText()
 	return self.text
 end
 
-function Header:SetFont(font)
-	self.String:SetFontObject(font or GameFontNormal)
+function Header:SetNormalFontObject(font)
+	self:Super(Header):SetNormalFontObject(font or GameFontNormal)
 	self:UpdateHeight()
-end
-
-function Header:GetFont()
-	return self.String:GetFontObject()
 end
 
 function Header:SetUnderlined(enable)
@@ -117,8 +118,8 @@ function Header:UpdateWidth()
 end
 
 function Header:UpdateHeight()
-	self.String:SetWidth(self:GetWidth())
-	self:SetHeight(self.String:GetHeight() + (self:IsUnderlined() and 3 or 0))
+	self:GetFontString():SetWidth(self:GetWidth())
+	self:SetHeight(self:GetTextHeight() + (self:IsUnderlined() and 3 or 0))
 end
 
 

@@ -56,8 +56,8 @@ function Expand:OnExpandClick()
 
 	PlaySound(self.Sound)
 	self:SetExpanded(expanded)
-	self:FireCall('OnExpand', expanded)
-	self:FireCall('OnUpdate')
+	self:FireCalls('OnExpand', expanded)
+	self:FireCalls('OnUpdate')
 end
 
 

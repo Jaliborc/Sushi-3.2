@@ -42,12 +42,16 @@ function Tipped:OnEnter()
 
 		GameTooltip:Show()
 	end
+
+	self:FireCalls('OnEnter')
 end
 
 function Tipped:OnLeave()
 	if GameTooltip:GetOwner() == self then
 		GameTooltip:Hide()
 	end
+
+	self:FireCalls('OnLeave')
 end
 
 

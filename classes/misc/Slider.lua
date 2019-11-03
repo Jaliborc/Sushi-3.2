@@ -62,20 +62,20 @@ end
 
 function Slider:OnMouseWheel(direction)
 	self:SetValue(self:GetValue() + self:GetStep() * direction, true)
-	self:FireCall('OnUpdate')
+	self:FireCalls('OnUpdate')
 end
 
 function Slider:OnValueChanged(value, manual)
 	self.Edit:SetValue(value)
 
 	if manual then
-		self:FireCall('OnValue', value)
-		self:FireCall('OnInput', value)
+		self:FireCalls('OnValue', value)
+		self:FireCalls('OnInput', value)
 	end
 end
 
 function Slider:OnMouseUp()
-	self:FireCall('OnUpdate')
+	self:FireCalls('OnUpdate')
 end
 
 

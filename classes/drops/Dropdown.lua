@@ -20,6 +20,12 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 local Drop = LibStub('Sushi-3.1').Group:NewSushi('Dropdown', 1, 'Frame')
 if not Drop then return end
 
+local function Clear()
+  if Drop.Current then
+    Drop.Current:Release()
+  end
+end
+
 
 --[[ Construct ]]--
 
@@ -34,12 +40,42 @@ function Drop:Construct()
   return f
 end
 
-function Drop:New(...)
-  local f = self:Super(Drop):New(...)
+function Drop:Toggle(parent)
+  local f = (not self.Current or self.Current:GetParent() ~= parent) and self:New(parent, nil, true)
+  Clear()
+  self.Current = f
+  return f
+end
+
+function Drop:New(parent, children, expires)
+  local f = self:Super(Drop):New(parent, children)
+  f.expires = expires and (GetTime() + 5)
+  f:SetScript('OnUpdate', expires and f.OnUpdate)
   f:SetFrameStrata('FULLSCREEN_DIALOG')
   f:SetClampedToScreen(true)
   f:SetBackdrop('Tooltip')
   return f
+end
+
+function Drop:Reset()
+  self:GetClass().Current = self.Current ~= self and self.Current
+  self:SetScript('OnUpdate', nil)
+  self:SetClampedToScreen(false)
+  self:Super(Drop):Reset()
+end
+
+
+--[[ Events ]]--
+
+function Drop:OnUpdate()
+  local time = GetTime()
+  if self.clicked then
+    self:Release()
+  elseif MouseIsOver(self) or MouseIsOver(self:GetParent()) then
+    self.expires = time + 5
+  elseif time >= self.expires then
+    self:Release()
+  end
 end
 
 
@@ -66,7 +102,11 @@ function Drop:Add(object, ...)
     return self:Add(self.ButtonClass, object, ...)
   end
 
-  return self:Super(Drop):Add(object, ...)
+  local f = self:Super(Drop):Add(object, ...)
+  if f.SetCall then
+    f:SetCall('OnClick', function() self.clicked = true end)
+  end
+  return f
 end
 
 function Drop:SetBackdrop(backdrop)
@@ -80,6 +120,11 @@ end
 
 
 --[[ Proprieties ]]--
+
+if not Drop.ButtonClass then
+  hooksecurefunc('ToggleDropDownMenu', Clear)
+  hooksecurefunc('CloseDropDownMenus', Clear)
+end
 
 Drop.Size = 10
 Drop.ButtonClass = 'DropButton'

@@ -1,3 +1,5 @@
+if not WoWUnit then return end
+
 local Sushi = LibStub('Sushi-3.1')
 local Panel = CreateFrame('Frame', nil, InterfaceOptionsFrame)
 Panel:Hide()
@@ -116,6 +118,7 @@ magic3:SetFooter('This is a footer')
 local credits = Sushi.CreditsGroup(magic2, { {title = 'Fruits', people = {'Banana', 'Strawberry'}} })
 credits:SetSubtitle(nil, 'https://www.google.com/')
 
+-- Dropdown
 local dropTitle = Sushi.DropButton(Panel, {text = 'Drop Buttons', isTitle = true})
 dropTitle:SetPoint('TOPLEFT', 20, -280)
 

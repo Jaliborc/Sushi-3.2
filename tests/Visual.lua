@@ -106,16 +106,16 @@ end)
 local placeholder = CreateFrame('Frame', nil, Panel)
 placeholder:SetPoint('TOPLEFT', faux, 'TOPRIGHT')
 placeholder:SetSize(150, 70)
-placeholder.name = 'Magic Group'
+placeholder.name = 'Options Group'
 
-local magic1 = Sushi.MagicGroup(placeholder)
-magic1:SetSubtitle('Parented to an existing frame')
+local options1 = Sushi.OptionsGroup(placeholder)
+options1:SetSubtitle('Parented to an existing frame')
 
-local magic2 = Sushi.MagicGroup('Sushi-3.1 Magic Group')
-local magic3 = Sushi.MagicGroup(magic2, 'Subcategory')
-magic3:SetFooter('This is a footer')
+local options2 = Sushi.OptionsGroup('Sushi-3.1 Options Group')
+local options3 = Sushi.OptionsGroup(options2, 'Subcategory')
+options3:SetFooter('This is a footer')
 
-local credits = Sushi.CreditsGroup(magic2, { {title = 'Fruits', people = {'Banana', 'Strawberry'}} })
+local credits = Sushi.CreditsGroup(options2, { {title = 'Fruits', people = {'Banana', 'Strawberry'}} })
 credits:SetSubtitle(nil, 'https://www.google.com/')
 
 -- Dropdown

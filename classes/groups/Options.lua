@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Group = LibStub('Sushi-3.1').Group:NewSushi('MagicGroup', 1, 'Frame')
+local Group = LibStub('Sushi-3.1').Group:NewSushi('OptionsGroup', 1, 'Frame')
 if not Group then return end
 
 local function NewCategory(parent, name)
@@ -53,14 +53,7 @@ function Group:New(category, subcategory)
 	f:SetPoint('TOPLEFT', 4, -11)
 	f:SetFooter(nil)
 	f:SetSize(0, 0)
-	return f, category
-end
-
-
---[[ Overrides ]]--
-
-function Group:SetChildren(call)
-	self:Super(Group):SetChildren(function(self)
+	f:SetCall('OnChildren', function(self)
 		if self:GetTitle() then
 			self:Add('Header', self:GetTitle(), GameFontNormalLarge)
 		end
@@ -68,11 +61,13 @@ function Group:SetChildren(call)
 		if self:GetSubtitle() then
 			self:Add('Header', self:GetSubtitle(), GameFontHighlightSmall).bottom = 20
 		end
-
-		if call then
-			call(self)
-		end
 	end)
+
+	category.default = function() f:FireCalls('OnDefaults')	end
+	category.cancel = function() f:FireCalls('OnCancel') end
+	category.okay = function() f:FireCalls('OnOkay') end
+
+	return f, category
 end
 
 

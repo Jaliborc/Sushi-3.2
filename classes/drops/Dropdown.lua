@@ -33,17 +33,9 @@ function Drop:Construct()
   local f = self:Super(Drop):Construct()
   local bg = CreateFrame('Frame', nil, f)
   bg:SetFrameLevel(f:GetFrameLevel())
-  bg:SetPoint('BOTTOMLEFT', 0, -11)
-  bg:SetPoint('TOPRIGHT', 0, 11)
+  bg:EnableMouse(true)
 
   f.Bg = bg
-  return f
-end
-
-function Drop:Toggle(parent)
-  local f = (not self.Current or self.Current:GetParent() ~= parent) and self:New(parent, nil, true)
-  Clear()
-  self.Current = f
   return f
 end
 
@@ -53,8 +45,19 @@ function Drop:New(parent, children, expires)
   f:SetScript('OnUpdate', expires and f.OnUpdate)
   f:SetFrameStrata('FULLSCREEN_DIALOG')
   f:SetClampedToScreen(true)
-  f:SetBackdrop('Tooltip')
+  f:SetBackdrop('TOOLTIP')
   return f
+end
+
+function Drop:Toggle(parent)
+  local show = not self.Current or self.Current:GetParent() ~= parent
+  Clear()
+
+  if show then
+    self.Current = self:New(parent, nil, true)
+    self.Current:SetScale(UIParent:GetScale() / parent:GetEffectiveScale())
+    return self.Current
+  end
 end
 
 function Drop:Reset()
@@ -62,6 +65,7 @@ function Drop:Reset()
   self:SetScript('OnUpdate', nil)
   self:SetClampedToScreen(false)
   self:Super(Drop):Reset()
+  self:SetScale(1)
 end
 
 
@@ -69,7 +73,7 @@ end
 
 function Drop:OnUpdate()
   local time = GetTime()
-  if self.clicked then
+  if self.done then
     self:Release()
   elseif MouseIsOver(self) or MouseIsOver(self:GetParent()) then
     self.expires = time + 5
@@ -81,16 +85,16 @@ end
 
 --[[ API ]]--
 
-function Drop:SetChildren(data)
-	self:Super(Drop):SetChildren(type(data) == 'table' and function(self)
-    for i, line in ipairs(data) do
+function Drop:SetChildren(object)
+	self:Super(Drop):SetChildren(type(object) == 'table' and function(self)
+    for i, line in ipairs(object) do
       self:Add(line)
     end
-	end or data)
+	end or object)
 end
 
 function Drop:Add(object, ...)
-  if type(object) == 'table' and not self.IsFrame(object) then
+  if type(object) == 'table' and type(object[0]) ~= 'userdata' then
     if not object.text and object[1] then
       local lines = {}
       for i, line in ipairs(object) do
@@ -104,7 +108,7 @@ function Drop:Add(object, ...)
 
   local f = self:Super(Drop):Add(object, ...)
   if f.SetCall then
-    f:SetCall('OnClick', function() self.clicked = true end)
+    f:SetCall('OnUpdate', function() self.done = true end)
   end
   return f
 end
@@ -112,10 +116,13 @@ end
 function Drop:SetBackdrop(backdrop)
   local data = self.Backdrops[backdrop] or backdrop
   assert(type(data) == 'table', 'Invalid data provided for `:SetBackdrop`')
+  local padding = data.padding or 0
 
   self.Bg:SetBackdrop(data)
   self.Bg:SetBackdropColor(data.backdropColor:GetRGB())
   self.Bg:SetBackdropBorderColor(data.backdropBorderColor:GetRGB())
+  self.Bg:SetPoint('BOTTOMLEFT', -padding, -11 - padding)
+  self.Bg:SetPoint('TOPRIGHT', padding, 11 + padding)
 end
 
 
@@ -129,14 +136,15 @@ end
 Drop.Size = 10
 Drop.ButtonClass = 'DropButton'
 Drop.Backdrops = {
-  Tooltip = GAME_TOOLTIP_BACKDROP_STYLE_DEFAULT,
-  Azerite = GAME_TOOLTIP_BACKDROP_STYLE_AZERITE_ITEM,
-  Dialog = {
+  TOOLTIP = GAME_TOOLTIP_BACKDROP_STYLE_DEFAULT,
+  AZERITE = GAME_TOOLTIP_BACKDROP_STYLE_AZERITE_ITEM,
+  DIALOG = {
     bgFile = 'Interface/DialogFrame/UI-DialogBox-Background-Dark',
     edgeFile = 'Interface/DialogFrame/UI-DialogBox-Border',
     insets = {left = 11, right = 11, top = 11, bottom = 9},
     edgeSize = 32, tileSize = 32, tile = true,
     backdropBorderColor = HIGHLIGHT_FONT_COLOR,
-    backdropColor = HIGHLIGHT_FONT_COLOR
+    backdropColor = HIGHLIGHT_FONT_COLOR,
+    padding = 4
   }
 }

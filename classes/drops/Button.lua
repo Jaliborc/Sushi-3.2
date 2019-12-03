@@ -27,9 +27,9 @@ function Button:Construct()
 	local b = self:Super(Button):Construct()
 	local name = b:GetName()
 
-	b.Arrow = _G[name .. 'ExpandArrow']
-	b.Color = _G[name .. 'ColorSwatch']
-	b.Color.Bg = _G[name .. 'ColorSwatchSwatchBG']
+	--b.Arrow = _G[name .. 'ExpandArrow']
+	--b.Color = _G[name .. 'ColorSwatch']
+	--b.Color.Bg = _G[name .. 'ColorSwatchSwatchBG']
 
 	b:SetScript('OnEnable', nil)
 	b:SetScript('OnDisable', nil)
@@ -39,23 +39,23 @@ function Button:Construct()
 	return b
 end
 
-function Button:New(parent, data)
-	local data = data or {}
+function Button:New(parent, info)
+	local info = info or {}
 	local b = self:Super(Button):New(parent)
 
-	b.Color:SetShown(data.hasColorSwatch)
-	b.Arrow:SetEnabled(not data.disabled)
-	b.Arrow:SetShown(data.menuTable or data.hasArrow)
+	--b.Color:SetShown(info.hasColorSwatch)
+	--b.Arrow:SetEnabled(not info.disabled)
+	--b.Arrow:SetShown(info.menuTable or info.hasArrow)
 
-	b.data = data
-	b:SetText(data.text)
-	b:SetChecked(data.checked)
-	b:SetTip(data.tooltipTitle, data.tooltipText)
-	b:SetEnabled(not data.disabled and not data.isTitle)
-	b:SetCall('OnClick', data.func and function() data:func() end)
-	b:SetCheckable(not data.isTitle and not data.notCheckable, not data.isNotRadio)
-	b:SetNormalFontObject(data.fontObject or data.isTitle and GameFontNormalSmallLeft or GameFontHighlightSmallLeft)
-	b:SetDisabledFontObject(data.fontObject or data.isTitle and GameFontNormalSmallLeft or GameFontDisableSmallLeft)
+	b.info = info
+	b:SetText(info.text)
+	b:SetChecked(info.checked)
+	b:SetTip(info.tooltipTitle, info.tooltipText)
+	b:SetEnabled(not info.disabled and not info.isTitle)
+	b:SetCall('OnClick', info.func and function() info:func() end)
+	b:SetCheckable(not info.isTitle and not info.notCheckable, not info.isNotRadio)
+	b:SetNormalFontObject(info.fontObject or info.isTitle and GameFontNormalSmallLeft or GameFontHighlightSmallLeft)
+	b:SetDisabledFontObject(info.fontObject or info.isTitle and GameFontNormalSmallLeft or GameFontDisableSmallLeft)
 
 	if parent.SetCall then
 		parent:SetCall('OnResize', function() b:UpdateWidth() end)
@@ -65,7 +65,7 @@ function Button:New(parent, data)
 end
 
 function Button:OnClick()
-	self.data.checked = self:GetChecked()
+	self.info.checked = self:GetChecked()
 	self:Super(Button):OnClick()
 end
 
@@ -80,6 +80,7 @@ end
 function Button:SetCheckable(checkable, radio)
 	local uv = radio and 0.5 or 0
 
+	self.left = checkable and 10 or 16
 	self:GetNormalTexture():SetTexCoord(0.5, 1, uv, uv+0.5)
 	self:GetNormalTexture():SetAlpha(checkable and 1 or 0)
 	self:GetCheckedTexture():SetTexCoord(0, 0.5, uv, uv+0.5)
@@ -96,7 +97,7 @@ end
 function Button:UpdateWidth()
 	self:SetWidth(max(
 		self:GetParent():GetWidth() - self.left - self.right,
-		self:GetTextWidth() + (self:IsCheckable() and 20 or 0)
+		self:GetTextWidth() + (self:IsCheckable() and 24 or 4)
 	))
 end
 

@@ -33,10 +33,6 @@ end
 
 function Popup:Construct()
 	local f = self:Super(Popup):Construct()
-	f.editBox:SetScript('OnEscapePressed', function() f:OnEscapePressed() end)
-	f.editBox:SetScript('OnEnterPressed', function() f:OnEnterPressed() end)
-	f.editBox:SetScript('OnTextChanged', function() f:OnTextChanged() end)
-
 	f:SetScript('OnKeyDown', f.OnKeyDown)
 	f:SetScript('OnUpdate', f.OnUpdate)
 	f:SetScript('OnHide', nil)
@@ -45,8 +41,12 @@ function Popup:Construct()
 end
 
 function Popup:Toggle(input)
+	return self:Hide(input) or self:New(input)
+end
+
+function Popup:Hide(input)
 	local f = self:GetActive(type(input) == 'table' and input.id or input)
-	return f and (f:Release() or true) or self:New(input)
+	return f and (f:Release() or true)
 end
 
 function Popup:New(input)
@@ -76,6 +76,7 @@ function Popup:New(input)
 	tinsert(self.Layout, f)
 
   f.id, f.info = id, info
+	f:EnableKeyboard(true)
 	f:Organize()
 	f:Update()
   return f
@@ -91,6 +92,7 @@ function Popup:Release(reason)
 		end
 
 		self:Super(Popup):Release()
+		self:EnableKeyboard(false)
 		self:Organize()
 		self:Hide()
 	end
@@ -242,6 +244,9 @@ function Popup:Update()
   -- Set the editbox of the self
   if info.hasEditBox then
 		local editBox = self.editBox
+		editBox:SetScript('OnEscapePressed', function() self:OnEscapePressed() end)
+		editBox:SetScript('OnEnterPressed', function() self:OnEnterPressed() end)
+		editBox:SetScript('OnTextChanged', function() self:OnTextChanged() end)
 		editBox:SetText(info.editBoxText or '')
 		editBox:Show()
 
@@ -282,12 +287,12 @@ function Popup:Update()
     _G[name..'MoneyFrame']:Show()
     _G[name..'MoneyInputFrame']:Hide()
   elseif info.hasMoneyInputFrame then
-    local moneyInputFrame = _G[name..'MoneyInputFrame']
-
-    moneyInputFrame:Show()
-    moneyInputFrame.gold:SetScript('OnEnterPressed', function() self:OnEnterPressed() end)
-    moneyInputFrame.silver:SetScript('OnEnterPressed', function() self:OnEnterPressed() end)
-    moneyInputFrame.copper:SetScript('OnEnterPressed', function() self:OnEnterPressed() end)
+		local moneyInput = _G[name..'MoneyInputFrame']
+		moneyInput.gold:SetScript('OnEnterPressed', function() self:OnEnterPressed() end)
+		moneyInput.silver:SetScript('OnEnterPressed', function() self:OnEnterPressed() end)
+		moneyInput.copper:SetScript('OnEnterPressed', function() self:OnEnterPressed() end)
+		moneyInput.gold:SetFocus()
+		moneyInput:Show()
 
 		_G[name..'MoneyFrame']:Hide()
   else
@@ -506,10 +511,6 @@ function Popup:Update()
 
   if info.OnShow then
     info.OnShow(self)
-  end
-
-  if info.hasMoneyInputFrame then
-    _G[self:GetName()..'MoneyInputFrameGold']:SetFocus()
   end
 
 	self:Show()

@@ -44,14 +44,15 @@ function Choice:OnClick()
 	local drop = Sushi.Dropdown:Toggle(self)
 	if drop then
 		drop:SetPoint('TOPRIGHT', -10, -40)
+		drop:SetBackdrop('DIALOG')
 		drop:SetChildren(function()
 			for i, choice in ipairs(self:GetChoices()) do
 				drop:Add {
 					isRadio = true,
 					checked = choice.key == self:GetValue(),
 					tooltipTitle = choice.tip and choice.text,
+					text = choice.text or choice.key,
 					tooltipText = choice.tip,
-					text = choice.text,
 					func = function()
 						if choice.key ~= self:GetValue() then
 							self:SetValue(choice.key)

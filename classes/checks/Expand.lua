@@ -37,26 +37,28 @@ end
 
 function Expand:New(...)
 	local b = self:Super(Expand):New(...)
-	b:SetExpanded(nil)
+	b:SetExpanded(true, nil)
 	return b
 end
 
-function Expand:SetExpanded(expanded)
-	local texture = expanded and 'MINUS' or 'PLUS'
+function Expand:SetExpanded(can, is)
+	local texture = is and 'MINUS' or 'PLUS'
 	self.Toggle:SetNormalTexture('Interface/Buttons/UI-' .. texture ..  'Button-UP')
 	self.Toggle:SetPushedTexture('Interface/Buttons/UI-' .. texture .. 'Button-DOWN')
+	self.Toggle:GetNormalTexture():SetDesaturated(not can)
+	self.Toggle:SetEnabled(can)
 end
 
 function Expand:IsExpanded()
-	return self.Toggle:GetNormalTexture():GetTexture() == 'Interface/Buttons/UI-MINUSButton-UP'
+	return self.Toggle:IsEnabled(), self.Toggle:GetNormalTexture():GetTexture() == 'Interface/Buttons/UI-MINUSButton-UP'
 end
 
 function Expand:OnExpandClick()
-	local expanded = not self:IsExpanded()
+	local can, is = self:IsExpanded()
 
 	PlaySound(self.Sound)
-	self:SetExpanded(expanded)
-	self:FireCalls('OnExpand', expanded)
+	self:SetExpanded(can, not is)
+	self:FireCalls('OnExpand', not is)
 	self:FireCalls('OnUpdate')
 end
 

@@ -68,7 +68,6 @@ function Group:UpdateChildren()
 	if self:CanLayout() then
 		self:ReleaseChildren()
 		self:FireCalls('OnChildren')
-		self:FireCalls('OnUpdate')
 		self:Layout()
 	end
 end
@@ -87,7 +86,8 @@ function Group:Add(object, ...)
 	end
 
 	if object.SetCall then
-		object:SetCall('OnUpdate', function() self:UpdateChildren() end)
+		object:SetCall('OnUpdate', function() self:Update() end)
+		object:SetCall('OnResize', function() self:Layout() end)
 	end
 
 	tinsert(self.Children, object)
@@ -142,10 +142,9 @@ function Group:Layout()
 	 			breakLine()
 	 		end
 
-			if child.SetPoint then
-				local a,b = self:Orient(x + left, y + top)
-				child:SetPoint('TOPLEFT', a, -b)
-			end
+			local a,b = self:Orient(x + left, y + top)
+			child:ClearAllPoints()
+			child:SetPoint('TOPLEFT', a, -b)
 
 			h = max(h, height)
 			x = x + width
@@ -157,8 +156,10 @@ function Group:Layout()
 	x, y = self:Orient(max(x, w), y + h)
 	if self:GetResizing() == 'HORIZONTAL' then
 		self:SetSize(x, max(y, self:GetHeight()))
+		self:FireCalls('OnResize')
 	elseif self:GetResizing() == 'VERTICAL' then
 		self:SetSize(max(x, self:GetWidth()), y)
+		self:FireCalls('OnResize')
 	end
 end
 

@@ -40,7 +40,7 @@ function Group:Construct()
 end
 
 function Group:New(category, subcategory)
-	assert(category, 'First parameter to `MagicGroup:New` is not optional')
+	assert(category, 'First parameter to `OptionsGroup:New` is not optional')
 	if type(category) == 'string' then
 		category = NewCategory(nil, category)
 	elseif subcategory then
@@ -72,6 +72,11 @@ end
 
 
 --[[ API ]]--
+
+function Group:Open()
+	InterfaceOptionsFrame:Show()
+	InterfaceOptionsFrame_OpenToCategory(self:GetParent())
+end
 
 function Group:SetTitle(title)
 	self.name = title

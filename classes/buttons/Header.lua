@@ -77,7 +77,7 @@ end
 
 function Header:SetText(text)
 	self.text = text
-	self:GetFontString():SetText(text)
+	self:Super(Header):SetText(text)
 	self:UpdateHeight()
 end
 

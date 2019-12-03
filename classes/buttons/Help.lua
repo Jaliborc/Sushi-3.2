@@ -22,8 +22,8 @@ if not Help then return end
 
 function Help:Construct()
 	local b = self:Super(Help):Construct()
-	b:SetHighlightTexture('Interface\\FriendsFrame\\InformationIcon-Highlight')
-	b:SetNormalTexture('Interface\\FriendsFrame\\InformationIcon')
+	b:SetHighlightTexture('Interface/FriendsFrame/InformationIcon-Highlight')
+	b:SetNormalTexture('Interface/FriendsFrame/InformationIcon')
 	b:SetSize(16, 16)
 	return b
 end

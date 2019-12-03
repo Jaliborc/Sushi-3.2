@@ -28,7 +28,6 @@ function Group:New(parent, people, title)
 	local f, p = self:Super(Group):New(parent, title or self.title)
 	f:SetCall('OnChildren', self.PopulatePeople)
 	f:SetPeople(people)
-
 	return f, p
 end
 
@@ -60,7 +59,6 @@ end
 
 function Group:SetPeople(people)
   self.people = people
-	self:UpdateChildren()
 end
 
 function Group:GetPeople()
@@ -105,7 +103,7 @@ do
 end
 
 Group.orientation = 'HORIZONTAL'
-Group.title = Group.title .. format(' |T%s\\art\\Patreon:13:13:0:0:64:64:10:54:10:54|t', Sushi.InstallLocation)
+Group.title = Group.title .. format(' |T%s/art/Patreon:13:13:0:0:64:64:10:54:10:54|t', Sushi.InstallLocation)
 Group.subtitle = '%p is distributed for free and supported trough donations. These are the people currently supporting development. Become a patron too at |cFFF96854%e|r.'
 
 Group.DialogMessage = 'Copy the following url into your browser'

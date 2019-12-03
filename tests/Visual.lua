@@ -35,7 +35,7 @@ check2:SetPoint('TOPLEFT', 10, -36)
 check2:SetEnabled(false)
 check2:SetChecked(true)
 
-local color = Sushi.ColorPicker(Panel, 'Color Picker', 1,0,0, 1)
+local color = Sushi.ColorPicker(Panel, 'Color Picker', CreateColor(1,0,0, 1))
 color:SetPoint('TOPLEFT', check, 'BOTTOMLEFT', 0, -5)
 
 local expand = Sushi.ExpandCheck(Panel, 'Expand Check')
@@ -98,7 +98,7 @@ faux:SetPoint('TOPLEFT', group, 'TOPRIGHT')
 faux:SetChildren(function()
   faux:SetNumEntries(5)
 
-  for i = faux:FirstEntry(), faux:LastEntry() do
+  for i = faux:First(), faux:Last() do
     faux:Add('RedButton', 'Faux scroll entry #' .. tostring(i))
   end
 end)

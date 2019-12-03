@@ -28,28 +28,29 @@ function Color:Construct()
 	local text = b:CreateFontString(nil, nil, self.NormalFont)
 	text:SetPoint('LEFT', 28, 1)
 
-	local color = b:CreateTexture(nil, 'BACKGROUND')
-	color:SetAtlas('Forge-ColorSwatch')
-	color:SetPoint('LEFT', 2, 1)
-	color:SetSize(20, 19)
+	local swatch = b:CreateTexture(nil, 'BACKGROUND')
+	swatch:SetAtlas('Forge-ColorSwatch')
+	swatch:SetPoint('LEFT', 2, 1)
+	swatch:SetSize(20, 19)
 
 	local bg = b:CreateTexture(nil, 'BORDER')
 	bg:SetAtlas('Forge-ColorSwatchBackground')
-	bg:SetAllPoints(color)
+	bg:SetAllPoints(swatch)
+	bg:SetAlpha(.2)
 
 	local border = b:CreateTexture(nil, 'ARTWORK')
 	border:SetAtlas('Forge-ColorSwatchBorder')
-	border:SetAllPoints(color)
+	border:SetAllPoints(swatch)
 
 	local glow = b:CreateTexture()
 	glow:SetAtlas('Forge-ColorSwatchHighlight')
-	glow:SetAllPoints(color)
+	glow:SetAllPoints(swatch)
 
 	local pushed = b:CreateTexture()
 	pushed:SetAtlas('Forge-ColorSwatchSelection')
-	pushed:SetAllPoints(color)
+	pushed:SetAllPoints(swatch)
 
-	b.Color = color
+	b.Swatch = swatch
 	b:SetHeight(26)
 	b:SetFontString(text)
 	b:SetNormalTexture(border)
@@ -58,19 +59,18 @@ function Color:Construct()
 	return b
 end
 
-function Color:New(parent, text, r,g,b, a)
+function Color:New(parent, text, color)
 	local b = self:Super(Color):New(parent, text)
-	b:SetValue(r,g,b, a)
-	b:EnableAlpha(a)
+	b:SetValue(color)
 	return b
 end
 
 function Color:OnClick()
-	local r,g,b,a = self:GetValue()
-	local set = function(...)
-		self:SetValue(...)
-		self:FireCalls('OnColor', ...)
-		self:FireCalls('OnInput', ...)
+	local color = self:GetValue()
+	local set = function(color)
+		self:SetValue(color)
+		self:FireCalls('OnColor', color)
+		self:FireCalls('OnInput', color)
 
 		if not ColorPickerFrame:IsShown() then
 			self:SetButtonState('NORMAL')
@@ -79,16 +79,17 @@ function Color:OnClick()
 	end
 
 	ColorPickerFrame.func = function()
+		local a = self:HasAlpha() and (1 - OpacitySliderFrame:GetValue())
 		local r,g,b = ColorPickerFrame:GetColorRGB()
-		set(r,g,b, 1 - OpacitySliderFrame:GetValue())
+		set(CreateColor(r,g,b,a))
 	end
 
 	ColorPickerFrame.target = self
-	ColorPickerFrame.opacity = 1 - a
+	ColorPickerFrame.opacity = 1 - (color.a or 1)
 	ColorPickerFrame.hasOpacity = self:HasAlpha()
 	ColorPickerFrame.opacityFunc = ColorPickerFrame.func
-	ColorPickerFrame.cancelFunc = function() set(r,g,b,a) end
-	ColorPickerFrame:SetColorRGB(r,g,b)
+	ColorPickerFrame.cancelFunc = function() set(color) end
+	ColorPickerFrame:SetColorRGB(color:GetRGB())
 	ColorPickerFrame:Show()
 
 	self:SetButtonState('PUSHED', true)
@@ -98,22 +99,17 @@ end
 
 --[[ API ]]--
 
-function Color:SetValue(r,g,b,a)
-	self.a = a
-	self.Color:SetVertexColor(r or 1, g or 1, b or 1)
+function Color:SetValue(color)
+	self.color = color
+	self.Swatch:SetVertexColor(self.color:GetRGB())
 end
 
 function Color:GetValue()
-	local r,g,b = self.Color:GetVertexColor()
-	return r,g,b, self.a
-end
-
-function Color:EnableAlpha(enable)
-	self.hasAlpha = enable
+	return self.color
 end
 
 function Color:HasAlpha()
-	return self.hasAlpha
+	return type(self.color.a) == 'number'
 end
 
 
@@ -124,7 +120,8 @@ Color.SetColor = Color.SetValue
 Color.GetColor = Color.GetValue
 Color.MinWidth = 150
 Color.WidthOff = 28
+
+Color.color = CreateColor(1,1,1)
 Color.bottom = 8
 Color.right = 10
 Color.left = 10
-Color.a = 1

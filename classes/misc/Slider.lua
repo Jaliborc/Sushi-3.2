@@ -36,7 +36,7 @@ function Slider:Construct()
 	return f
 end
 
-function Slider:New(parent, label, value, low,high, step)
+function Slider:New(parent, label, value, min,max, step)
 	local f = self:Super(Slider):New(parent, label)
 	f.Edit = Sushi.DarkEdit(f)
 	f.Edit:SetNumeric(true)
@@ -45,7 +45,7 @@ function Slider:New(parent, label, value, low,high, step)
 		f:SetValue(value, true)
 	end)
 
-	f:SetRange(low or 1, high or 100)
+	f:SetRange(min or 1, max or 100)
 	f:SetValue(value or 1)
 	f:SetStep(step or 1)
 	return f

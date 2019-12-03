@@ -56,11 +56,11 @@ end
 
 --[[ State ]]--
 
-function Group:FirstEntry()
+function Group:First()
 	return self:GetOffset() + 1
 end
 
-function Group:LastEntry()
+function Group:Last()
 	return min(self:GetOffset() + self.maxEntries, self.numEntries)
 end
 

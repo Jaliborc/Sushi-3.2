@@ -21,12 +21,15 @@ local Lib = LibStub:NewLibrary('Sushi-3.1', 1)
 if not Lib then return end
 
 local Base = Lib.Base or LibStub('Poncho-2.0')()
-local Install = debugstack(1,1,0):match('^(.+)\\Sushi[%d\.\-]+\.lua')
+local Install = debugstack(1,0,0):match('^(.+)\\Sushi[%d\.\-]+\.lua')
+local Root = 'Interface\\AddOns\\'
 
 if Install:sub(1,3) == '...' then
-	for i = 4, strlen(Install) do
-		if root:find(Install:sub(4, i) .. '$') then
-			Install = 'Interface\\AddOns\\' .. Install:sub(i+1)
+	Install = Install:sub(4)
+
+	for i = strlen(Install), 0, -1 do
+		if Root:find(Install:sub(1, i) .. '$') then
+			Install = Root .. Install:sub(i+1)
 			break
 		end
 	end

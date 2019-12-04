@@ -6,7 +6,7 @@ Sushi is a GUI framework for the game World of Warcraft, designed to be:
 * Versatile and easily extendable.
 * Similar to Blizzard's API and hence, easy to learn.
 
-### How to Use
+## How to Use
 For instance, imagine you wish to create a dropdown choice menu. To do so, you can simply call the `Sushi.Choice` class:
 ````lua
 local myMenu = LibStub('Sushi-3.1').Choice(MyParent)
@@ -31,7 +31,7 @@ end)
 * `SetCall` work much alike the native `SetScript`, except it is a method defined by the library. Multiple functions can be assigned to a single event.
 * If you release the frame `myMenu`, all attributes assigned to it and proprieties modified trough class methods will be cleared.
 
-### Available Classes
-Each class is defined in it's own `.lua` file under the `\classes` directory. The library contains classes to display buttons, checkbuttons, dropdowns, editboxes, sliders, static popups, automatic layouts and more.
+## Available Classes
+Each class is defined in it's own `.lua` file under the `\classes` directory. The library contains classes to display buttons, checkbuttons, dropdowns, editboxes, sliders, static popups, automatic layouts and more. Read the [Class Reference](https://github.com/Jaliborc/Sushi-3.0/wiki) for further details.
 
 No class makes use of native code that can generate taint. For example, the `Dropdown` frame implementation does not make use of the `UIDropDownMenu` API.

@@ -34,4 +34,4 @@ end)
 ## Available Classes
 Each class is defined in it's own `.lua` file under the `\classes` directory. The library contains classes to display buttons, checkbuttons, dropdowns, editboxes, sliders, static popups, automatic layouts and more. Read the [Class Reference](https://github.com/Jaliborc/Sushi-3.0/wiki) for further details.
 
-No class makes use of native code that can generate taint. For example, the  [Class Reference](https://github.com/Jaliborc/Sushi-3.0/wiki/Dropdown) frame implementation does not make use of the `UIDropDownMenu` API.
+No class makes use of native code that can generate taint. For example, the  [Dropdown](https://github.com/Jaliborc/Sushi-3.0/wiki/Dropdown) frame implementation does not make use of the `UIDropDownMenu` API.

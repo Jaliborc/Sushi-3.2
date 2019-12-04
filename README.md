@@ -1,4 +1,6 @@
 # Sushi-3.1 :sushi:
+![](http://jaliborc.com/images/addons/large/sushi-3.1.jpg)
+
 Sushi is a GUI framework for the game World of Warcraft, designed to be:
 * Completely object oriented.
 * Versatile and easily extendable.

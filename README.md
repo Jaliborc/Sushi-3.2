@@ -1,62 +1,37 @@
-# Sushi-3.0 :sushi:
+# Sushi-3.1 :sushi:
+![](http://jaliborc.com/images/addons/large/sushi-3.1.jpg)
+
 Sushi is a GUI framework for the game World of Warcraft, designed to be:
-
-* Versatile and easily extendable.
 * Completely object oriented.
+* Versatile and easily extendable.
 * Similar to Blizzard's API and hence, easy to learn.
-* Wrapped in seaweed for extra flavor.
-
-## Why Sushi?
-Why not? While there are some popular GUI frameworks out there, they tend to share one large problem: instead of being _object driven_, has it was to expect from a GUI framework, they are _data driven_.
-
-While it may appear to be an interesting idea, this makes the libraries hardly flexible: they force the developer to follow a given layout. The inexistence of inherence turns the creation of new widget classes into a burdening process. On top of that, they tend to have an incredible high amount of memory, cpu usage and code complexity for how _little_ they achieve.
-
-They become good at just one thing: building configuration menus. Commonly, improperly designed configuration menus, as they are incapable to react to the application needs. Sushi, on the other hand, is good for everything. And even better with soy sauce.
-
-## What's in the Box?
-Basically, Sushi is composed of a collection of frame classes. Here is the complete list as of January 2012:
-
-> ![Tasty](https://github.com/jaliborc/Sushi-3.0/wiki/Images/Sushi-Graph.png)
 
 ## How to Use
-For instance, imagine you wish to create a Dropdown. After properly including Sushi in your addon _(see below)_, simply call the `SushiDropdown` class:
+For instance, imagine you wish to create a dropdown choice menu. To do so, you can simply call the `Sushi.Choice` class:
+````lua
+local myMenu = LibStub('Sushi-3.1').Choice(MyParent)
+myMenu:SetPoint('CENTER')
 
-	local myDropdown = SushiDropdown()
-	myDropdown:SetPoint('CENTER')
-	myDropdown:SetLabel('My Awesome Dropdown')
-	
-	myDropdown:AddLine('Salmon')
-	myDropdown:AddLine('Grouper')
-	myDropdown:AddLine('None')
-	
-	myDropdown:SetCall('OnInput', function(self, v)
-		if v == 'None' then
-			print('Not hungry?')
-		else
-			print('You cannot have it.')
-		end
-	end)
+myMenu:SetLabel('My Awesome Dropdown')
+myMenu:AddChoice('Salmon')
+myMenu:AddChoice('Grouper')
+myMenu:AddChoice('None')
 
-### :bulb: Notice!
+myMenu:SetCall('OnInput', function(self, value)
+	if value == 'None' then
+		print('Not hungry?')
+	else
+		print('You cannot have it.')
+	end
+end)
+````
 
-* All classes are named as in the graph above, but preceded by `Sushi`.
-* All functionality is available as methods, never as attributes.
-* `SetCall` work exactly alike the native `SetScript`, except it is a method defined by Sushi.
+:bulb: Three things of note in this snippet:
+* Functionality is available as methods, never as attributes.  
+* `SetCall` work much alike the native `SetScript`, except it is a method defined by the library. Multiple functions can be assigned to a single event.
+* If you release the frame `myMenu`, all attributes assigned to it and proprieties modified trough class methods will be cleared.
 
-## Installation
-Sushi is installed exactly has any other library for World of Warcraft:
+## Available Classes
+Each class is defined in it's own `.lua` file under the `\classes` directory. The library contains classes to display buttons, checkbuttons, dropdowns, editboxes, sliders, static popups, automatic layouts and more. Read the [Class Reference](https://github.com/Jaliborc/Sushi-3.0/wiki) for further details.
 
-1. Download [Sushi](https://github.com/Jaliborc/Sushi-3.0), [Poncho](https://github.com/Jaliborc/Poncho-1.0) and [LibStub](https://github.com/p3lim/LibStub).
-2. Include the three folders in the directory of your add-on.
-3. Add these three lines to your _.toc_ file, before any other loading line:
-
-.
-
-	LibStub\LibStub.lua
-	Poncho-1.0\Poncho-1.0.xml
-	Sushi-3.0\Sushi-3.0.xml
-
-## More Information
-* See [Class Reference](https://github.com/Jaliborc/Sushi-3.0/wiki/Class-Reference) for a complete list of every class.
-* Read the [Best Practices](https://github.com/Jaliborc/Sushi-3.0/wiki/Best-practices) section.
-* For questions or additional help, post [an issue](https://github.com/Jaliborc/Sushi-3.0/issues/new).
+No class makes use of native code that can generate taint. For example, the  [Dropdown](https://github.com/Jaliborc/Sushi-3.0/wiki/Dropdown) frame implementation does not make use of the `UIDropDownMenu` API.

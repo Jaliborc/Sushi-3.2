@@ -3,7 +3,7 @@ name: tag
 on:
   push:
     paths:
-      - Sushi-3.0.lua
+      - Sushi-3.1.lua
     branches:
       - master
 
@@ -15,6 +15,6 @@ jobs:
       - uses: jaliborc/action-general-autotag@master
         with:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-          source_file: "Sushi-3.0.lua"
-          extraction_regex: "LibStub:NewLibrary\\(['\\s]+Sushi-3.0['\\s]+,\\s*(\\d+)\\)"
-          tag_format: "3.0.{version}"
+          source_file: "Sushi-3.1.lua"
+          extraction_regex: "LibStub:NewLibrary\\(['\\s]+Sushi-3.1['\\s]+,\\s*(\\d+)\\)"
+          tag_format: "3.1.{version}"

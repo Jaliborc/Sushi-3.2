@@ -6,6 +6,8 @@ Sushi is a GUI framework for the game World of Warcraft, designed to be:
 * Versatile and easily extendable.
 * Similar to Blizzard's API and hence, easy to learn.
 
+Requires [LibStub](https://www.wowace.com/projects/libstub) and [Poncho-2.0](https://github.com/jaliborc/poncho-2.0).
+
 ## How to Use
 For instance, imagine you wish to create a dropdown choice menu. To do so, you can simply call the `Sushi.Choice` class:
 ````lua

@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Lib = LibStub:NewLibrary('Sushi-3.1', 1)
+local Lib = LibStub:NewLibrary('Sushi-3.1', 2)
 if not Lib then return end
 
 local Base = Lib.Base or LibStub('Poncho-2.0')()

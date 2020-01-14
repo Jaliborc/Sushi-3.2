@@ -1,5 +1,5 @@
 --[[
-Copyright 2008-2019 João Cardoso
+Copyright 2008-2020 João Cardoso
 Sushi is distributed under the terms of the GNU General Public License(or the Lesser GPL).
 This file is part of Sushi.
 
@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Color = LibStub('Sushi-3.1').TextedClickable:NewSushi('ColorPicker', 1, 'Button')
+local Color = LibStub('Sushi-3.1').TextedClickable:NewSushi('ColorPicker', 2, 'Button')
 if not Color then	return end
 
 
@@ -78,19 +78,19 @@ function Color:OnClick()
 		end
 	end
 
+	-- order of these lines is important
 	ColorPickerFrame.func = function()
 		local a = self:HasAlpha() and (1 - OpacitySliderFrame:GetValue())
 		local r,g,b = ColorPickerFrame:GetColorRGB()
 		set(CreateColor(r,g,b,a))
 	end
-
-	ColorPickerFrame.target = self
+	ColorPickerFrame.cancelFunc = function() set(color) end
+	ColorPickerFrame.opacityFunc = ColorPickerFrame.func
 	ColorPickerFrame.opacity = 1 - (color.a or 1)
 	ColorPickerFrame.hasOpacity = self:HasAlpha()
-	ColorPickerFrame.opacityFunc = ColorPickerFrame.func
-	ColorPickerFrame.cancelFunc = function() set(color) end
-	ColorPickerFrame:SetColorRGB(color:GetRGB())
+	ColorPickerFrame.target = self
 	ColorPickerFrame:Show()
+	ColorPickerFrame:SetColorRGB(color:GetRGB())
 
 	self:SetButtonState('PUSHED', true)
 	PlaySound(self.Sound)

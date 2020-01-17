@@ -1,4 +1,4 @@
 <Ui>
-  <Script file="Unit.lua"/>
   <Script file="Visual.lua"/>
+  <Script file="Unit.lua"/>
 </Ui>

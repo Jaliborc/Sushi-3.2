@@ -1,7 +1,7 @@
-if not WoWUnit then return end
+local Tests = WoWUnit and WoWUnit('Sushi-3.1')
+if not Tests then return end
 
 local Sushi = LibStub('Sushi-3.1')
-local Tests = WoWUnit('Sushi-3.1')
 local AreEqual, IsFalse, IsTrue = WoWUnit.AreEqual, WoWUnit.IsFalse, WoWUnit.IsTrue
 
 function Tests:CallableReset()

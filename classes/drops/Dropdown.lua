@@ -39,13 +39,25 @@ function Drop:Construct()
   return f
 end
 
+
+local backdropInfo =
+{
+	bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
+ 	edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
+ 	tile = true,
+ 	tileEdge = true,
+ 	tileSize = 8,
+ 	edgeSize = 8,
+ 	insets = { left = 1, right = 1, top = 1, bottom = 1 },
+}
+
 function Drop:New(parent, children, expires)
   local f = self:Super(Drop):New(parent, children)
   f.expires = expires and (GetTime() + 5)
   f:SetScript('OnUpdate', expires and f.OnUpdate)
   f:SetFrameStrata('FULLSCREEN_DIALOG')
   f:SetClampedToScreen(true)
-  f:SetBackdrop('TOOLTIP')
+  f:SetBackdrop(backdropInfo)
   return f
 end
 
@@ -137,8 +149,8 @@ function Drop:SetBackdrop(backdrop)
   local padding = data.padding or 0
 
   self.Bg:SetBackdrop(data)
-  self.Bg:SetBackdropColor(data.backdropColor:GetRGB())
-  self.Bg:SetBackdropBorderColor(data.backdropBorderColor:GetRGB())
+  self.Bg:SetBackdropColor(0, 0, 0)
+  self.Bg:SetBackdropBorderColor(0.4, 0.4, 0.4)
   self.Bg:SetPoint('BOTTOMLEFT', -padding, -11 - padding)
   self.Bg:SetPoint('TOPRIGHT', padding, 11 + padding)
 end

@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Expand = LibStub('Sushi-3.1').Check:NewSushi('ExpandCheck', 1, 'CheckButton')
+local Expand = LibStub('Sushi-3.1').Check:NewSushi('ExpandCheck', 2, 'CheckButton')
 if not Expand then return end
 
 
@@ -43,14 +43,15 @@ end
 
 function Expand:SetExpanded(can, is)
 	local texture = is and 'MINUS' or 'PLUS'
-	self.Toggle:SetNormalTexture('Interface/Buttons/UI-' .. texture ..  'Button-UP')
-	self.Toggle:SetPushedTexture('Interface/Buttons/UI-' .. texture .. 'Button-DOWN')
+	self.Toggle:SetNormalTexture('Interface/Buttons/UI-' .. texture ..  'Button-Up')
+	self.Toggle:SetPushedTexture('Interface/Buttons/UI-' .. texture .. 'Button-Down')
 	self.Toggle:GetNormalTexture():SetDesaturated(not can)
 	self.Toggle:SetEnabled(can)
 end
 
 function Expand:IsExpanded()
-	return self.Toggle:IsEnabled(), self.Toggle:GetNormalTexture():GetTexture() == 'Interface/Buttons/UI-MINUSButton-UP'
+	return self.Toggle:IsEnabled(),
+				 self.Toggle:GetNormalTexture():GetTexture() == GetFileIDFromPath('Interface/Buttons/UI-MinusButton-Up')
 end
 
 function Expand:OnExpandClick()

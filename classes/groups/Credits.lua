@@ -19,14 +19,14 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 
 
 local Sushi = LibStub('Sushi-3.1')
-local Group = Sushi.OptionsGroup:NewSushi('CreditsGroup', 1, 'Frame')
+local Group = Sushi.OptionsGroup:NewSushi('CreditsGroup', 2, 'Frame')
 if not Group then return end
 
 
 --[[ Construct ]]--
 
 function Group:New(parent, people, title)
-	local f, p = self:Super(Group):New(parent, title or self.title)
+	local f, p = self:Super(Group):New(parent, title or 'Patrons')
 	f:SetCall('OnChildren', self.PopulatePeople)
 	f:SetPeople(people)
 	return f, p
@@ -36,10 +36,10 @@ function Group:PopulatePeople()
 	local subtitle = self.Children[2]
 	subtitle:SetHighlightFactor(1.5)
 	subtitle:SetCall('OnClick', function()
-		if self.external then
+		if self.url then
 			Sushi.Popup {
 				text = self.DialogMessage, button1 = OKAY, whileDead = 1, exclusive = 1, hideOnEscape = 1,
-				hasEditBox = 1, editBoxWidth = 260, editBoxText = self.external, autoHighlight = 1
+				hasEditBox = 1, editBoxWidth = 260, editBoxText = self.url, autoHighlight = 1
 			}
 		end
 	end)
@@ -66,47 +66,18 @@ function Group:GetPeople()
   return self.people or {}
 end
 
-function Group:SetSubtitle(subtitle, external)
-	self.subtitle, self.external = subtitle, external
+function Group:SetSubtitle(subtitle, url)
+	self.subtitle, self.url = subtitle, url
 end
 
 function Group:GetSubtitle()
-	local external = self.external or ''
-	external = external:match('^https?://(.-)/?$') or external
-	external = external:match('^www\.(.-)$') or external
-
-	return self.subtitle:gsub('%%p', self:GetProduct() or ''):gsub('%%e', external)
-end
-
-function Group:GetProduct()
-	local panel = self:GetParent()
-	return panel and panel.parent and panel.parent:gsub(' *|T.-|t *', '')
+	return self.subtitle, self.url
 end
 
 
 --[[ Proprieties ]]--
 
-do
-	local locale = GetLocale():sub(1, 2)
-	if locale == 'de' then
-		Group.title = 'Schirmherren'
-	elseif locale == 'es' then
-		Group.title = 'Patronos'
-	elseif locale == 'it' then
-		Group.title = 'Patronos'
-	elseif locale == 'pt' then
-		Group.title = 'Patronos'
-	elseif locale == 'ru' then
-		Group.title = 'Покровители'
-	else
-		Group.title = 'Patrons'
-	end
-end
-
 Group.orientation = 'HORIZONTAL'
-Group.title = Group.title .. format(' |T%s/art/Patreon:13:13:0:0:64:64:10:54:10:54|t', Sushi.InstallLocation)
-Group.subtitle = '%p is distributed for free and supported trough donations. These are the people currently supporting development. Become a patron too at |cFFF96854%e|r.'
-
 Group.DialogMessage = 'Copy the following url into your browser'
 Group.Fonts = {
 	GameFontHighlightHuge,

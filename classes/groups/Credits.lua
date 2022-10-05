@@ -19,7 +19,7 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 
 
 local Sushi = LibStub('Sushi-3.1')
-local Group = Sushi.OptionsGroup:NewSushi('CreditsGroup', 2, 'Frame')
+local Group = Sushi.OptionsGroup:NewSushi('CreditsGroup', 3, 'Frame')
 if not Group then return end
 
 
@@ -33,16 +33,18 @@ function Group:New(parent, people, title)
 end
 
 function Group:PopulatePeople()
-	local subtitle = self.Children[2]
-	subtitle:SetHighlightFactor(1.5)
-	subtitle:SetCall('OnClick', function()
-		if self.url then
-			Sushi.Popup {
-				text = self.DialogMessage, button1 = OKAY, whileDead = 1, exclusive = 1, hideOnEscape = 1,
-				hasEditBox = 1, editBoxWidth = 260, editBoxText = self.url, autoHighlight = 1
-			}
-		end
-	end)
+	if self.subtitle then
+		local subtitle = self.Children[2]
+		subtitle:SetHighlightFactor(1.5)
+		subtitle:SetCall('OnClick', function()
+			if self.url then
+				Sushi.Popup {
+					text = self.DialogMessage, button1 = OKAY, whileDead = 1, exclusive = 1, hideOnEscape = 1,
+					hasEditBox = 1, editBoxWidth = 260, editBoxText = self.url, autoHighlight = 1
+				}
+			end
+		end)
+	end
 
 	for i, section in ipairs(self:GetPeople()) do
 		if section.people then

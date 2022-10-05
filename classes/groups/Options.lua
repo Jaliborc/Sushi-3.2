@@ -35,8 +35,8 @@ function Group:New(category, subcategory)
 
 	local dock = CreateFrame('Frame', nil, InterfaceOptionsFrame or SettingsPanel)
 	if subcategory then
-		dock.parent, dock.name = category and category.name, subcategory
-	elseif type(category) == 'string' then
+		dock.parent, dock.name = type(category) == 'table' and category.name or category, subcategory
+	else
 		dock.name = category
 	end
 

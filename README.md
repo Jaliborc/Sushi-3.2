@@ -2,8 +2,7 @@
 ![](http://jaliborc.com/images/addons/large/sushi-3.1.jpg)
 [![Patreon](http://img.shields.io/badge/news%20&%20rewards-patreon-ff4d42)](https://www.patreon.com/jaliborc)
 [![Paypal](http://img.shields.io/badge/donate-paypal-1d3fe5)](https://www.paypal.me/jaliborc)
-[![Discord](http://img.shields.io/badge/discuss-discord-5865F2)](https://bit.ly/discord-jaliborc)
-
+[![Discord](http://img.shields.io/badge/discuss-discord-5865F2)](https://bit.ly/discord-jaliborc)  
 
 Sushi is a GUI framework for the game World of Warcraft, designed to be:
 * Completely object oriented.
@@ -41,3 +40,6 @@ end)
 Each class is defined in it's own `.lua` file under the `\classes` directory. The library contains classes to display buttons, checkbuttons, dropdowns, editboxes, sliders, static popups, automatic layouts and more. Read the [Class Reference](https://github.com/Jaliborc/Sushi-3.0/wiki) for further details.
 
 No class makes use of native code that can generate taint. For example, the  [Dropdown](https://github.com/Jaliborc/Sushi-3.0/wiki/Dropdown) frame implementation does not make use of the `UIDropDownMenu` API.
+
+## :warning: Reminder!
+If you use this library, please list it as one of your dependencies in the CurseForge admin system. It's a big help! :+1:

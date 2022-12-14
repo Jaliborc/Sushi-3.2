@@ -18,7 +18,7 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
 local Sushi = LibStub('Sushi-3.1')
-local Choice = Sushi.Labeled:NewSushi('DropChoice', 1, 'Button', 'UIDropDownMenuTemplate', true)
+local Choice = Sushi.Labeled:NewSushi('DropChoice', 2, 'Button', 'UIDropDownMenuTemplate', true)
 if not Choice then return end
 
 
@@ -65,6 +65,8 @@ function Choice:OnClick()
 			end
 		end)
 	end
+	
+	self:SetCall('OnReset', drop and function() drop:Release() end)
 end
 
 
@@ -86,7 +88,9 @@ function Choice:AddChoices(key, text, tip)
 			tinsert(self.choices, data)
 		else
 			for i, choice in ipairs(data) do
-				tinsert(self.choices, choice)
+				if type(choice) == 'table' and choice.key then
+					tinsert(self.choices, choice)
+				end
 			end
 		end
 	elseif key then

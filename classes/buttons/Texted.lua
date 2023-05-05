@@ -60,7 +60,7 @@ function Texted:IsSmall()
 end
 
 
---[[ Proprieties ]]--
+--[[ Properties ]]--
 
 Texted.HighlightFont = 'GameFontHighlight'
 Texted.DisableFont = 'GameFontDisable'

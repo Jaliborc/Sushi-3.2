@@ -77,7 +77,7 @@ function Group:GetSubtitle()
 end
 
 
---[[ Proprieties ]]--
+--[[ Properties ]]--
 
 Group.orientation = 'HORIZONTAL'
 Group.DialogMessage = 'Copy the following url into your browser'

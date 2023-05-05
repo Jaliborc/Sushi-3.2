@@ -86,7 +86,7 @@ function Editable:GetValue()
 end
 
 
---[[ Proprieties ]]--
+--[[ Properties ]]--
 
 Editable.NormalFont = 'GameFontHighlightSmall'
 Editable.DisabledFont = 'GameFontDisableSmall'

@@ -203,7 +203,7 @@ function Group:GetLimit()
 end
 
 
---[[ Proprieties ]]--
+--[[ Properties ]]--
 
 Group.orientation, Group.resizing = 'VERTICAL', 'VERTICAL'
 Group.Update = Group.UpdateChildren

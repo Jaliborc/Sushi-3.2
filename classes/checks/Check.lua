@@ -66,7 +66,7 @@ function Check:Reset()
 end
 
 
---[[ Proprieties ]]--
+--[[ Properties ]]--
 
 Check.NormalFont = 'GameFontHighlight'
 Check.SetValue = Check.SetChecked

@@ -64,6 +64,6 @@ function Expand:OnExpandClick()
 end
 
 
---[[ Proprieties ]]--
+--[[ Properties ]]--
 
 Expand.left = Expand:GetSuper().left + 14

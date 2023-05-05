@@ -111,7 +111,7 @@ function Slider:GetPattern()
 end
 
 
---[[ Proprieties ]]--
+--[[ Properties ]]--
 
 Slider.NormalFont = 'GameFontNormal'
 Slider.DisabledFont = 'GameFontDisable'

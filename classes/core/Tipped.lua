@@ -71,7 +71,7 @@ function Tipped:GetTooltipAnchor()
 end
 
 
---[[ Proprieties ]]--
+--[[ Properties ]]--
 
 Tipped.SetTip = Tipped.SetTooltip
 Tipped.GetTip = Tipped.GetTooltip

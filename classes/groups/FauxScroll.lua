@@ -96,7 +96,7 @@ function Group:NumEntries()
 end
 
 
---[[ Proprieties ]]--
+--[[ Properties ]]--
 
 Group.numEntries = 1
 Group.maxEntries = 10

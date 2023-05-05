@@ -115,7 +115,7 @@ function Choice:UpdateText()
 end
 
 
---[[ Proprieties ]]--
+--[[ Properties ]]--
 
 Choice.Add = Choice.AddChoices
 Choice.top = 18

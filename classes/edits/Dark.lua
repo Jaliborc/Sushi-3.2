@@ -93,7 +93,7 @@ function Dark:GetPattern()
 end
 
 
---[[ Proprieties ]]--
+--[[ Properties ]]--
 
 Dark.Ruler = Dark.Ruler or UIParent:CreateFontString()
 Dark.MaxWidth = 150

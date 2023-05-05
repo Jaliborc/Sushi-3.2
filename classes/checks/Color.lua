@@ -113,7 +113,7 @@ function Color:HasAlpha()
 end
 
 
---[[ Proprieties ]]--
+--[[ Properties ]]--
 
 Color.NormalFont = 'GameFontHighlight'
 Color.SetColor = Color.SetValue

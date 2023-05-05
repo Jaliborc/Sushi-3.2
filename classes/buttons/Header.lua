@@ -123,7 +123,7 @@ function Header:UpdateHeight()
 end
 
 
---[[ Proprieties ]]--
+--[[ Properties ]]--
 
 Header.SetLabel = Header.SetText
 Header.GetLabel = Header.GetText

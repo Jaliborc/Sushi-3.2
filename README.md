@@ -34,7 +34,7 @@ end)
 :bulb: Three things of note in this snippet:
 * Functionality is available as methods, never as attributes.  
 * `SetCall` work much alike the native `SetScript`, except it is a method defined by the library. Multiple functions can be assigned to a single event.
-* If you release the frame `myMenu`, all attributes assigned to it and proprieties modified trough class methods will be cleared.
+* If you release the frame `myMenu`, all attributes assigned to it and properties modified trough class methods will be cleared.
 
 ## Available Classes
 Each class is defined in it's own `.lua` file under the `\classes` directory. The library contains classes to display buttons, checkbuttons, dropdowns, editboxes, sliders, static popups, automatic layouts and more. Read the [Class Reference](https://github.com/Jaliborc/Sushi-3.0/wiki) for further details.

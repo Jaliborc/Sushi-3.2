@@ -67,7 +67,7 @@ function Labeled:UpdateFont()
 end
 
 
---[[ Proprieties ]]--
+--[[ Properties ]]--
 
 Labeled.LabelFont = 'GameFontNormal'
 Labeled.LabelDisabledFont = 'GameFontDisable'

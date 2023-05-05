@@ -160,7 +160,7 @@ function Drop:IsMouseInteracting()
 end
 
 
---[[ Proprieties ]]--
+--[[ Properties ]]--
 
 if WOW_PROJECT_ID ~= WOW_PROJECT_MAINLINE and not Drop.ButtonClass then
   hooksecurefunc('ToggleDropDownMenu', function() Drop:Clear() end)

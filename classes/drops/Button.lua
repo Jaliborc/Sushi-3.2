@@ -102,7 +102,7 @@ function Button:UpdateWidth()
 end
 
 
---[[ Proprieties ]]--
+--[[ Properties ]]--
 
 Button.SetLabel, Button.GetLabel = Button.SetText, Button.GetText
 Button.left, Button.right = 16, 16

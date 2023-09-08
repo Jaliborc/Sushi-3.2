@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Group = LibStub('Sushi-3.1').Group:NewSushi('OptionsGroup', 2, 'Frame')
+local Group = LibStub('Sushi-3.1').Group:NewSushi('OptionsGroup', 3, 'Frame')
 if not Group then return end
 
 
@@ -33,7 +33,7 @@ end
 function Group:New(category, subcategory)
 	assert(category, 'First parameter to `OptionsGroup:New` is not optional')
 
-	local dock = CreateFrame('Frame', nil, InterfaceOptionsFrame or SettingsPanel)
+	local dock = CreateFrame('Frame', nil, SettingsPanel or InterfaceOptionsFrame)
 	if subcategory then
 		dock.parent, dock.name = type(category) == 'table' and category.name or category, subcategory
 	else
@@ -69,12 +69,12 @@ end
 --[[ API ]]--
 
 function Group:Open()
-	if InterfaceOptionsFrame then
-		InterfaceOptionsFrame:Show()
-		InterfaceOptionsFrame_OpenToCategory(self:GetParent())
-	else
+	if SettingsPanel then
 		SettingsPanel:Show()
 		SettingsPanel:SelectCategory(self.category) -- GetCategory is bugged, must go direct
+	else
+		InterfaceOptionsFrame:Show()
+		InterfaceOptionsFrame_OpenToCategory(self:GetParent())
 	end
 end
 

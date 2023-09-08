@@ -1,7 +1,7 @@
 if not WoWUnit or WoWUnit:HasGroup('Sushi-3.1') then return end
 
 local Sushi = LibStub('Sushi-3.1')
-local Panel = CreateFrame('Frame', nil, InterfaceOptionsFrame or SettingsPanel)
+local Panel = CreateFrame('Frame', nil, SettingsPanel or InterfaceOptionsFrame)
 Panel:Hide()
 Panel.name = 'Sushi-3.1'
 InterfaceOptions_AddCategory(Panel)

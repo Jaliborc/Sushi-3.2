@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Callable = LibStub('Sushi-3.1').Base:NewSushi('Callable', 2)
+local Callable = LibStub('Sushi-3.1').Base:NewSushi('Callable', 3)
 if not Callable then return end
 
 function Callable:New(...)
@@ -29,6 +29,8 @@ end
 function Callable:Reset()
 	self:FireCalls('OnReset')
 	self:Super(Callable):Reset()
+	self:SetScale(1)
+	self:SetAlpha(1)
 
 	for k, v in pairs(self) do
 		if type(k) == 'string' and k:sub(1, 1):find('%l') then

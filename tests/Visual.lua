@@ -110,7 +110,8 @@ local options2 = Sushi.OptionsGroup('Sushi-3.1 Options Group')
 local options3 = Sushi.OptionsGroup(options2, 'Subcategory')
 options3:SetFooter('This is a footer')
 
-local credits = Sushi.CreditsGroup(options2, { {title = 'Fruits', people = {'Banana', 'Strawberry'}} })
+local credits = Sushi.CreditsGroup(options2, { {title = 'Development', people = {'Jaliborc', 'Poseidon'}}, {title = 'Art', people = {'Bob Ross', 'Your Mom'}} })
+credits:SetSubtitle('This is a panel for listing credits, supporters or something like that.')
 
 -- Dropdown
 local dropTitle = Sushi.DropButton(Panel, {text = 'Drop Buttons', isTitle = true})

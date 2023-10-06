@@ -15,12 +15,12 @@ helpButton:SetText('Hello')
 local redButton = Sushi.RedButton(Panel, 'Red Button')
 redButton:SetPoint('LEFT', helpButton, 'RIGHT', 5, 0)
 redButton:SetCall('OnClick', function()
-  Sushi.Popup {text = 'This is a Popup message.', button1 = OKAY, whileDead = 1, hideOnEscape = 1, exclusive = 1}
-  Sushi.Popup {
-    text = 'This is another Popup.', button1 = OKAY, whileDead = 1, hideOnEscape = 1,
-    hasEditBox = 1, editBoxWidth = 260, editBoxText = 'With an editbox', autoHighlight = 1,
-    id = 'Unit Test'
-  }
+	Sushi.Popup {text = 'This is a Popup message.', button1 = OKAY, whileDead = 1, hideOnEscape = 1, exclusive = 1}
+	Sushi.Popup {
+		text = 'This is another Popup.', button1 = OKAY, whileDead = 1, hideOnEscape = 1,
+		hasEditBox = 1, editBoxWidth = 260, editBoxText = 'With an editbox', autoHighlight = 1,
+		id = 'Unit Test'
+	}
 end)
 
 local grayButton = Sushi.GrayButton(Panel, 'Gray Button')
@@ -50,7 +50,7 @@ glow:SetPoint('BOTTOM', expand, 'TOP', 0, 30)
 local boxEdit = Sushi.BoxEdit(Panel, 'Box Edit', 'Some user text')
 boxEdit:SetPoint('TOPLEFT', 20, -75)
 boxEdit:SetCall('OnInput', function(boxEdit, value)
-  print('Box edit changed value to ' .. value)
+	print('Box edit changed value to ' .. value)
 end)
 
 local dark = Sushi.DarkEdit(Panel, 'More user text')
@@ -79,11 +79,11 @@ choice:SetPoint('TOPLEFT', slider, 'TOPRIGHT', 5, -2)
 local group = Sushi.Group(Panel)
 group:SetPoint('TOPLEFT', 20, -175)
 group:SetChildren(function()
-  for i = 1, 12 do
-    group:Add('HelpButton').left = 0
-    group:Add('HelpButton').left = 0
-    group:AddBreak()
-  end
+	for i = 1, 12 do
+		group:Add('HelpButton').left = 0
+		group:Add('HelpButton').left = 0
+		group:AddBreak()
+	end
 end)
 
 local header1 = Sushi.Header(group, 'This is a parent-resized header')
@@ -96,11 +96,11 @@ header2:SetWidth(100)
 local faux = Sushi.FauxScroll(Panel, 3, 22)
 faux:SetPoint('TOPLEFT', group, 'TOPRIGHT')
 faux:SetChildren(function()
-  faux:SetNumEntries(5)
+	faux:SetNumEntries(5)
 
-  for i = faux:First(), faux:Last() do
-    faux:Add('RedButton', 'Faux scroll entry #' .. tostring(i))
-  end
+	for i = faux:First(), faux:Last() do
+		faux:Add('RedButton', 'Faux scroll entry #' .. tostring(i))
+	end
 end)
 
 local options1 = Sushi.OptionsGroup(Panel, 'Subcategory')
@@ -129,9 +129,10 @@ dropButton3:SetPoint('TOPLEFT', dropButton2, 'BOTTOMLEFT', 0, 0)
 local drop = Sushi.Dropdown(Panel)
 drop:SetPoint('TOPLEFT', dropTitle, 'TOPRIGHT', 15, 0)
 drop:SetChildren(function()
-  drop:Add{ text = 'Dropdown', isTitle = true }
-  drop:Add{ text = 'It Can', isNotRadio = true }
-  drop:Add{ text = 'Do All That', isNotRadio = true, checked = true }
-  drop:Add{ text = 'Dropdowns Do', isNotRadio = true }.bottom = 8
-  drop:Add('RedButton', 'And More').left = 23
+	drop:Add{ text = 'Dropdown', isTitle = true }
+	drop:Add{ text = 'It Can', isNotRadio = true }
+	drop:Add{ text = 'Do All That', isNotRadio = true, checked = true }
+	drop:Add{ text = 'Dropdowns Do', isNotRadio = true, sublevel = {
+		{text = 'Yeah...'}, {text = 'Even This', sublevel = {{text = 'Forever'}}}} }.bottom = 8
+	drop:Add('RedButton', 'And More').left = 23
 end)

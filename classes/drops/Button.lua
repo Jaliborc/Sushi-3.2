@@ -88,6 +88,7 @@ end
 
 function Button:OnUpdate()
 	self.Sublevel:SetShown(self.Sublevel:IsMouseInteracting())
+	self:SetHighlightLocked(self.Sublevel:IsVisible())
 end
 
 
@@ -136,7 +137,7 @@ end
 function Button:UpdateSize()
 	self:SetSize(min(max(
 		self:GetParent():GetWidth() - self.left - self.right,
-		self:GetTextWidth() + (self:IsCheckable() and 24 or 4)),
+		self:GetTextWidth() + (self:IsCheckable() and 24 or 4) + (self:IsFletched() and 14 or 0)),
 		self.maxWidth or math.huge
 	), max(self:GetTextHeight(), 16))
 end

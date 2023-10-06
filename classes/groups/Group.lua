@@ -18,7 +18,7 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
 local Lib = LibStub('Sushi-3.1')
-local Group = Lib.Callable:NewSushi('Group', 2, 'Frame')
+local Group = Lib.Callable:NewSushi('Group', 3, 'Frame')
 if not Group then return end
 
 
@@ -88,7 +88,7 @@ function Group:Add(object, ...)
 	end
 
 	if object.SetCall then
-		object:SetCall('OnUpdate', function() self:Update() end)
+		object:SetCall('OnUpdate', function() self:Update(); self:FireCalls('OnUpdate') end)
 		object:SetCall('OnResize', function() self:Layout() end)
 	end
 

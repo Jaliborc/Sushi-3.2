@@ -127,6 +127,7 @@ function Button:IsCheckable()
 end
 
 function Button:SetFletched(hasArrow)
+	self.right = hasArrow and 10 or 16
 	self.Arrow:SetShown(hasArrow)
 end
 

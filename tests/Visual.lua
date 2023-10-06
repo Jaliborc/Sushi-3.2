@@ -134,5 +134,5 @@ drop:SetChildren(function()
 	drop:Add{ text = 'Do All That', isNotRadio = true, checked = true }
 	drop:Add{ text = 'Dropdowns Do', isNotRadio = true, sublevel = {
 		{text = 'Yeah...'}, {text = 'Even This', sublevel = {{text = 'Forever'}}}} }.bottom = 8
-	drop:Add('RedButton', 'And More').left = 23
+	drop:Add('RedButton', 'And More').left = 28
 end)

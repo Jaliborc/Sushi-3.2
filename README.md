@@ -7,6 +7,7 @@
 Sushi is a GUI framework for the game World of Warcraft, designed to be:
 * Completely object oriented.
 * Versatile and easily extendable.
+* A taint-free alternative to frequently used objects (for example, dropdowns)
 * Similar to Blizzard's API and hence, easy to learn.
 
 Requires [LibStub](https://www.wowace.com/projects/libstub) and [Poncho-2.0](https://github.com/jaliborc/poncho-2.0).

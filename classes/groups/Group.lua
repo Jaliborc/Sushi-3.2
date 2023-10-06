@@ -114,6 +114,10 @@ function Group:IterateChildren()
 	return ipairs(self.Children)
 end
 
+function Group:NumChildren()
+	return #self.Children
+end
+
 
 --[[ Layout ]]--
 

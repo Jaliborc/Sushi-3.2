@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Drop = LibStub('Sushi-3.1').Group:NewSushi('Dropdown', 9, 'Frame')
+local Drop = LibStub('Sushi-3.1').Group:NewSushi('Dropdown', 10, 'Frame')
 if not Drop then return end
 
 
@@ -145,13 +145,15 @@ end
 
 function Drop:IsMouseInteracting()
 	local function step(frame)
-		if not frame:IsForbidden() and frame:IsMouseOver() then
+		if GetMouseFocus() == frame then
 			return true
 		end
 
-		for i, child in ipairs {frame:GetChildren()} do
-			if step(child) then
-				return true
+		if not frame:IsForbidden() then
+			for i, child in ipairs {frame:GetChildren()} do
+				if step(child) then
+					return true
+				end
 			end
 		end
 	end

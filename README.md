@@ -1,5 +1,6 @@
 ![Preview](http://jaliborc.com/media/addons/large/sushi-3.1.webp)
-[![Patreon](http://img.shields.io/badge/news-patreon-ff424d)](https://www.patreon.com/jaliborc)
+[![News](http://img.shields.io/badge/news-patreon-ff424d)](https://www.patreon.com/jaliborc)
+[![Donate](http://img.shields.io/badge/donate-paypal-0079C1)](https://www.paypal.me/jaliborc)
 [![Community](http://img.shields.io/badge/community-discord-5865F2)](https://bit.ly/discord-jaliborc)
 
 # Sushi-3.1 :sushi:

@@ -40,7 +40,7 @@ function Texted:SetText(text)
 end
 
 function Texted:SetLabel(label)
-  self:SetText(label)
+	self:SetText(label)
 end
 
 function Texted:GetLabel()

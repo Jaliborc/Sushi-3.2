@@ -18,7 +18,7 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
 local Sushi = LibStub('Sushi-3.1')
-local Button = Sushi.Clickable:NewSushi('DropButton', 3, 'CheckButton', 'UIDropDownMenuButtonTemplate', true)
+local Button = Sushi.Clickable:NewSushi('DropButton', 4, 'CheckButton', 'UIDropDownMenuButtonTemplate', true)
 if not Button then return end
 
 
@@ -35,6 +35,8 @@ function Button:Construct()
 	b.Arrow:SetScript('OnEnter', nil)
 	b.Arrow:SetScript('OnMouseDown', nil)
 	b.Highlight:SetPoint('BOTTOMRIGHT', 2, 0)
+	b.Icon = _G[name .. 'Icon']
+	b.Icon:Show()
 
 	b.Sublevel = Sushi.Dropdown:New(b)
 	b.Sublevel:SetPoint('TOPLEFT', b, 'RIGHT')
@@ -57,6 +59,7 @@ function Button:New(parent, info)
 	MergeTable(b, info)
 	b.info = info
 	b:SetText(info.text)
+	b:SetIcon(info.icon)
 	b:SetSublevel(sublevel)
 	b:SetChecked(info.checked)
 	b:SetFletched(info.hasArrow or sublevel)
@@ -104,9 +107,16 @@ function Button:SetEnabled(enabled)
 	self.Arrow:SetEnabled(enabled)
 end
 
-function Button:SetSublevel(children)
-	self:SetScript('OnUpdate', children and self.OnUpdate)
-	self.Sublevel:SetChildren(children)
+function Button:SetIcon(icon)
+	if icon and C_Texture.GetAtlasInfo(icon) then
+		self.Icon:SetAtlas(icon)
+	else
+		self.Icon:SetTexture(icon)
+	end
+end
+
+function Button:GetIcon()
+	return self.Icon:GetAtlas() or self.Icon:GetTexture()
 end
 
 function Button:SetCheckable(checkable, radio)
@@ -124,6 +134,11 @@ end
 function Button:IsCheckable()
 	local normal = self:GetNormalTexture()
 	return normal:GetAlpha() > 0, select(3, normal:GetTexCoord()) > 0
+end
+
+function Button:SetSublevel(children)
+	self:SetScript('OnUpdate', children and self.OnUpdate)
+	self.Sublevel:SetChildren(children)
 end
 
 function Button:SetFletched(hasArrow)

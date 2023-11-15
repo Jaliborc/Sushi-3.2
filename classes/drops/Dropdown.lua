@@ -17,8 +17,9 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Drop = LibStub('Sushi-3.1').Group:NewSushi('Dropdown', 10, 'Frame')
+local Drop = LibStub('Sushi-3.1').Group:NewSushi('Dropdown', 11, 'Frame')
 if not Drop then return end
+local Mainline = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
 
 
 --[[ Construct ]]--
@@ -29,10 +30,9 @@ function Drop:Construct()
 	bg:SetFrameLevel(f:GetFrameLevel())
 	bg:EnableMouse(true)
 
-	if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
-		f:SetScript('OnHide', f.OnHide)
+	if Mainline then
 		f:SetScript('OnEvent', f.OnGlobalMouse)
-		f:RegisterEvent('GLOBAL_MOUSE_DOWN')
+		f:SetScript('OnHide', f.OnHide)
 	end
 
 	f.Bg = bg
@@ -46,6 +46,10 @@ function Drop:New(parent, children, expires)
 	f:SetFrameStrata('FULLSCREEN_DIALOG')
 	f:SetClampedToScreen(true)
 	f:SetBackdrop('TOOLTIP')
+
+	if Mainline then
+		f:RegisterEvent('GLOBAL_MOUSE_DOWN')
+	end
 	return f
 end
 
@@ -68,6 +72,10 @@ function Drop:Clear()
 end
 
 function Drop:Reset()
+	if Mainline then
+		self:UnregisterEvent('GLOBAL_MOUSE_DOWN')
+	end
+
 	self:GetClass().Current = self.Current ~= self and self.Current
 	self:SetScript('OnUpdate', nil)
 	self:SetClampedToScreen(false)
@@ -97,7 +105,9 @@ end
 
 function Drop:OnHide()
 	self:ReleaseChildren()
-	self.done = true
+	if self.expires then
+		self:Release()
+	end
 end
 
 
@@ -164,7 +174,7 @@ end
 
 --[[ Properties ]]--
 
-if WOW_PROJECT_ID ~= WOW_PROJECT_MAINLINE and not Drop.ButtonClass then
+if not Mainline and not Drop.ButtonClass then
 	hooksecurefunc('ToggleDropDownMenu', function() Drop:Clear() end)
 	hooksecurefunc('CloseDropDownMenus', function() Drop:Clear() end)
 end

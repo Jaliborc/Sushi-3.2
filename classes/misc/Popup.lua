@@ -97,7 +97,7 @@ function Popup:New(input)
 	elseif #self.Active >= self.Max then
 		return info.OnCancel and info.OnCancel(nil, 'overflow')
 	elseif info.exclusive then
-		for i, f in ipairs(CopyTable(self.Active)) do
+		for i, f in ipairs(CopyTable(self.Active, true)) do
 			f:Release('override')
 		end
 	elseif info.cancels then

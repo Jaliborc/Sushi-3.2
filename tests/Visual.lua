@@ -15,11 +15,10 @@ helpButton:SetText('Hello')
 local redButton = Sushi.RedButton(Panel, 'Red Button')
 redButton:SetPoint('LEFT', helpButton, 'RIGHT', 5, 0)
 redButton:SetCall('OnClick', function()
-	Sushi.Popup {text = 'This is a Popup message.', button1 = OKAY, whileDead = 1, hideOnEscape = 1, exclusive = 1}
+	Sushi.Popup {text = 'This is a Popup message.', button1 = OKAY, whileDead = 1, showAlert = 1, exclusive = 1}
 	Sushi.Popup {
-		text = 'This is another Popup.', button1 = OKAY, whileDead = 1, hideOnEscape = 1,
-		hasEditBox = 1, editBoxWidth = 260, editBoxText = 'With an editbox', autoHighlight = 1,
-		id = 'Unit Test'
+		id = 'Unit Test', text = 'This is another Popup.', button1 = OKAY, whileDead = 1,
+		hasEditBox = 1, editBoxWidth = 260, editBoxText = 'With an editbox'
 	}
 end)
 

@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Header = LibStub('Sushi-3.1').Clickable:NewSushi('Header', 1, 'Button')
+local Header = LibStub('Sushi-3.1').Clickable:NewSushi('Header', 2, 'Button')
 if not Header then return end
 
 
@@ -44,6 +44,7 @@ function Header:New(parent, text, font, underlined)
 	local b = self:Super(Header):New(parent)
 	b:SetUnderlined(underlined)
 	b:SetNormalFontObject(font)
+	b:SetJustifyH('LEFT')
 	b:SetText(text)
 	b:UpdateWidth()
 
@@ -107,6 +108,14 @@ function Header:GetHighlightFactor()
 	return self.highlight
 end
 
+function Header:SetJustifyH(justify)
+	self:GetFontString():SetJustifyH(justify)
+end
+
+function Header:GetJustifyH()
+	return self:GetFontString():GetJustifyH()
+end
+
 
 --[[ Resize ]]--
 
@@ -127,8 +136,6 @@ end
 
 Header.SetLabel = Header.SetText
 Header.GetLabel = Header.GetText
+Header.right, Header.left = 12, 12
+Header.top, Header.bottom = 5, 5
 Header.highlight = 1
-Header.bottom = 5
-Header.right = 12
-Header.left = 12
-Header.top = 5

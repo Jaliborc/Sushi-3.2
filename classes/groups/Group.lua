@@ -18,7 +18,7 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
 local Lib = LibStub('Sushi-3.1')
-local Group = Lib.Callable:NewSushi('Group', 3, 'Frame')
+local Group = Lib.Callable:NewSushi('Group', 4, 'Frame')
 if not Group then return end
 
 
@@ -41,6 +41,7 @@ function Group:New(parent, children)
 end
 
 function Group:Reset()
+	self:SetBackdrop(nil)
 	self:ReleaseChildren()
 	self:Super(Group):Reset()
 end
@@ -141,6 +142,14 @@ function Group:Layout()
 			local bottom, right = child.bottom or 0, child.right or 0
 			local width, height = child:GetSize()
 
+			if child.centered then
+				if self:GetResizing() == 'HORIZONTAL' then
+					top = (self:GetHeight() - child:GetHeight()) / 2
+				else
+					left = (self:GetWidth() - child:GetWidth()) / 2
+				end
+			end
+
 			width, height = self:Orient(width + left + right, height + top + bottom)
 			top, left = self:Orient(top, left)
 
@@ -209,9 +218,44 @@ function Group:GetLimit()
 end
 
 
+--[[ Backdrop ]]--
+
+function Group:SetBackdrop(template)
+	if self.pool then
+		self.pool:Release(self.bg)
+	end
+
+	if template and template ~= 'NONE' then -- backwards compatibility
+		local template = self.Backdrops[template] or template -- backwards compatibility
+		local pool = self.Pools[template] or CreateFramePool('Frame', UIParent, template)
+		local bg = pool:Acquire()
+		bg:SetParent(self)
+		bg:SetFrameLevel(self:GetFrameLevel())
+		bg:SetPoint('BOTTOMRIGHT', 0, -10)
+		bg:SetPoint('TOPLEFT', 0, 10)
+		bg:EnableMouse(true)
+		bg:Show()
+
+		self.pool, self.bg = pool, bg
+		self.Pools[template] = pool
+	else
+		self.pool, self.bg = nil
+	end
+
+	self.backdrop = template
+end
+
+function Group:GetBackdrop()
+	return self.backdrop
+end
+
+
 --[[ Properties ]]--
 
 Group.orientation, Group.resizing = 'VERTICAL', 'VERTICAL'
 Group.Update = Group.UpdateChildren
+Group.Pools, Group.Break = {}, {}
 Group.Size = 200
-Group.Break = {}
+Group.Backdrops = { -- backwards compatibility
+	DIALOG  = 'DialogBorderDarkTemplate',
+	TOOLTIP = 'TooltipBackdropTemplate'}

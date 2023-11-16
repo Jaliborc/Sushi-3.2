@@ -26,16 +26,10 @@ local Mainline = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
 
 function Drop:Construct()
 	local f = self:Super(Drop):Construct()
-	local bg = CreateFrame('Frame', nil, f, BackdropTemplateMixin and 'BackdropTemplate')
-	bg:SetFrameLevel(f:GetFrameLevel())
-	bg:EnableMouse(true)
-
 	if Mainline then
 		f:SetScript('OnEvent', f.OnGlobalMouse)
 		f:SetScript('OnHide', f.OnHide)
 	end
-
-	f.Bg = bg
 	return f
 end
 
@@ -43,9 +37,9 @@ function Drop:New(parent, children, expires)
 	local f = self:Super(Drop):New(parent, children)
 	f.expires = expires and (GetTime() + 5)
 	f:SetScript('OnUpdate', expires and f.OnUpdate)
+	f:SetBackdrop('TooltipBackdropTemplate')
 	f:SetFrameStrata('FULLSCREEN_DIALOG')
 	f:SetClampedToScreen(true)
-	f:SetBackdrop('TOOLTIP')
 
 	if Mainline then
 		f:RegisterEvent('GLOBAL_MOUSE_DOWN')
@@ -141,18 +135,6 @@ function Drop:Add(object, ...)
 	return f
 end
 
-function Drop:SetBackdrop(backdrop)
-	local data = self.Backdrops[backdrop] or backdrop
-	assert(type(data) == 'table', 'Invalid data provided for `:SetBackdrop`')
-	local padding = data.padding or 0
-
-	self.Bg:SetBackdrop(data)
-	self.Bg:SetBackdropColor((data.backdropColor or WHITE_FONT_COLOR):GetRGB())
-	self.Bg:SetBackdropBorderColor((data.backdropBorderColor or WHITE_FONT_COLOR):GetRGB())
-	self.Bg:SetPoint('BOTTOMLEFT', -padding, -11 - padding)
-	self.Bg:SetPoint('TOPRIGHT', padding, 11 + padding)
-end
-
 function Drop:IsMouseInteracting()
 	local function step(frame)
 		if GetMouseFocus() == frame then
@@ -181,7 +163,7 @@ end
 
 Drop.Size = 10
 Drop.ButtonClass = 'DropButton'
-Drop.Backdrops = {
+--[[Drop.Backdrops = {
 	TOOLTIP = {
 		bgFile = 'Interface/Tooltips/UI-Tooltip-Background',
 		edgeFile = 'Interface/Tooltips/UI-Tooltip-Border',
@@ -199,3 +181,4 @@ Drop.Backdrops = {
 	},
 	NONE = {}
 }
+]]--

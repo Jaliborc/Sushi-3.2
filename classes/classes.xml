@@ -26,10 +26,10 @@
   <!-- Misc -->
   <Script file="misc\Glowbox.lua"/>
   <Script file="misc\Slider.lua"/>
-  <Script file="misc\Popup.lua"/>
 
   <!-- Groups -->
   <Script file="groups\Group.lua"/>
+  <Script file="groups\Popup.lua"/>
   <Script file="groups\Options.lua"/>
   <Script file="groups\Credits.lua"/>
   <Script file="groups\FauxScroll.lua"/>

@@ -140,23 +140,17 @@ function Popup:Populate()
 	if self.button1 or self.button2 then
 		local buttons = self:Add('Group', function(group)
 			if self.button1 then
-				local b = group:Add('RedButton', self.button1)
-				b:SetSize(118, 20)
-				b:SetCall('OnClick', function()
+				group:Add('RedButton', self.button1):SetSize(118, 20):SetCall('OnClick', function()
 					self:FireCalls('OnAccept')
 					self:Release()
-				end)
-				b.right = 0
+				end).right = 0
 			end
 
 			if self.button2 then
-				local b = group:Add('RedButton', self.button2)
-				b:SetCall('OnClick', function()
+				group:Add('RedButton', self.button2):SetSize(118, 20):SetCall('OnClick', function()
 					self:FireCalls('OnCancel')
 					self:Release()
-				end)
-				b:SetSize(118, 20)
-				b.right = 0
+				end).right = 0
 			end
 		end)
 

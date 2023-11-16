@@ -17,24 +17,42 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Popup = LibStub('Sushi-3.1').Group:NewSushi('Popup', 3)
+local Popup = LibStub('Sushi-3.1').Group:NewSushi('Popup', 4)
 if not Popup then return end
-local Defaults = StaticPopup_DisplayedFrames
-
-if not rawget(Popup, 'Layout') or not Popup.Active then
-	hooksecurefunc('StaticPopup_CollapseTable', function() Popup:Organize() end)
-	hooksecurefunc('StaticPopup_Show', function() Popup:Organize() end)
-end
-
 Popup.Active = Popup.Active or {}
 Popup.Size = 420
 Popup.Max = 6
+
+local Defaults = StaticPopup_DisplayedFrames
+local Locale, Go2Browser = GetLocale()
+
+if Locale == 'deDE' then
+    Go2Browser = 'Kopieren Sie diese URL in Ihren Browser'
+elseif Locale == 'frFR' then
+    Go2Browser = 'Copiez cette URL dans votre navigateur'
+elseif Locale == 'esES' or Locale == 'esMX' then
+    Go2Browser = 'Copia esta URL en tu navegador'
+elseif Locale == 'ruRU' then
+    Go2Browser = 'Скопируйте эту ссылку в ваш браузер'
+elseif Locale == 'ptBR' then
+    Go2Browser = 'Copie este URL no seu browser'
+elseif Locale == 'itIT' then
+    Go2Browser = 'Copia questo URL nel tuo browser'
+elseif Locale == 'koKR' then
+    Go2Browser = '이 URL을 브라우저에 복사하세요'
+elseif Locale == 'zhCN' then
+    Go2Browser = '复制此网址到您的浏览器'
+elseif Locale == 'zhTW' then
+    Go2Browser = '複製此網址到您的瀏覽器'
+else
+    Go2Browser = 'Copy this url into your browser'
+end
 
 
 --[[ Manage ]]--
 
 function Popup:External(url)
-	return self:New {id = url, icon = 'communities-icon-searchmagnifyingglass', text = 'Copy this url into your browser', editBoxText = url, button1 = OKAY}
+	return self:New {id = url, icon = 'communities-icon-searchmagnifyingglass', text = Go2Browser, editBoxText = url, button1 = OKAY}
 end
 
 function Popup:Toggle(input)
@@ -182,4 +200,9 @@ function Popup:OnKeyDown(key)
 	end
 
 	self:SetPropagateKeyboardInput(true)
+end
+
+if not rawget(Popup, 'Layout') or not Popup.Active then
+	hooksecurefunc('StaticPopup_CollapseTable', function() Popup:Organize() end)
+	hooksecurefunc('StaticPopup_Show', function() Popup:Organize() end)
 end

@@ -17,9 +17,17 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Lib = LibStub:NewLibrary('Sushi-3.1', 5)
+local Lib = LibStub:NewLibrary('Sushi-3.1', 6)
 if not Lib then return end
 local Base = Lib.Base or LibStub('Poncho-2.0')()
+local Meta = Lib.Meta or CopyTable(getmetatable(Base))
+
+local function chain(func)
+	return function(self,...)
+		func(self,...)
+		return self
+	end
+end
 
 function Base:NewSushi(name, version, type, template, global)
 	local class = Lib[name] or self:NewClass(type, (global or self:GetClassName()) and ('Sushi-3.1-' .. name), template)
@@ -28,9 +36,21 @@ function Base:NewSushi(name, version, type, template, global)
 		return
 	end
 
-	class.__version = version
+	setmetatable(class, Meta)
+	for k,v in pairs(class.__base) do
+		if not class.__super[k] then
+			class[k] = v
+		end
+	end
+
 	Lib[name] = class
+	class.__version = version
 	return class, old
 end
 
+function Meta:__newindex(key, value)
+	rawset(self, key, type(value) == 'function' and key:sub(1,3) == 'Set' and chain(value) or value)
+end
+
 Lib.Base = Base
+Lib.Meta = Meta

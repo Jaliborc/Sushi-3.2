@@ -26,12 +26,12 @@ if not Editable then return end
 function Editable:Construct()
 	local f = self:Super(Editable):Construct()
 	f.Label = f:CreateFontString(nil, nil, self.LabelFont)
-  f:SetScript('OnEditFocusLost', f.OnEditFocusLost)
-  f:SetScript('OnEnterPressed', f.OnEnterPressed)
-  f:SetFontObject(f.NormalFont)
-  f:SetAltArrowKeyMode(false)
-  f:SetAutoFocus(false)
-  return f
+	f:SetScript('OnEditFocusLost', f.OnEditFocusLost)
+	f:SetScript('OnEnterPressed', f.OnEnterPressed)
+	f:SetFontObject(f.NormalFont)
+	f:SetAltArrowKeyMode(false)
+	f:SetAutoFocus(false)
+	return f
 end
 
 function Editable:New(parent, label, value)

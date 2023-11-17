@@ -1,9 +1,9 @@
-if not WoWUnit or WoWUnit:HasGroup('Sushi-3.1') then return end
+if not WoWUnit or WoWUnit:HasGroup('Sushi-3.2') then return end
 
-local Sushi = LibStub('Sushi-3.1')
+local Sushi = LibStub('Sushi-3.2')
 local Panel = CreateFrame('Frame', nil, SettingsPanel or InterfaceOptionsFrame)
 Panel:Hide()
-Panel.name = 'Sushi-3.1'
+Panel.name = 'Sushi-3.2'
 InterfaceOptions_AddCategory(Panel)
 
 -- Singletons
@@ -105,12 +105,9 @@ end)
 local options1 = Sushi.OptionsGroup(Panel, 'Subcategory')
 options1:SetSubtitle('Parented to an existing frame')
 
-local options2 = Sushi.OptionsGroup('Sushi-3.1 Options Group')
+local options2 = Sushi.OptionsGroup('Sushi-3.2 Options Group')
 local options3 = Sushi.OptionsGroup(options2, 'Subcategory')
 options3:SetFooter('This is a footer')
-
-local credits = Sushi.CreditsGroup(options2, { {title = 'Development', people = {'Jaliborc', 'Poseidon'}}, {title = 'Art', people = {'Bob Ross', 'Your Mom'}} })
-credits:SetSubtitle('This is a panel for listing credits, supporters or something like that.')
 
 -- Dropdown
 local dropTitle = Sushi.DropButton(Panel, {text = 'Drop Buttons', isTitle = true})

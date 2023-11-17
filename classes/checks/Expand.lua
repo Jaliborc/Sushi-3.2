@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Expand = LibStub('Sushi-3.1').Check:NewSushi('ExpandCheck', 2, 'CheckButton')
+local Expand = LibStub('Sushi-3.2').Check:NewSushi('ExpandCheck', 1, 'CheckButton')
 if not Expand then return end
 
 

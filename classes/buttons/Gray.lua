@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Gray = LibStub('Sushi-3.1').RedButton:NewSushi('GrayButton', 1)
+local Gray = LibStub('Sushi-3.2').RedButton:NewSushi('GrayButton', 1)
 if not Gray then return end
 
 function Gray:Construct()

@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Dark = LibStub('Sushi-3.1').Editable:NewSushi('DarkEdit', 2, 'EditBox', 'InputBoxScriptTemplate')
+local Dark = LibStub('Sushi-3.2').Editable:NewSushi('DarkEdit', 1, 'EditBox', 'InputBoxScriptTemplate')
 if not Dark then return end
 
 

@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Editable = LibStub('Sushi-3.1').Labeled:NewSushi('Editable', 1)
+local Editable = LibStub('Sushi-3.2').Labeled:NewSushi('Editable', 1)
 if not Editable then return end
 
 

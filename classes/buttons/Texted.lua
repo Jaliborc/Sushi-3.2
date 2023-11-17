@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Texted = LibStub('Sushi-3.1').Clickable:NewSushi('TextedClickable', 1)
+local Texted = LibStub('Sushi-3.2').Clickable:NewSushi('TextedClickable', 1)
 if not Texted then return end
 
 

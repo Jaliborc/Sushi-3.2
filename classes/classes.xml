@@ -31,7 +31,6 @@
   <Script file="groups\Group.lua"/>
   <Script file="groups\Popup.lua"/>
   <Script file="groups\Options.lua"/>
-  <Script file="groups\Credits.lua"/>
   <Script file="groups\FauxScroll.lua"/>
 
   <!-- Dropdowns -->

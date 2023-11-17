@@ -3,7 +3,7 @@
 [![Donate](http://img.shields.io/badge/donate-paypal-0079C1)](https://www.paypal.me/jaliborc)
 [![Community](http://img.shields.io/badge/community-discord-5865F2)](https://bit.ly/discord-jaliborc)
 
-# Sushi-3.1 :sushi:
+# Sushi-3.2 :sushi:
 Sushi is a GUI framework for the game World of Warcraft, designed to be:
 * Completely object oriented.
 * Versatile and easily extendable.
@@ -15,7 +15,7 @@ Requires [LibStub](https://www.wowace.com/projects/libstub) and [Poncho-2.0](htt
 ## How to Use
 For instance, imagine you wish to create a dropdown choice menu. To do so, you can simply call the `Sushi.Choice` class:
 ````lua
-local myMenu = LibStub('Sushi-3.1').Choice(MyParent)
+local myMenu = LibStub('Sushi-3.2').Choice(MyParent)
 myMenu:SetPoint('CENTER')
 
 myMenu:SetLabel('My Awesome Dropdown')

@@ -17,8 +17,8 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Sushi = LibStub('Sushi-3.1')
-local Slider = Sushi.Labeled:NewSushi('Slider', 2, 'Slider', 'OptionsSliderTemplate', true)
+local Sushi = LibStub('Sushi-3.2')
+local Slider = Sushi.Labeled:NewSushi('Slider', 1, 'Slider', 'OptionsSliderTemplate', true)
 if not Slider then return end
 
 

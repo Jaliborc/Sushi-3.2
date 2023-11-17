@@ -17,8 +17,8 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Sushi = LibStub('Sushi-3.1')
-local Button = Sushi.Clickable:NewSushi('DropButton', 4, 'CheckButton', 'UIDropDownMenuButtonTemplate', true)
+local Sushi = LibStub('Sushi-3.2')
+local Button = Sushi.Clickable:NewSushi('DropButton', 1, 'CheckButton', 'UIDropDownMenuButtonTemplate', true)
 if not Button then return end
 
 
@@ -57,17 +57,16 @@ function Button:New(parent, info)
 	--b.Color:SetShown(info.hasColorSwatch)
 
 	MergeTable(b, info)
-	b.info = info
-	b:SetText(info.text)
-	b:SetIcon(info.icon)
+	b:SetText(b.text)
+	b:SetIcon(b.icon)
 	b:SetSublevel(sublevel)
-	b:SetChecked(info.checked)
-	b:SetFletched(info.hasArrow or sublevel)
-	b:SetEnabled(not info.disabled and not info.isTitle)
-	b:SetCall('OnClick', info.func and function() info.func(b) end)
-	b:SetCheckable(not info.isTitle and not info.notCheckable, not info.isNotRadio)
-	b:SetNormalFontObject(info.fontObject or info.isTitle and GameFontNormalSmallLeft or GameFontHighlightSmallLeft)
-	b:SetDisabledFontObject(info.fontObject or info.isTitle and GameFontNormalSmallLeft or GameFontDisableSmallLeft)
+	b:SetChecked(b.checked)
+	b:SetFletched(b.hasArrow or sublevel)
+	b:SetEnabled(not b.disabled and not b.isTitle)
+	b:SetCheckable(not b.isTitle and not b.notCheckable, not b.isNotRadio)
+	b:SetNormalFontObject(b.fontObject or b.isTitle and GameFontNormalSmallLeft or GameFontHighlightSmallLeft)
+	b:SetDisabledFontObject(b.fontObject or b.isTitle and GameFontNormalSmallLeft or GameFontDisableSmallLeft)
+	b:SetCall('OnClick', b.func)
 
 	if parent.SetCall then
 		parent:SetCall('OnResize', function() b:UpdateSize() end)
@@ -139,6 +138,7 @@ end
 function Button:SetSublevel(children)
 	self:SetScript('OnUpdate', children and self.OnUpdate)
 	self.Sublevel:SetChildren(children)
+	self:SetHighlightLocked(false)
 end
 
 function Button:SetFletched(hasArrow)

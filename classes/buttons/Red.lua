@@ -17,10 +17,10 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Red = LibStub('Sushi-3.1').TextedClickable:NewSushi('RedButton', 1, 'Button', 'UIPanelButtonNoTooltipTemplate', true)
+local Red = LibStub('Sushi-3.2').TextedClickable:NewSushi('RedButton', 1, 'Button', 'UIPanelButtonNoTooltipTemplate', true)
 if not Red then return end
 
-Red.WidthOff = 20
+Red.WidthOff = 40
 Red.bottom = 5
 Red.right = 11
 Red.left = 11

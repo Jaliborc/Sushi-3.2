@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Header = LibStub('Sushi-3.1').Clickable:NewSushi('Header', 2, 'Button')
+local Header = LibStub('Sushi-3.2').Clickable:NewSushi('Header', 1, 'Button')
 if not Header then return end
 
 

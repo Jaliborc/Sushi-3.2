@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Icon = LibStub('Sushi-3.1').Check:NewSushi('IconCheck', 1, 'CheckButton')
+local Icon = LibStub('Sushi-3.2').Check:NewSushi('IconCheck', 1, 'CheckButton')
 if not Icon then return end
 
 function Icon:Construct()

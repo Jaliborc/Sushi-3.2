@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Popup = LibStub('Sushi-3.1').Group:NewSushi('Popup', 4)
+local Popup = LibStub('Sushi-3.2').Group:NewSushi('Popup', 1)
 if not Popup then return end
 Popup.Active = Popup.Active or {}
 Popup.Size = 420

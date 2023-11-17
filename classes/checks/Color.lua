@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Color = LibStub('Sushi-3.1').TextedClickable:NewSushi('ColorPicker', 2, 'Button')
+local Color = LibStub('Sushi-3.2').TextedClickable:NewSushi('ColorPicker', 1, 'Button')
 if not Color then	return end
 
 

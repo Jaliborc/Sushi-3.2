@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Box = LibStub('Sushi-3.1').Editable:NewSushi('BoxEdit', 1, 'EditBox', 'InputBoxTemplate')
+local Box = LibStub('Sushi-3.2').Editable:NewSushi('BoxEdit', 1, 'EditBox', 'InputBoxTemplate')
 if not Box then return end
 
 function Box:Construct()

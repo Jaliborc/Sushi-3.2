@@ -17,8 +17,8 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Lib = LibStub('Sushi-3.1')
-local Group = Lib.Callable:NewSushi('Group', 4, 'Frame')
+local Lib = LibStub('Sushi-3.2')
+local Group = Lib.Callable:NewSushi('Group', 1, 'Frame')
 if not Group then return end
 
 
@@ -79,8 +79,8 @@ function Group:Add(object, ...)
 
 	if kind == 'string' then
 		local class = Lib[object]
-		assert(class, 'Sushi-3.1 class `' .. object .. '` was not found.')
-		assert(type(class) == 'table', 'Sushi-3.1 class name `' .. object .. '` is a reserved keyword')
+		assert(class, 'Sushi-3.2 class `' .. object .. '` was not found.')
+		assert(type(class) == 'table', 'Sushi-3.2 class name `' .. object .. '` is a reserved keyword')
 		object = class(self, ...)
 	elseif kind == 'function' then
 		object = object(self, ...)

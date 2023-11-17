@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Callable = LibStub('Sushi-3.1').Base:NewSushi('Callable', 3)
+local Callable = LibStub('Sushi-3.2').Base:NewSushi('Callable', 1)
 if not Callable then return end
 
 function Callable:New(...)

@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Drop = LibStub('Sushi-3.1').Group:NewSushi('Dropdown', 11, 'Frame')
+local Drop = LibStub('Sushi-3.2').Group:NewSushi('Dropdown', 1, 'Frame')
 if not Drop then return end
 local Mainline = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
 
@@ -41,7 +41,7 @@ function Drop:New(parent, children, expires)
 	f:SetFrameStrata('FULLSCREEN_DIALOG')
 	f:SetClampedToScreen(true)
 
-	if Mainline then
+	if expires and Mainline then
 		f:RegisterEvent('GLOBAL_MOUSE_DOWN')
 	end
 	return f
@@ -142,8 +142,8 @@ function Drop:IsMouseInteracting()
 		end
 
 		if not frame:IsForbidden() then
-			for i, child in ipairs {frame:GetChildren()} do
-				if step(child) then
+			for i = 1, select('#', frame:GetChildren()) do
+				if step(select(i, frame:GetChildren())) then
 					return true
 				end
 			end
@@ -163,22 +163,3 @@ end
 
 Drop.Size = 10
 Drop.ButtonClass = 'DropButton'
---[[Drop.Backdrops = {
-	TOOLTIP = {
-		bgFile = 'Interface/Tooltips/UI-Tooltip-Background',
-		edgeFile = 'Interface/Tooltips/UI-Tooltip-Border',
-		insets = { left = 4, right = 4, top = 4, bottom = 4 },
-		tileSize = 16, edgeSize = 16, tile = true, tileEdge = true,
-		backdropColor = TOOLTIP_DEFAULT_BACKGROUND_COLOR,
-		backdropBorderColor = TOOLTIP_DEFAULT_COLOR,
-	},
-	DIALOG = {
-		bgFile = 'Interface/DialogFrame/UI-DialogBox-Background-Dark',
-		edgeFile = 'Interface/DialogFrame/UI-DialogBox-Border',
-		insets = {left = 11, right = 11, top = 11, bottom = 9},
-		edgeSize = 32, tileSize = 32, tile = true,
-		padding = 4
-	},
-	NONE = {}
-}
-]]--

@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Tipped = LibStub('Sushi-3.1').Callable:NewSushi('Tipped', 2)
+local Tipped = LibStub('Sushi-3.2').Callable:NewSushi('Tipped', 1)
 if not Tipped then return end
 
 

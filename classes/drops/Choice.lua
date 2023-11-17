@@ -17,8 +17,8 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Sushi = LibStub('Sushi-3.1')
-local Choice = Sushi.Labeled:NewSushi('DropChoice', 2, 'Button', 'UIDropDownMenuTemplate', true)
+local Sushi = LibStub('Sushi-3.2')
+local Choice = Sushi.Labeled:NewSushi('DropChoice', 1, 'Button', 'UIDropDownMenuTemplate', true)
 if not Choice then return end
 
 
@@ -44,7 +44,6 @@ function Choice:OnClick()
 	local drop = Sushi.Dropdown:Toggle(self)
 	if drop then
 		drop:SetPoint('TOPRIGHT', -10, -40)
-		drop:SetBackdrop('DIALOG')
 		drop:SetChildren(function()
 			for i, choice in ipairs(self:GetChoices()) do
 				drop:Add {

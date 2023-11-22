@@ -74,6 +74,7 @@ local choice = Sushi.DropChoice(Panel, 'Dropdown Choice', 2)
 choice:AddChoices{ {key = 1, text = 'Hi'}, {key = 2, text = 'Hey'}, {key = 3, text = 'Hello'} }
 choice:SetPoint('TOPLEFT', slider, 'TOPRIGHT', 5, -2)
 
+
 -- Groups
 local group = Sushi.Group(Panel)
 group:SetPoint('TOPLEFT', 20, -175)
@@ -85,8 +86,13 @@ group:SetChildren(function()
 	end
 end)
 
+
+local expand2 = Sushi.ExpandHeader(group, 'Expandable Header')
+expand2:SetPoint('TOPLEFT', group, 'BOTTOMLEFT', 0, -5)
+expand2:SetChecked(true)
+
 local header1 = Sushi.Header(group, 'This is a parent-resized header')
-header1:SetPoint('TOPLEFT', group, 'BOTTOMLEFT', 0, -5)
+header1:SetPoint('TOPLEFT', expand2, 'BOTTOMLEFT', 0, -5)
 
 local header2 = Sushi.Header(group, 'This is not')
 header2:SetPoint('TOPLEFT', header1, 'BOTTOMLEFT', 0, -5)
@@ -111,7 +117,7 @@ options3:SetFooter('This is a footer')
 
 -- Dropdown
 local dropTitle = Sushi.DropButton(Panel, {text = 'Drop Buttons', isTitle = true})
-dropTitle:SetPoint('TOPLEFT', 20, -280)
+dropTitle:SetPoint('TOPLEFT', 20, -310)
 
 local dropButton1 = Sushi.DropButton(Panel, {text = 'Uncheckable', notCheckable = true})
 dropButton1:SetPoint('TOPLEFT', dropTitle, 'BOTTOMLEFT', 0, 0)
@@ -130,5 +136,5 @@ drop:SetChildren(function()
 	drop:Add{ text = 'Do All That', isNotRadio = true, checked = true }
 	drop:Add{ text = 'Dropdowns Do', isNotRadio = true, sublevel = {
 		{text = 'Yeah...'}, {text = 'Even This', sublevel = {{text = 'Forever'}}}} }.bottom = 8
-	drop:Add('RedButton', 'And More').left = 28
+	drop:Add('RedButton', 'And More').left = 16
 end)

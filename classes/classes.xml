@@ -11,6 +11,7 @@
   <Script file="buttons\Red.lua"/>
   <Script file="buttons\Gray.lua"/>
   <Script file="buttons\Header.lua"/>
+  <Script file="buttons\ExpandHeader.lua"/>
 
   <!-- CheckButtons -->
   <Script file="checks\Check.lua"/>

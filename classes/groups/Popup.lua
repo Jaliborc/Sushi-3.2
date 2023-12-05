@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Popup = LibStub('Sushi-3.2').Group:NewSushi('Popup', 1)
+local Popup = LibStub('Sushi-3.2').Group:NewSushi('Popup', 2)
 if not Popup then return end
 Popup.Active = Popup.Active or {}
 Popup.Size = 420
@@ -52,7 +52,7 @@ end
 --[[ Manage ]]--
 
 function Popup:External(url)
-	return self:New {id = url, icon = 'communities-icon-searchmagnifyingglass', text = Go2Browser, editBoxText = url, button1 = OKAY}
+	return self:New {id = url, icon = 'communities-icon-searchmagnifyingglass', text = Go2Browser, editBox = url, button1 = OKAY}
 end
 
 function Popup:Toggle(input)
@@ -60,8 +60,8 @@ function Popup:Toggle(input)
 end
 
 function Popup:Cancel(input)
-	local f = self:GetActive(input)
-	return f and (f:Release() or true)
+	local f = input and self:GetActive(input)
+	return f and (f:Release('closed') or true)
 end
 
 function Popup:Organize()
@@ -94,11 +94,14 @@ function Popup:Construct()
 	local f = self:Super(Popup):Construct()
 	f:SetScript('OnKeyDown', f.OnKeyDown)
 
-	local icon = f:CreateTexture()
-	icon:SetSize(36,36)
-	icon:SetPoint('LEFT', 24,0)
+	local money = CreateFrame('Frame', tostring(f)..'MoneyInput', f, 'MoneyInputFrameTemplate')
+	money.top, money.bottom, money.centered = 0, 6, true
 
-	f.Icon = icon
+	local icon = f:CreateTexture()
+	icon:SetPoint('LEFT', 24,0)
+	icon:SetSize(36,36)
+
+	f.MoneyInput, f.Icon = money, icon
 	return f
 end
 
@@ -107,13 +110,13 @@ function Popup:New(input)
 	local id = info.id or input
 
 	if UnitIsDeadOrGhost('player') and not info.whileDead then
-		return info.OnCancel and info.OnCancel(nil, 'dead')
+		return info.OnCancel and info.OnCancel('dead')
 	elseif InCinematic() and not info.interruptCinematic then
-		return info.OnCancel and info.OnCancel(nil, 'cinematic')
+		return info.OnCancel and info.OnCancel('cinematic')
 	elseif id and self:GetActive(id) then
-		return info.OnCancel and info.OnCancel(nil, 'duplicate')
+		return info.OnCancel and info.OnCancel('duplicate')
 	elseif #self.Active >= self.Max then
-		return info.OnCancel and info.OnCancel(nil, 'overflow')
+		return info.OnCancel and info.OnCancel('overflow')
 	elseif info.exclusive then
 		for i, f in ipairs(CopyTable(self.Active, true)) do
 			f:Release('override')
@@ -124,8 +127,9 @@ function Popup:New(input)
 	end
 
 	local f = self:Super(Popup):New(UIParent)
-	f.text, f.button1, f.button2, f.hideOnEscape = info.text, info.button1, info.button2, f.hideOnEscape
-	f.id, f.editBoxText = id, '' and (info.editBoxText or info.hasEditBox)
+	f.id, f.edit, f.money = info.id or info.text, info.editBox, info.moneyInput or info.money
+	f.button1, f.button2, f.moneyInput, f.hideOnEscape = info.button1, info.button2, info.moneyInput, f.hideOnEscape
+	f.text = info.text .. (not f.moneyInput and f.money and ('|n'..GetCoinTextureString(f.money)) or '')
 	f:SetBackdrop('DialogBorderDarkTemplate')
 	f:SetCall('OnAccept', info.OnAccept)
 	f:SetCall('OnCancel', info.OnCancel)
@@ -149,26 +153,23 @@ function Popup:Populate()
 		self:Add('Header', self.text, GameFontHighlightLeft):SetJustifyH('CENTER')
 	end
 
-	if self.editBoxText then
-		local edit = self:Add('BoxEdit', nil, self.editBoxText)
-		edit.centered, edit.top, edit.left, edit.right, edit.bottom = true, -6,-3,-3,-3
-		edit:SetWidth(240)
+	if self.edit then
+		self.textInput = self:Add('BoxEdit', nil, self.edit):SetWidth(240):SetKeys{centered = true, top = -6, left = -3, right = -3, bottom = -3}
+	end
+
+	if self.moneyInput then
+		self:Add(self.MoneyInput):Show()
+		MoneyInputFrame_SetCopper(self.MoneyInput, tonumber(self.money) or 0)
 	end
 
 	if self.button1 or self.button2 then
 		local buttons = self:Add('Group', function(group)
 			if self.button1 then
-				group:Add('RedButton', self.button1):SetSize(118, 20):SetCall('OnClick', function()
-					self:FireCalls('OnAccept')
-					self:Release()
-				end).right = 0
+				group:Add('RedButton', self.button1):SetSize(118, 20):SetCall('OnClick', function() self:Accept() end).right = 0
 			end
 
 			if self.button2 then
-				group:Add('RedButton', self.button2):SetSize(118, 20):SetCall('OnClick', function()
-					self:FireCalls('OnCancel')
-					self:Release()
-				end).right = 0
+				group:Add('RedButton', self.button2):SetSize(118, 20):SetCall('OnClick', function() self:Release('closed') end).right = 0
 			end
 		end)
 
@@ -178,12 +179,23 @@ function Popup:Populate()
 	end
 end
 
+function Popup:Accept()
+	self.edit = self.textInput and self.textInput:GetText()
+	self.money = self.moneyInput and MoneyInputFrame_GetCopper(self.MoneyInput) or self.money
+	self:FireCalls('OnAccept', self.edit or self.money)
+	self:Release()
+end
+
 function Popup:Release(reason)
 	local _, i = self:GetActive(self)
 	if i then
 		tremove(self.Active, i)
 
-		self:FireCalls('OnCancel', nil, reason or 'closed')
+		if reason then
+			self:FireCalls('OnCancel', reason)
+		end
+
+		self.MoneyInput:Hide()
 		self:Super(Popup):Release()
 		self:Organize()
 		self:Hide()
@@ -196,7 +208,10 @@ end
 function Popup:OnKeyDown(key)
 	if self.hideOnEscape ~= false and GetBindingFromClick(key) == 'TOGGLEGAMEMENU' then
 		self:SetPropagateKeyboardInput(false)
-		return self:Release()
+		return self:Release('closed')
+	elseif self.editBox or self.moneyInput and key == 'ENTER' then
+		self:SetPropagateKeyboardInput(false)
+		return self:Accept()
 	end
 
 	self:SetPropagateKeyboardInput(true)

@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Header = LibStub('Sushi-3.2').Clickable:NewSushi('Header', 1, 'Button')
+local Header = LibStub('Sushi-3.2').Clickable:NewSushi('Header', 2, 'Button')
 if not Header then return end
 
 
@@ -58,7 +58,9 @@ end
 function Header:OnEnter()
 	self:Super(Header):OnEnter()
 	self:GetFontString():SetText(self:GetText():gsub('|c(' .. strrep('%x', 8) .. ')', function(value)
-		return '|c' .. value:gsub('(%x%x)', function(v) return format('%x', min(255, tonumber(v, 16) * self:GetHighlightFactor())) end)
+		return '|c' .. value:gsub('(%x%x)', function(v)
+			return format('%02x', min(255, tonumber(v, 16) * self:GetHighlightFactor()))
+		end)
 	end))
 end
 

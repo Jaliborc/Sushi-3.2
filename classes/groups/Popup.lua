@@ -17,13 +17,14 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Popup = LibStub('Sushi-3.2').Group:NewSushi('Popup', 2)
+local Popup = LibStub('Sushi-3.2').Group:NewSushi('Popup', 3)
 if not Popup then return end
 Popup.Active = Popup.Active or {}
 Popup.Size = 420
 Popup.Max = 6
 
 local Defaults = StaticPopup_DisplayedFrames
+local Magnifier = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE and 'communities-icon-searchmagnifyingglass' or 'shop-games-magnifyingglass'
 local Locale, Go2Browser = GetLocale()
 
 if Locale == 'deDE' then
@@ -52,7 +53,7 @@ end
 --[[ Manage ]]--
 
 function Popup:External(url)
-	return self:New {id = url, icon = 'communities-icon-searchmagnifyingglass', text = Go2Browser, editBox = url, button1 = OKAY}
+	return self:New {id = url, icon = Magnifier, text = Go2Browser, editBox = url, button1 = OKAY}
 end
 
 function Popup:Toggle(input)

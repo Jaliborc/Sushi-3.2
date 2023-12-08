@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Popup = LibStub('Sushi-3.2').Group:NewSushi('Popup', 3)
+local Popup = LibStub('Sushi-3.2').Group:NewSushi('Popup', 4)
 if not Popup then return end
 Popup.Active = Popup.Active or {}
 Popup.Size = 420
@@ -99,8 +99,8 @@ function Popup:Construct()
 	money.top, money.bottom, money.centered = 0, 6, true
 
 	local icon = f:CreateTexture()
-	icon:SetPoint('LEFT', 24,0)
-	icon:SetSize(36,36)
+	icon:SetPoint('LEFT', 22,0)
+	icon:SetSize(40,40)
 
 	f.MoneyInput, f.Icon = money, icon
 	return f
@@ -110,7 +110,7 @@ function Popup:New(input)
 	local info = type(input) == 'table' and input or CopyTable(StaticPopupDialogs[input])
 	local id = info.id or input
 
-	if UnitIsDeadOrGhost('player') and not info.whileDead then
+	if UnitIsDeadOrGhost('player') and info.whileDead == false then
 		return info.OnCancel and info.OnCancel('dead')
 	elseif InCinematic() and not info.interruptCinematic then
 		return info.OnCancel and info.OnCancel('cinematic')
@@ -138,7 +138,7 @@ function Popup:New(input)
 	f:Show()
 
 	local icon = info.icon or (info.showAlert and 357854) or (info.showAlertGear and 357855)
-	if tonumber(icon) then
+	if tonumber(icon) or strfind(icon or '', '[\\/]') then
 		f.Icon:SetTexture(icon)
 	else
 		f.Icon:SetAtlas(icon)

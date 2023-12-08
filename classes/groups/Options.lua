@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Group = LibStub('Sushi-3.2').Group:NewSushi('OptionsGroup', 1, 'Frame')
+local Group = LibStub('Sushi-3.2').Group:NewSushi('OptionsGroup', 2, 'Frame')
 if not Group then return end
 
 
@@ -72,6 +72,9 @@ function Group:Open()
 	if SettingsPanel then
 		SettingsPanel:Show()
 		SettingsPanel:SelectCategory(self.category) -- GetCategory is bugged, must go direct
+
+		self.category.expanded = true -- force subcategory expansion
+		SettingsPanel.CategoryList:CreateCategories()
 	else
 		InterfaceOptionsFrame:Show()
 		InterfaceOptionsFrame_OpenToCategory(self:GetParent())

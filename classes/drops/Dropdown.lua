@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Drop = LibStub('Sushi-3.2').Group:NewSushi('Dropdown', 1, 'Frame')
+local Drop = LibStub('Sushi-3.2').Group:NewSushi('Dropdown', 2, 'Frame')
 if not Drop then return end
 local Mainline = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
 
@@ -136,21 +136,7 @@ function Drop:Add(object, ...)
 end
 
 function Drop:IsMouseInteracting()
-	local function step(frame)
-		if GetMouseFocus() == frame then
-			return true
-		end
-
-		if not frame:IsForbidden() then
-			for i = 1, select('#', frame:GetChildren()) do
-				if step(select(i, frame:GetChildren())) then
-					return true
-				end
-			end
-		end
-	end
-
-	return step(self:GetParent())
+	return DoesAncestryInclude(self:GetParent(), GetMouseFocus())
 end
 
 

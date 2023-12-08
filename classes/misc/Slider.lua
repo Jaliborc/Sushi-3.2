@@ -18,7 +18,7 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
 local Sushi = LibStub('Sushi-3.2')
-local Slider = Sushi.Labeled:NewSushi('Slider', 1, 'Slider', 'OptionsSliderTemplate', true)
+local Slider = Sushi.Labeled:NewSushi('Slider', 2, 'Slider', 'OptionsSliderTemplate', true)
 if not Slider then return end
 
 
@@ -36,9 +36,9 @@ function Slider:Construct()
 	return f
 end
 
-function Slider:New(parent, label, value, min,max, step)
+function Slider:New(parent, label, value, min,max, step, pattern)
 	local f = self:Super(Slider):New(parent, label)
-	f.Edit = Sushi.DarkEdit(f)
+	f.Edit = Sushi.DarkEdit(f, value or 1, pattern)
 	f.Edit:SetPoint('TOP', f, 'BOTTOM', 0, 7)
 	f.Edit:SetCall('OnInput', function(edit, value)
 		if tonumber(value) then

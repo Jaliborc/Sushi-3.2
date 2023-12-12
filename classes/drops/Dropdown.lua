@@ -17,33 +17,22 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Drop = LibStub('Sushi-3.2').Group:NewSushi('Dropdown', 2, 'Frame')
+local Drop, old = LibStub('Sushi-3.2').Group:NewSushi('Dropdown', 2, 'Frame')
 if not Drop then return end
-local Mainline = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
 
 
 --[[ Construct ]]--
 
-function Drop:Construct()
-	local f = self:Super(Drop):Construct()
-	if Mainline then
-		f:SetScript('OnEvent', f.OnGlobalMouse)
-		f:SetScript('OnHide', f.OnHide)
-	end
-	return f
-end
-
 function Drop:New(parent, children, expires)
 	local f = self:Super(Drop):New(parent, children)
 	f.expires = expires and (GetTime() + 5)
+	f:SetScript('OnHide', f.OnHide)
+	f:SetScript('OnKeyDown', f.OnKeyDown)
 	f:SetScript('OnUpdate', expires and f.OnUpdate)
 	f:SetBackdrop('TooltipBackdropTemplate')
 	f:SetFrameStrata('FULLSCREEN_DIALOG')
 	f:SetClampedToScreen(true)
-
-	if expires and Mainline then
-		f:RegisterEvent('GLOBAL_MOUSE_DOWN')
-	end
+	f:Show()
 	return f
 end
 
@@ -66,15 +55,17 @@ function Drop:Clear()
 end
 
 function Drop:Reset()
-	if Mainline then
-		self:UnregisterEvent('GLOBAL_MOUSE_DOWN')
-	end
-
 	self:GetClass().Current = self.Current ~= self and self.Current
 	self:SetScript('OnUpdate', nil)
-	self:SetClampedToScreen(false)
 	self:Super(Drop):Reset()
 	self:SetScale(1)
+end
+
+function Drop:Release()
+	self:SetScript('OnHide', nil)
+	self:SetClampedToScreen(false)
+	self:Super(Drop):Release()
+	self:Hide()
 end
 
 
@@ -86,15 +77,15 @@ function Drop:OnUpdate()
 		self:Release()
 	elseif self:IsMouseInteracting() then
 		self.expires = time + 5
-	elseif time >= self.expires then
-		self:Release()
+	elseif time >= self.expires or IsMouseButtonDown() then
+		self.done = true
 	end
 end
 
-function Drop:OnGlobalMouse()
-	if not self:IsMouseInteracting() then
-		self.done = true
-	end
+function Drop:OnKeyDown(key)
+	local esc = GetBindingFromClick(key) == 'TOGGLEGAMEMENU'
+	self:SetPropagateKeyboardInput(not esc)
+	self.done = self.done or esc
 end
 
 function Drop:OnHide()
@@ -107,12 +98,12 @@ end
 
 --[[ API ]]--
 
-function Drop:SetChildren(object)
-	self:Super(Drop):SetChildren(type(object) == 'table' and function(self)
-		for i, line in ipairs(object) do
+function Drop:SetChildren(children)
+	self:Super(Drop):SetChildren(type(children) == 'table' and function(self)
+		for i, line in ipairs(children) do
 			self:Add(line)
 		end
-	end or object)
+	end or children)
 end
 
 function Drop:Add(object, ...)
@@ -142,7 +133,7 @@ end
 
 --[[ Properties ]]--
 
-if not Mainline and not Drop.ButtonClass then
+if not WOW_PROJECT_ID == WOW_PROJECT_MAINLINE and not old then
 	hooksecurefunc('ToggleDropDownMenu', function() Drop:Clear() end)
 	hooksecurefunc('CloseDropDownMenus', function() Drop:Clear() end)
 end

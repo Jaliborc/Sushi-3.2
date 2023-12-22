@@ -17,8 +17,9 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Box = LibStub('Sushi-3.2').Callable:NewSushi('Glowbox', 1, 'Frame', 'GlowBoxTemplate', true)
-if not Box then return end
+local Sushi = LibStub('Sushi-3.2')
+local Box = Sushi.Callable:NewSushi('Glowbox', 2, 'Frame', 'GlowBoxTemplate', true)
+if Box then Sushi.HelpTip = Box else return end
 
 local Sides = {'BOTTOM', 'LEFT', 'TOP', 'RIGHT'}
 local function RotateTexture(texture, i)
@@ -69,6 +70,7 @@ function Box:New(parent, text, direction)
 	f:SetDirection(direction or 'BOTTOM')
 	f:SetFrameStrata('DIALOG')
 	f:SetText(text)
+	f:Show()
 	return f
 end
 

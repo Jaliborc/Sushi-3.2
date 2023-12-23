@@ -108,7 +108,7 @@ end
 
 function Popup:New(input)
 	local info = type(input) == 'table' and input or CopyTable(StaticPopupDialogs[input])
-	local id = info.id or input
+	local id = info.id or info.text or input
 
 	if UnitIsDeadOrGhost('player') and info.whileDead == false then
 		return info.OnCancel and info.OnCancel('dead')
@@ -128,7 +128,7 @@ function Popup:New(input)
 	end
 
 	local f = self:Super(Popup):New(UIParent)
-	f.id, f.edit, f.money = info.id or info.text, info.editBox, info.moneyInput or info.money
+	f.id, f.edit, f.money = id, info.editBox, info.moneyInput or info.money
 	f.button1, f.button2, f.moneyInput, f.hideOnEscape = info.button1, info.button2, info.moneyInput, f.hideOnEscape
 	f.text = info.text .. (not f.moneyInput and f.money and ('|n'..GetCoinTextureString(f.money)) or '')
 	f:SetBackdrop('DialogBorderDarkTemplate')

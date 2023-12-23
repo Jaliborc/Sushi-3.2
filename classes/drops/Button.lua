@@ -18,7 +18,7 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
 local Sushi = LibStub('Sushi-3.2')
-local Button = Sushi.Clickable:NewSushi('DropButton', 2, 'CheckButton', 'UIDropDownMenuButtonTemplate', true)
+local Button = Sushi.Clickable:NewSushi('DropButton', 3, 'CheckButton', 'UIDropDownMenuButtonTemplate', true)
 if not Button then return end
 
 
@@ -57,8 +57,9 @@ function Button:New(parent, info)
 	b:SetIcon(b.icon)
 	b:SetSublevel(sublevel)
 	b:SetChecked(b.checked)
-	b:SetFletched(b.hasArrow or sublevel)
+	b:SetTooltip(b.tooltipTitle, b.tooltipText)
 	b:SetEnabled(not b.disabled and not b.isTitle)
+	b:SetFletched(b.arrow or b.hasArrow or sublevel)
 	b:SetCheckable(not b.isTitle and not b.notCheckable, not b.isNotRadio)
 	b:SetNormalFontObject(b.fontObject or b.isTitle and GameFontNormalSmallLeft or GameFontHighlightSmallLeft)
 	b:SetDisabledFontObject(b.fontObject or b.isTitle and GameFontNormalSmallLeft or GameFontDisableSmallLeft)

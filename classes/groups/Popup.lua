@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Popup = LibStub('Sushi-3.2').Group:NewSushi('Popup', 5)
+local Popup = LibStub('Sushi-3.2').Group:NewSushi('Popup', 6)
 if not Popup then return end
 Popup.Active = Popup.Active or {}
 Popup.Size = 420
@@ -130,7 +130,7 @@ function Popup:New(input)
 	local f = self:Super(Popup):New(UIParent)
 	f.id, f.edit, f.money = id, info.editBox, info.moneyInput or info.money
 	f.button1, f.button2, f.moneyInput, f.hideOnEscape = info.button1, info.button2, info.moneyInput, f.hideOnEscape
-	f.text = info.text .. (not f.moneyInput and f.money and ('|n'..GetCoinTextureString(f.money)) or '')
+	f.text = (info.text or '') .. (not f.moneyInput and f.money and ('|n'..GetCoinTextureString(f.money)) or '')
 	f:SetBackdrop('DialogBorderDarkTemplate')
 	f:SetCall('OnAccept', info.OnAccept)
 	f:SetCall('OnCancel', info.OnCancel)

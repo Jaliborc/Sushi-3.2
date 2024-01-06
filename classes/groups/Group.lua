@@ -1,5 +1,5 @@
 --[[
-Copyright 2008-2023 João Cardoso
+Copyright 2008-2024 João Cardoso
 Sushi is distributed under the terms of the GNU General Public License (or the Lesser GPL).
 This file is part of Sushi.
 
@@ -18,7 +18,7 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
 local Lib = LibStub('Sushi-3.2')
-local Group = Lib.Callable:NewSushi('Group', 1, 'Frame')
+local Group = Lib.Callable:NewSushi('Group', 2, 'Frame')
 if not Group then return end
 
 

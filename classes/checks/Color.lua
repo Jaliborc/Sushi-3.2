@@ -17,8 +17,16 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Color = LibStub('Sushi-3.2').TextedClickable:NewSushi('ColorPicker', 1, 'Button')
-if not Color then	return end
+local Color = LibStub('Sushi-3.2').TextedClickable:NewSushi('ColorPicker', 2, 'Button')
+if not Color then return end
+
+ColorPickerFrame.SetupColorPickerAndShow = ColorPickerFrame.SetupColorPickerAndShow or function(_,...) OpenColorPicker(...) end
+ColorPickerFrame:HookScript('OnHide', function() 
+	if Color.Active and Color.Active:GetButtonState() == 'PUSHED' then
+		Color.Active:SetButtonState('NORMAL')
+		Color.Active:FireCalls('OnUpdate')
+	end
+end)
 
 
 --[[ Overrides ]]--
@@ -67,30 +75,26 @@ end
 
 function Color:OnClick()
 	local color = self:GetValue()
+
 	local set = function(color)
 		self:SetValue(color)
 		self:FireCalls('OnColor', color)
 		self:FireCalls('OnInput', color)
-
-		if not ColorPickerFrame:IsShown() then
-			self:SetButtonState('NORMAL')
-			self:FireCalls('OnUpdate')
-		end
 	end
 
-	-- order of these lines is important
-	ColorPickerFrame.func = function()
-		local a = self:HasAlpha() and (1 - OpacitySliderFrame:GetValue())
+	local update = function()
+		local a = (OpacitySliderFrame and OpacitySliderFrame:GetValue()) or (ColorPickerFrame:GetColorAlpha())
 		local r,g,b = ColorPickerFrame:GetColorRGB()
 		set(CreateColor(r,g,b,a))
 	end
-	ColorPickerFrame.cancelFunc = function() set(color) end
-	ColorPickerFrame.opacityFunc = ColorPickerFrame.func
-	ColorPickerFrame.opacity = 1 - (color.a or 1)
-	ColorPickerFrame.hasOpacity = self:HasAlpha()
-	ColorPickerFrame.target = self
-	ColorPickerFrame:Show()
-	ColorPickerFrame:SetColorRGB(color:GetRGB())
+
+	Color.Active = self
+	ColorPickerFrame:SetupColorPickerAndShow {
+		cancelFunc = function() set(color) end,
+		swatchFunc = update, opacityFunc = update,
+		hasOpacity = self:HasAlpha(), opacity = color.a,
+		r = color.r, g = color.g, b = color.b,
+	}
 
 	self:SetButtonState('PUSHED', true)
 	PlaySound(self.Sound)

@@ -20,7 +20,6 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 local Color = LibStub('Sushi-3.2').TextedClickable:NewSushi('ColorPicker', 2, 'Button')
 if not Color then return end
 
-ColorPickerFrame.SetupColorPickerAndShow = ColorPickerFrame.SetupColorPickerAndShow or function(_,...) OpenColorPicker(...) end
 ColorPickerFrame:HookScript('OnHide', function() 
 	if Color.Active and Color.Active:GetButtonState() == 'PUSHED' then
 		Color.Active:SetButtonState('NORMAL')
@@ -89,12 +88,29 @@ function Color:OnClick()
 	end
 
 	Color.Active = self
-	ColorPickerFrame:SetupColorPickerAndShow {
-		cancelFunc = function() set(color) end,
-		swatchFunc = update, opacityFunc = update,
-		hasOpacity = self:HasAlpha(), opacity = color.a,
-		r = color.r, g = color.g, b = color.b,
-	}
+    if ColorPickerFrame.SetupColorPickerAndShow then -- 10.2.5
+        ColorPickerFrame:SetupColorPickerAndShow({
+            cancelFunc = function() set(color) end,
+            swatchFunc = update,
+            opacityFunc = update,
+            hasOpacity = self:HasAlpha(),
+            opacity = color.a,
+            r = color.r,
+            g = color.g,
+            b = color.b
+        })
+    else -- Classic
+        OpenColorPicker({
+            cancelFunc = function() set(color) end,
+            swatchFunc = update,
+            opacityFunc = update,
+            hasOpacity = self:HasAlpha(),
+            opacity = color.a,
+            r = color.r,
+            g = color.g,
+            b = color.b
+        })
+    end
 
 	self:SetButtonState('PUSHED', true)
 	PlaySound(self.Sound)

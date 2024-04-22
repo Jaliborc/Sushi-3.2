@@ -17,10 +17,10 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Color = LibStub('Sushi-3.2').TextedClickable:NewSushi('ColorPicker', 2, 'Button')
+local Color = LibStub('Sushi-3.2').TextedClickable:NewSushi('ColorPicker', 3, 'Button')
 if not Color then return end
 
-ColorPickerFrame.SetupColorPickerAndShow = ColorPickerFrame.SetupColorPickerAndShow or function(_,...) OpenColorPicker(...) end
+Color.OpenPicker = OpenColorPicker or GenerateClosure(ColorPickerFrame.SetupColorPickerAndShow, ColorPickerFrame)
 ColorPickerFrame:HookScript('OnHide', function() 
 	if Color.Active and Color.Active:GetButtonState() == 'PUSHED' then
 		Color.Active:SetButtonState('NORMAL')
@@ -89,7 +89,7 @@ function Color:OnClick()
 	end
 
 	Color.Active = self
-	ColorPickerFrame:SetupColorPickerAndShow {
+	Color.OpenPicker {
 		cancelFunc = function() set(color) end,
 		swatchFunc = update, opacityFunc = update,
 		hasOpacity = self:HasAlpha(), opacity = color.a,

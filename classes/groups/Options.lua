@@ -33,7 +33,7 @@ end
 function Group:New(category, subcategory)
 	assert(category, 'First parameter to `OptionsGroup:New` is not optional')
 
-	local dock = CreateFrame('Frame', nil, SettingsPanel or InterfaceOptionsFrame)
+	local dock = CreateFrame('Frame', nil, SettingsPanel)
 	if subcategory then
 		dock.parent, dock.name = type(category) == 'table' and category.name or category, subcategory
 	else
@@ -42,11 +42,11 @@ function Group:New(category, subcategory)
 
 	local group = self:Super(Group):New(dock)
 	group.name, group.title = dock.name, dock.name
-	group.category = InterfaceOptions_AddCategory(dock)
+	group.category = dock.parent or dock.name
+
 	group:SetPoint('BOTTOMRIGHT', -4, 5)
 	group:SetPoint('TOPLEFT', 4, -11)
 	group:SetFooter(nil)
-	group:SetSize(0, 0)
 	group:SetCall('OnChildren', function(self)
 		if self:GetTitle() then
 			self:Add('Header', self:GetTitle(), GameFontNormalLarge)
@@ -57,9 +57,24 @@ function Group:New(category, subcategory)
 		end
 	end)
 
-	dock.default = function() group:FireCalls('OnDefaults')	end
-	dock.cancel = function() group:FireCalls('OnCancel') end
-	dock.okay = function() group:FireCalls('OnOkay') end
+	dock.OnDefault = function() group:FireCalls('OnDefaults') end
+	dock.OnCancel = function() group:FireCalls('OnCancel') end
+	dock.OnCommit = function() group:FireCalls('OnOkay') end
+	dock.OnRefresh = function() group:FireCalls('OnRefresh') end
+
+	if subcategory then
+		local parent = Settings.GetCategory(dock.parent)
+		local child = Settings.RegisterCanvasLayoutSubcategory(parent, dock, dock.name)
+		-- BUG: SettingsCategoryMixin:Init(name) sets category.ID to a number
+		child.ID = dock.name
+	else
+		local parent = Settings.RegisterCanvasLayoutCategory(dock, dock.name)
+		-- BUG: SettingsCategoryMixin:Init(name) sets category.ID to a number
+		parent.ID = dock.name
+
+		Settings.RegisterAddOnCategory(parent)
+	end
+
 	dock:Hide()
 
 	return group
@@ -69,16 +84,7 @@ end
 --[[ API ]]--
 
 function Group:Open()
-	if SettingsPanel then
-		SettingsPanel:Show()
-		SettingsPanel:SelectCategory(self.category) -- GetCategory is bugged, must go direct
-
-		self.category.expanded = true -- force subcategory expansion
-		SettingsPanel.CategoryList:CreateCategories()
-	else
-		InterfaceOptionsFrame:Show()
-		InterfaceOptionsFrame_OpenToCategory(self:GetParent())
-	end
+	Settings.OpenToCategory(self.category)
 end
 
 function Group:SetTitle(title)

@@ -154,8 +154,8 @@ function Group:Layout()
 			top, left = self:Orient(top, left)
 
 			if self.limit and (x + width) > self.limit then
-	 			breakLine()
-	 		end
+				breakLine()
+			end
 
 			local a,b = self:Orient(x + left, y + top)
 			child:ClearAllPoints()

@@ -139,7 +139,7 @@ function Drop:IsMouseInteracting()
 		end
 		
 		-- before tww 11.0.0
-		return GetMouseFocus();
+		return _G.GetMouseFocus();
 	end
 	
 	return DoesAncestryInclude(self:GetParent(), GetMouseFocus())

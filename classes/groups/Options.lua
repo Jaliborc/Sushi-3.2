@@ -42,7 +42,6 @@ function Group:New(category, subcategory)
 
 	local group = self:Super(Group):New(dock)
 	group.name, group.title = dock.name, dock.name
-	group.category = dock.parent or dock.name
 
 	group:SetPoint('BOTTOMRIGHT', -4, 5)
 	group:SetPoint('TOPLEFT', 4, -11)
@@ -63,16 +62,12 @@ function Group:New(category, subcategory)
 	dock.OnRefresh = function() group:FireCalls('OnRefresh') end
 
 	if subcategory then
-		local parent = Settings.GetCategory(dock.parent)
-		local child = Settings.RegisterCanvasLayoutSubcategory(parent, dock, dock.name)
-		-- BUG: SettingsCategoryMixin:Init(name) sets category.ID to a number
-		child.ID = dock.name
+		local parent = Settings.GetCategory(category.category:GetID())
+		group.category = Settings.RegisterCanvasLayoutSubcategory(parent, dock, dock.name)
 	else
-		local parent = Settings.RegisterCanvasLayoutCategory(dock, dock.name)
-		-- BUG: SettingsCategoryMixin:Init(name) sets category.ID to a number
-		parent.ID = dock.name
+		group.category = Settings.RegisterCanvasLayoutCategory(dock, dock.name)
 
-		Settings.RegisterAddOnCategory(parent)
+		Settings.RegisterAddOnCategory(group.category)
 	end
 
 	dock:Hide()
@@ -84,7 +79,9 @@ end
 --[[ API ]]--
 
 function Group:Open()
-	Settings.OpenToCategory(self.category)
+	-- cannot open to a subcategory
+	local category = self.category:GetParentCategory() or self.category
+	Settings.OpenToCategory(category:GetID())
 end
 
 function Group:SetTitle(title)

@@ -1,10 +1,11 @@
 if not WoWUnit or WoWUnit:HasGroup('Sushi-3.2') then return end
 
 local Sushi = LibStub('Sushi-3.2')
-local Panel = CreateFrame('Frame', nil, SettingsPanel or InterfaceOptionsFrame)
+local Panel = CreateFrame('Frame', nil, SettingsPanel)
 Panel:Hide()
-Panel.name = 'Sushi-3.2'
-InterfaceOptions_AddCategory(Panel)
+
+Settings.RegisterAddOnCategory(
+	Settings.RegisterCanvasLayoutCategory(Panel, 'Sushi-3.2'))
 
 -- Singletons
 local helpButton = Sushi.HelpButton(Panel)

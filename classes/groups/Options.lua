@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Group = LibStub('Sushi-3.2').Group:NewSushi('OptionsGroup', 2, 'Frame')
+local Group = LibStub('Sushi-3.2').Group:NewSushi('OptionsGroup', 3, 'Frame')
 if not Group then return end
 
 
@@ -33,20 +33,12 @@ end
 function Group:New(category, subcategory)
 	assert(category, 'First parameter to `OptionsGroup:New` is not optional')
 
-	local dock = CreateFrame('Frame', nil, SettingsPanel or InterfaceOptionsFrame)
-	if subcategory then
-		dock.parent, dock.name = type(category) == 'table' and category.name or category, subcategory
-	else
-		dock.name = category
-	end
-
+	local dock = CreateFrame('Frame', nil, SettingsPanel)
 	local group = self:Super(Group):New(dock)
-	group.name, group.title = dock.name, dock.name
-	group.category = InterfaceOptions_AddCategory(dock)
+	group.title = subcategory or category
 	group:SetPoint('BOTTOMRIGHT', -4, 5)
 	group:SetPoint('TOPLEFT', 4, -11)
 	group:SetFooter(nil)
-	group:SetSize(0, 0)
 	group:SetCall('OnChildren', function(self)
 		if self:GetTitle() then
 			self:Add('Header', self:GetTitle(), GameFontNormalLarge)
@@ -57,9 +49,13 @@ function Group:New(category, subcategory)
 		end
 	end)
 
-	dock.default = function() group:FireCalls('OnDefaults')	end
-	dock.cancel = function() group:FireCalls('OnCancel') end
-	dock.okay = function() group:FireCalls('OnOkay') end
+	group.registry = subcategory and Settings.RegisterCanvasLayoutSubcategory(category.registry or category, dock, group.title) or Settings.RegisterCanvasLayoutCategory(dock, group.title)
+	Settings.RegisterAddOnCategory(group.registry)
+
+	dock.OnRefresh = function() group:FireCalls('OnRefresh') end
+	dock.OnDefault = function() group:FireCalls('OnDefaults') end
+	dock.OnCancel = function() group:FireCalls('OnCancel') end
+	dock.OnCommit = function() group:FireCalls('OnOkay') end
 	dock:Hide()
 
 	return group
@@ -69,16 +65,11 @@ end
 --[[ API ]]--
 
 function Group:Open()
-	if SettingsPanel then
-		SettingsPanel:Show()
-		SettingsPanel:SelectCategory(self.category) -- GetCategory is bugged, must go direct
+	SettingsPanel:Show()
+	SettingsPanel:SelectCategory(self.registry) -- GetCategory is bugged, must go direct
 
-		self.category.expanded = true -- force subcategory expansion
-		SettingsPanel.CategoryList:CreateCategories()
-	else
-		InterfaceOptionsFrame:Show()
-		InterfaceOptionsFrame_OpenToCategory(self:GetParent())
-	end
+	self.registry.expanded = true -- force subcategory expansion
+	SettingsPanel.CategoryList:CreateCategories()
 end
 
 function Group:SetTitle(title)

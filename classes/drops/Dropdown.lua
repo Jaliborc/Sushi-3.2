@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Drop, old = LibStub('Sushi-3.2').Group:NewSushi('Dropdown', 3, 'Frame')
+local Drop, old = LibStub('Sushi-3.2').Group:NewSushi('Dropdown', 4, 'Frame')
 if not Drop then return end
 
 
@@ -127,7 +127,7 @@ function Drop:Add(object, ...)
 end
 
 function Drop:IsMouseInteracting()
-	local focus = GetMouseFoci and GetMouseFoci()[1] or GetMouseFocus()
+	local focus = GetMouseFoci and GetMouseFoci()[1] or GetMouseFocus and GetMouseFocus()
 	return DoesAncestryInclude(self:GetParent(), focus)
 end
 

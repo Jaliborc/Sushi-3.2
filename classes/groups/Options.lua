@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Group = LibStub('Sushi-3.2').Group:NewSushi('OptionsGroup', 3, 'Frame')
+local Group = LibStub('Sushi-3.2').Group:NewSushi('OptionsGroup', 4, 'Frame')
 if not Group then return end
 
 
@@ -49,14 +49,15 @@ function Group:New(category, subcategory)
 		end
 	end)
 
-	group.registry = subcategory and Settings.RegisterCanvasLayoutSubcategory(category.registry or category, dock, group.title) or Settings.RegisterCanvasLayoutCategory(dock, group.title)
-	Settings.RegisterAddOnCategory(group.registry)
-
 	dock.OnRefresh = function() group:FireCalls('OnRefresh') end
 	dock.OnDefault = function() group:FireCalls('OnDefaults') end
 	dock.OnCancel = function() group:FireCalls('OnCancel') end
 	dock.OnCommit = function() group:FireCalls('OnOkay') end
 	dock:Hide()
+
+	Settings.RegisterAddOnCategory(subcategory and
+		Settings.RegisterCanvasLayoutSubcategory(Group.GetCategory(category), dock, group.title) or
+		Settings.RegisterCanvasLayoutCategory(dock, group.title))
 
 	return group
 end
@@ -65,10 +66,10 @@ end
 --[[ API ]]--
 
 function Group:Open()
+	local category = self:GetCategory()
 	SettingsPanel:Show()
-	SettingsPanel:SelectCategory(self.registry) -- GetCategory is bugged, must go direct
-
-	self.registry.expanded = true -- force subcategory expansion
+	SettingsPanel:SelectCategory(category)
+	category.expanded = true -- force subcategory expansion
 	SettingsPanel.CategoryList:CreateCategories()
 end
 
@@ -94,4 +95,15 @@ end
 
 function Group:GetFooter()
 	return self.Footer:GetText()
+end
+
+
+--[[ Blizzard Workaround ]]--
+
+function Group.GetCategory(query)
+	for category, layout in pairs(SettingsPanel.categoryLayouts) do
+		if category == query or category:GetName() == query or DoesAncestryInclude(layout.frame, query) then
+			return category
+		end
+	end
 end

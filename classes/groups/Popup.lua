@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Popup = LibStub('Sushi-3.2').Group:NewSushi('Popup', 7)
+local Popup = LibStub('Sushi-3.2').Group:NewSushi('Popup', 8)
 if not Popup then return end
 Popup.Active = Popup.Active or {}
 Popup.Size = 420
@@ -147,6 +147,7 @@ function Popup:New(input)
 	f:SetCall('OnAccept', info.OnAccept)
 	f:SetCall('OnCancel', info.OnCancel)
 	f:SetChildren(self.Populate)
+	f:SetFrameStrata('DIALOG')
 	f:Show()
 
 	local icon = info.icon or (info.showAlert and 357854) or (info.showAlertGear and 357855)

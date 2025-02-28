@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Popup = LibStub('Sushi-3.2').Group:NewSushi('Popup', 9)
+local Popup = LibStub('Sushi-3.2').Group:NewSushi('Popup', 10)
 if not Popup then return end
 Popup.Active = Popup.Active or {}
 Popup.Size = 420
@@ -170,6 +170,7 @@ function Popup:Populate()
 
 	if self.edit then
 		self.textInput = self:Add('BoxEdit', nil, self.edit):SetWidth(240):SetKeys{centered = true, top = -6, left = -3, right = -3, bottom = -3}
+															:SetCall('OnInput', function() self:Accept() end)
 	end
 
 	if self.moneyInput then

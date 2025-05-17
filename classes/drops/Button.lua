@@ -18,8 +18,13 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
 local Sushi = LibStub('Sushi-3.2')
-local Button = Sushi.Clickable:NewSushi('DropButton', 3, 'CheckButton', 'UIDropDownMenuButtonTemplate', true)
+local Button = Sushi.Clickable:NewSushi('DropButton', 4, 'CheckButton', 'UIDropDownMenuButtonTemplate', true)
 if not Button then return end
+
+local Modern = LE_EXPANSION_LEVEL_CURRENT > LE_EXPANSION_WRATH_OF_THE_LICH_KING
+local TitleFont = Modern and GameFontNormalLeft or GameFontNormalSmallLeft
+local NormalFont = Modern and  GameFontHighlightLeft or GameFontHighlightSmallLeft
+local DisableFont = Modern and GameFontDisableLeft or GameFontDisableSmallLeft
 
 
 --[[ Construct ]]--
@@ -27,9 +32,6 @@ if not Button then return end
 function Button:Construct()
 	local b = self:Super(Button):Construct()
 	local name = b:GetName()
-
-	--b.Color = _G[name .. 'ColorSwatch']
-	--b.Color.Bg = _G[name .. 'ColorSwatchSwatchBG']
 
 	b.Arrow = _G[name .. 'ExpandArrow']
 	b.Arrow:SetScript('OnEnter', nil)
@@ -49,21 +51,23 @@ end
 function Button:New(parent, info)
 	local info = info or {}
 	local sublevel = info.menuTable or info.sublevel or info.children
+	local font = info.fontObject or info.isTitle and TitleFont or NormalFont
 	local b = self:Super(Button):New(parent)
 
-	--b.Color:SetShown(info.hasColorSwatch)
 	b:SetKeys(info)
-	b:SetText(b.text)
-	b:SetIcon(b.icon)
 	b:SetSublevel(sublevel)
-	b:SetChecked(b.checked)
-	b:SetTooltip(b.tooltipTitle, b.tooltipText)
-	b:SetEnabled(not b.disabled and not b.isTitle)
-	b:SetFletched(b.arrow or b.hasArrow or sublevel)
-	b:SetCheckable(not b.isTitle and not b.notCheckable, not b.isNotRadio)
-	b:SetNormalFontObject(b.fontObject or b.isTitle and GameFontNormalSmallLeft or GameFontHighlightSmallLeft)
-	b:SetDisabledFontObject(b.fontObject or b.isTitle and GameFontNormalSmallLeft or GameFontDisableSmallLeft)
+	b:SetNormalFontObject(font)
+	b:SetHighlightFontObject(font)
+	b:SetDisabledFontObject(b.fontObject or b.isTitle and TitleFont or DisableFont)
+	b:SetText(b.text)
+
 	b:SetCall('OnClick', b.func)
+	b:SetCheckable(not b.isTitle and not b.notCheckable, not b.isNotRadio)
+	b:SetFletched(b.arrow or b.hasArrow or sublevel)
+	b:SetEnabled(not b.disabled and not b.isTitle)
+	b:SetTooltip(b.tooltipTitle, b.tooltipText)
+	b:SetChecked(b.checked)
+	b:SetIcon(b.icon)
 
 	if parent.SetCall then
 		parent:SetCall('OnResize', function() b:UpdateSize() end)
@@ -118,7 +122,7 @@ end
 function Button:SetCheckable(checkable, radio)
 	local uv = radio and 0.5 or 0
 
-	self.left = checkable and 10 or 16
+	self.left = rawget(self, 'left') or (checkable and 10 or 16)
 	self:GetNormalTexture():SetTexCoord(0.5, 1, uv, uv+0.5)
 	self:GetNormalTexture():SetAlpha(checkable and 1 or 0)
 	self:GetCheckedTexture():SetTexCoord(0, 0.5, uv, uv+0.5)
@@ -143,7 +147,7 @@ function Button:SetSublevel(children)
 end
 
 function Button:SetFletched(hasArrow)
-	self.right = hasArrow and 10 or 16
+	self.right = rawget(self, 'right') or (hasArrow and 10 or 16)
 	self.Arrow:SetShown(hasArrow)
 end
 

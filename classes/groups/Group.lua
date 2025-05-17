@@ -18,7 +18,7 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
 local Lib = LibStub('Sushi-3.2')
-local Group = Lib.Callable:NewSushi('Group', 2, 'Frame')
+local Group = Lib.Callable:NewSushi('Group', 3, 'Frame')
 if not Group then return end
 
 
@@ -60,13 +60,13 @@ end
 
 --[[ Children ]]--
 
-function Group:SetChildren(call)
+function Group:SetChildren(call, force)
 	self:SetCall('OnChildren', call)
-	self:UpdateChildren()
+	self:UpdateChildren(force)
 end
 
-function Group:UpdateChildren()
-	if self:CanLayout() then
+function Group:UpdateChildren(force)
+	if self:CanLayout() or force then
 		self:ReleaseChildren()
 		self:FireCalls('OnChildren')
 		self:Layout()
@@ -122,8 +122,8 @@ end
 
 --[[ Layout ]]--
 
-function Group:Layout()
-	if self:CanLayout() then
+function Group:Layout(force)
+	if self:CanLayout() or force then
 		self.limit = self:GetLimit()
 	else
 		return

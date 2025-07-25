@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Popup = LibStub('Sushi-3.2').Group:NewSushi('Popup', 10)
+local Popup, old = LibStub('Sushi-3.2').Group:NewSushi('Popup', 10)
 if not Popup then return end
 Popup.Active = Popup.Active or {}
 Popup.Size = 420
@@ -53,11 +53,15 @@ local function lastPopup()
 		return StaticPopup_DisplayedFrames[#StaticPopup_DisplayedFrames]
 	end
 
-	for i = 1, STATICPOPUP_NUMDIALOGS do --> thanks blizz, very simple and efficient, great change
-		local frame = _G['StaticPopup'..i]
-		if frame:IsShown() and select(2, frame:GetPointByName('TOP')) == UIParent then
-			return frame
+	local i = 0
+	while true do --> thanks blizz, very simple and efficient, great change making everything local
+		local k = i+1
+		local frame = _G['StaticPopup'..k]
+		if not frame or not frame:IsShown() then
+			return _G['StaticPopup'..i]
 		end
+
+		i = k
 	end
 end
 
@@ -234,7 +238,8 @@ function Popup:OnKeyDown(key)
 	self:SetPropagateKeyboardInput(true)
 end
 
-if not rawget(Popup, 'Layout') or not Popup.Active then
-	hooksecurefunc('StaticPopup_CollapseTable', function() Popup:Organize() end)
+if old <= 10 then
+	hooksecurefunc('StaticPopupSpecial_Hide', function() Popup:Organize() end)
+	hooksecurefunc('StaticPopup_OnHide', function() Popup:Organize() end)
 	hooksecurefunc('StaticPopup_Show', function() Popup:Organize() end)
 end

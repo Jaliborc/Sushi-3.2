@@ -45,9 +45,10 @@ end
 
 function Choice:OnClick()
 	if not self.open then
-		local root = MenuUtil.CreateRootMenuDescription(MenuVariants.GetDefaultMenuMixin())
 		local anchor = AnchorUtil.CreateAnchor('TOPLEFT', self, 'BOTTOMLEFT', 0, 0)
-
+		local root = MenuUtil.CreateRootMenuDescription(MenuVariants.GetDefaultMenuMixin())
+		root:SetMinimumWidth(self:GetWidth())
+		
 		Menu.PopulateDescription(self.OnPopulate, self, root)
 		Menu.GetManager():OpenMenu(self, root, anchor)
 	else

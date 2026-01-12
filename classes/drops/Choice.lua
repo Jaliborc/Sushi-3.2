@@ -18,7 +18,7 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
 local Sushi = LibStub('Sushi-3.2')
-local Choice = Sushi.Labeled:NewSushi('DropChoice', 1, 'Button', 'UIDropDownMenuTemplate', true)
+local Choice = Sushi.Labeled:NewSushi('DropChoice', 2, 'DropdownButton', 'WowStyle1DropdownTemplate')
 if not Choice then return end
 
 
@@ -27,8 +27,8 @@ if not Choice then return end
 function Choice:Construct()
 	local f = self:Super(Choice):Construct()
 	f.Label = f:CreateFontString(nil, nil, self.LabelFont)
-	f.Label:SetPoint('BOTTOMLEFT', f, 'TOPLEFT', 16, 3)
-	f.Button:SetScript('OnClick', function() f:OnClick() end)
+	f.Label:SetPoint('BOTTOMLEFT', f, 'TOPLEFT', 4, 3)
+	f:SetScript('OnClick', f.OnClick)
 	f:SetWidth(150)
 	return f
 end
@@ -40,40 +40,57 @@ function Choice:New(parent, label, value)
 	return f
 end
 
+
+--[[ Events ]]--
+
 function Choice:OnClick()
-	local drop = Sushi.Dropdown:Toggle(self)
-	if drop then
-		drop:SetPoint('TOPRIGHT', -10, -40)
-		drop:SetChildren(function()
-			for i, choice in ipairs(self:GetChoices()) do
-				drop:Add {
-					isRadio = true,
-					checked = choice.key == self:GetValue(),
-					tooltipTitle = choice.tip and choice.text,
-					text = choice.text or choice.key,
-					tooltipText = choice.tip,
-					func = function()
-						if choice.key ~= self:GetValue() then
-							self:SetValue(choice.key)
-							self:FireCalls('OnValue', choice.key)
-							self:FireCalls('OnInput', choice.key)
-							self:FireCalls('OnUpdate')
-						end
-					end
-				}
-			end
-		end)
+	if not self.open then
+		local root = MenuUtil.CreateRootMenuDescription(MenuVariants.GetDefaultMenuMixin())
+		local anchor = AnchorUtil.CreateAnchor('TOPLEFT', self, 'BOTTOMLEFT', 0, 0)
+
+		Menu.PopulateDescription(self.OnPopulate, self, root)
+		Menu.GetManager():OpenMenu(self, root, anchor)
+	else
+		Menu.GetManager():CloseMenus()
 	end
-	
-	self:SetCall('OnReset', drop and function() drop:Release() end)
+
+	self.open = not self.open
+end
+
+function Choice:OnPopulate(drop)
+	local getter = function(key) return key == self:GetValue() end
+	local setter = function(key)
+		self:SetValue(key)
+		self:FireCalls('OnValue', key)
+		self:FireCalls('OnInput', key)
+		self:FireCalls('OnUpdate')
+	end
+
+	for i, choice in ipairs(self:GetChoices()) do
+		local title = choice.text or choice.key
+		local button = drop:CreateRadio(title, getter, setter, choice.key)
+		if choice.tip then
+			button:SetTitleAndTextTooltip(title, choice.tip)
+		end
+	end
 end
 
 
 --[[ API ]]--
 
+function Choice:Refresh()
+	for i, choice in ipairs(self:GetChoices()) do
+		if choice.key == self:GetValue() then
+			return self:SetText(choice.text or choice.key)
+		end
+	end
+
+	self:SetText()
+end
+
 function Choice:SetValue(value)
 	self.value = value
-	self:UpdateText()
+	self:Refresh()
 end
 
 function Choice:GetValue()
@@ -96,25 +113,19 @@ function Choice:AddChoices(key, text, tip)
 		tinsert(self.choices, {key = key, text = text, tip = tip})
 	end
 
-	self:UpdateText()
+	self:Refresh()
 end
 
 function Choice:GetChoices()
 	return self.choices
 end
 
-function Choice:UpdateText()
-	for i, choice in ipairs(self:GetChoices()) do
-		if choice.key == self:GetValue() then
-			return self.Text:SetText(choice.text or choice.key)
-		end
-	end
-
-	self.Text:SetText()
-end
-
 
 --[[ Properties ]]--
 
 Choice.Add = Choice.AddChoices
-Choice.top = 18
+Choice.top, Choice.left, Choice.bottom = 18, 12, 4
+
+if old == 1 then
+	Choice.__frames, Choice.__count = {}, 0
+end

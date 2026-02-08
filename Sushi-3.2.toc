@@ -1,0 +1,9 @@
+## Title: Sushi
+## Notes: A GUI framework, all wrapped in rice and seaweed for extra flavor.
+## Interface: 120001, 120000, 50501, 40402, 30404, 20505, 11507
+## Author: Jaliborc (João Cardoso)
+## Category: Libraries
+## Dependencies: LibStub, Poncho-2.0
+## OptionalDeps: WoWUnit
+
+Sushi-3.2.toc

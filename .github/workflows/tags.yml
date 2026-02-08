@@ -1,0 +1,70 @@
+name: Tag Library Version
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch: # This enables manual triggering
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetches all tags and history
+
+      - name: Extract Version
+        id: get_version
+        run: |
+          # Find the file
+          FILE_PATH=$(grep -rl "LibStub:NewLibrary" --include="*.lua" . | head -n 1)
+
+          if [ -z "$FILE_PATH" ]; then
+            echo "Error: Could not find LibStub:NewLibrary"
+            exit 1
+          fi
+
+          # The Regex Explanation:
+          # 1. Look for '-' followed by numbers/dots: ([0-9.]+)
+          # 2. Skip the middle man: .*
+          # 3. Look for the comma and the final number: ,[[:space:]]*([0-9.]+)
+          LINE=$(grep "LibStub:NewLibrary" "$FILE_PATH")
+          
+          MAJOR_MINOR=$(echo "$LINE" | sed -E 's/.*-([0-9.]+).*/\1/')
+          PATCH=$(echo "$LINE" | sed -E 's/.*,[[:space:]]*([0-9.]+).*/\1/')
+          
+          # Combine them: e.g., 1.2 and 3 becomes 1.2.3
+          FULL_VERSION="${MAJOR_MINOR}.${PATCH}"
+
+          echo "Detected Version: $FULL_VERSION"
+          echo "version=$FULL_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Create and Push Tag
+        run: |
+          VERSION="${{ steps.get_version.outputs.version }}"
+          
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # 1. Check if the clean version tag already exists
+          if git rev-parse "$VERSION" >/dev/null 2>&1; then
+            echo "Tag $VERSION already exists. Appending commit SHA."
+            # 2. If it exists, create a unique tag using the short SHA
+            SHORT_SHA=$(git rev-parse --short HEAD)
+            TAG_NAME="${VERSION}-${SHORT_SHA}"
+          else
+            # 3. If it's a fresh version, use the clean tag
+            TAG_NAME="$VERSION"
+          fi
+
+          echo "Final Tag Name: $TAG_NAME"
+
+          # Final check to prevent errors if the SHA-suffix tag somehow exists
+          if git rev-parse "$TAG_NAME" >/dev/null 2>&1; then
+            echo "Tag $TAG_NAME already exists (exact commit already tagged). Skipping."
+          else
+            git tag "$TAG_NAME"
+            git push origin "$TAG_NAME"
+          fi

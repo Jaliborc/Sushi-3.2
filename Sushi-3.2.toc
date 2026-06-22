@@ -1,6 +1,6 @@
 ## Title: Sushi
 ## Notes: A GUI framework, all wrapped in rice and seaweed for extra flavor.
-## Interface: 120005, 50503, 40402, 30404, 20505, 11508
+## Interface: 120007, 50504, 40402, 30404, 20505, 11508
 ## Author: Jaliborc (João Cardoso)
 ## Category: Libraries
 ## Dependencies: LibStub, Poncho-2.0

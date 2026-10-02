@@ -23,7 +23,7 @@ Popup.Active = Popup.Active or {}
 Popup.Size = 420
 Popup.Max = 6
 
-local Magnifier = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE and 'communities-icon-searchmagnifyingglass' or 'shop-games-magnifyingglass'
+local Magnifier = (WOW_PROJECT_ID == WOW_PROJECT_MAINLINE or WOW_PROJECT_ID == WOW_PROJECT_CAMELOT) and 'communities-icon-searchmagnifyingglass' or 'shop-games-magnifyingglass'
 local Locale, Go2Browser = GetLocale()
 
 if Locale == 'deDE' then

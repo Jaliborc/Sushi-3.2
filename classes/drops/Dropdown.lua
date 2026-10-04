@@ -134,7 +134,7 @@ end
 
 --[[ Properties ]]--
 
-if not WOW_PROJECT_ID == WOW_PROJECT_MAINLINE and not WOW_PROJECT_ID == WOW_PROJECT_CAMELOT and not old then
+if not WOW_PROJECT_ID == WOW_PROJECT_MAINLINE and not WOW_PROJECT_ID == 18 and not old then
 	hooksecurefunc('ToggleDropDownMenu', function() Drop:Clear() end)
 	hooksecurefunc('CloseDropDownMenus', function() Drop:Clear() end)
 end

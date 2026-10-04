@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Drop, old = LibStub('Sushi-3.2').Group:NewSushi('Dropdown', 4, 'Frame')
+local Drop, old = LibStub('Sushi-3.2').Group:NewSushi('Dropdown', 5, 'Frame')
 if not Drop then return end
 
 
@@ -134,7 +134,7 @@ end
 
 --[[ Properties ]]--
 
-if not WOW_PROJECT_ID == WOW_PROJECT_MAINLINE and not old then
+if not WOW_PROJECT_ID == WOW_PROJECT_MAINLINE and not WOW_PROJECT_ID == WOW_PROJECT_CAMELOT and not old then
 	hooksecurefunc('ToggleDropDownMenu', function() Drop:Clear() end)
 	hooksecurefunc('CloseDropDownMenus', function() Drop:Clear() end)
 end

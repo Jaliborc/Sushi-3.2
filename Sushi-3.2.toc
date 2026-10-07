@@ -6,4 +6,4 @@
 ## Dependencies: LibStub, Poncho-2.0
 ## OptionalDeps: WoWUnit
 
-Sushi-3.2.toc
+Sushi-3.2.xml

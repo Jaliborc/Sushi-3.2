@@ -18,7 +18,7 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
 local Lib = LibStub('Sushi-3.2')
-local Group = Lib.Callable:NewSushi('Group', 3, 'Frame')
+local Group = Lib.Callable:NewSushi('Group', 4, 'Frame')
 if not Group then return end
 
 
@@ -119,6 +119,10 @@ function Group:NumChildren()
 	return #self.Children
 end
 
+function Group:GetContent()
+	return self
+end
+
 
 --[[ Layout ]]--
 
@@ -170,10 +174,10 @@ function Group:Layout(force)
 
 	x, y = self:Orient(max(x, w), y + h)
 	if self:GetResizing() == 'HORIZONTAL' then
-		self:SetSize(x, max(y, self:GetHeight()))
+		self:GetContent():SetSize(x, max(y, self:GetHeight()))
 		self:FireCalls('OnResize')
 	elseif self:GetResizing() == 'VERTICAL' then
-		self:SetSize(max(x, self:GetWidth()), y)
+		self:GetContent():SetSize(max(x, self:GetWidth()), y)
 		self:FireCalls('OnResize')
 	end
 end

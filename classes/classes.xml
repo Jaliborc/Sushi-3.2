@@ -30,6 +30,7 @@
 
   <!-- Groups -->
   <Script file="groups\Group.lua"/>
+  <Script file="groups\Scroll.lua"/>
   <Script file="groups\Popup.lua"/>
   <Script file="groups\Options.lua"/>
   <Script file="groups\FauxScroll.lua"/>

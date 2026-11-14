@@ -73,7 +73,7 @@ slider:SetRange(0, 100, 'None')
 
 local choice = Sushi.DropChoice(Panel, 'Dropdown Choice', 2)
 choice:AddChoices{ {key = 1, text = 'Hi'}, {key = 2, text = 'Hey'}, {key = 3, text = 'Hello'} }
-choice:SetPoint('TOPLEFT', slider, 'TOPRIGHT', 5, -2)
+choice:SetPoint('TOPLEFT', slider, 'TOPRIGHT', 10, -2)
 
 
 -- Groups
@@ -99,8 +99,25 @@ local header2 = Sushi.Header(group, 'This is not')
 header2:SetPoint('TOPLEFT', header1, 'BOTTOMLEFT', 0, -5)
 header2:SetWidth(100)
 
+local scroller = Sushi.Scroll(Panel)
+scroller:SetSize(160, 220)
+scroller:SetPoint('TOPLEFT', group, 'TOPRIGHT', 15, 0)
+scroller:SetBackdrop('TooltipBackdropTemplate')
+scroller:SetChildren(function(scroll)
+	for i = 1, 12 do
+		scroll:Add('RedButton', 'Scroll entry #' .. tostring(i))
+	end
+end)
+
+local scrollerShort = Sushi.Scroll(Panel)
+scrollerShort:SetSize(160, 60)
+scrollerShort:SetPoint('TOPLEFT', scroller, 'BOTTOMLEFT', 0, -10)
+scrollerShort:SetChildren(function(scroll)
+	scroll:Add('RedButton', 'Fits, so no bar')
+end)
+
 local faux = Sushi.FauxScroll(Panel, 3, 22)
-faux:SetPoint('TOPLEFT', group, 'TOPRIGHT')
+faux:SetPoint('TOPLEFT', scroller, 'TOPRIGHT', 5, 0)
 faux:SetChildren(function()
 	faux:SetNumEntries(5)
 

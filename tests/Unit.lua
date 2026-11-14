@@ -32,3 +32,62 @@ function Tests:GroupResize()
     IsTrue(group:GetWidth() > 0 and group:GetHeight() > 0)
   end)
 end
+
+function Tests:GroupContent()
+  local group = Sushi.Group()
+
+  AreEqual(group:GetContent(), group)
+  group:Release()
+end
+
+function Tests:ScrollRange()
+  local scroll = Sushi.Scroll(UIParent, function(scroll)
+    for i = 1, 12 do
+      scroll:Add('RedButton', 'Entry ' .. i)
+    end
+  end)
+  scroll:SetSize(300, 200)
+  scroll:Show()
+
+  if scroll.ScrollFrame then
+    AreEqual(scroll:GetWidth(), 300)
+    AreEqual(scroll:GetHeight(), 200)
+    IsTrue(scroll:GetScrollRange() > 0)
+  end
+
+  scroll:Release()
+end
+
+function Tests:ScrollClamp()
+  local scroll = Sushi.Scroll(UIParent, function(scroll)
+    for i = 1, 12 do
+      scroll:Add('RedButton', 'Entry ' .. i)
+    end
+  end)
+  scroll:SetSize(300, 200)
+  scroll:Show()
+
+  if scroll.ScrollFrame then
+    scroll:ScrollTo(-50)
+    AreEqual(scroll:GetScroll(), 0)
+
+    scroll:ScrollTo(9999)
+    AreEqual(scroll:GetScroll(), scroll:GetScrollRange())
+  end
+
+  scroll:Release()
+end
+
+function Tests:ScrollFit()
+  local scroll = Sushi.Scroll(UIParent, function(scroll)
+    scroll:Add('HelpButton')
+  end)
+  scroll:SetSize(300, 200)
+  scroll:Show()
+
+  if scroll.ScrollFrame then
+    AreEqual(scroll:GetScrollRange(), 0)
+  end
+
+  scroll:Release()
+end

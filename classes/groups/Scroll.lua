@@ -26,18 +26,14 @@ if not Scroll then return end
 
 function Scroll:Construct()
 	local f = self:Super(Scroll):Construct()
-	local ok, scroll = pcall(CreateFrame, 'ScrollFrame', nil, f, 'ScrollFrameTemplate')
+	local scroll = CreateFrame('ScrollFrame', nil, f, 'ScrollFrameTemplate')
+	scroll:SetPoint('TOPLEFT')
 	scroll:SetPoint('BOTTOMRIGHT', -f.Gutter, 0)
 	scroll:EnableMouseWheel(true)
-	scroll:SetPoint('TOPLEFT')
 	scroll:Show()
 
-	if scroll.SetClipsChildren then
-		scroll:SetClipsChildren(true)
-	end
-
 	local bar = scroll.ScrollBar
-	bar:SetHideIfUnscrollable(true).
+	bar:SetHideIfUnscrollable(true)
 	bar.Track:ClearAllPoints()
 	bar.Track:SetAllPoints(bar)
 	bar.Forward:Hide()
@@ -62,9 +58,9 @@ end
 
 --[[ Overrides ]]--
 
-function Scroll:SetBackdrop(template)
-	self:Super(Scroll):SetBackdrop(template)
-	self.ScrollFrame:SetFrameLevel(self:GetFrameLevel() + 1)
+function Scroll:UpdateChildren(force)
+	self:Super(Scroll):UpdateChildren(force)
+	self.ScrollFrame:SetVerticalScroll(0)
 end
 
 function Scroll:GetLimit()
@@ -104,12 +100,13 @@ function Scroll:SetScrollStep(step)
 end
 
 function Scroll:GetScrollStep()
-	return self.ScrollFrame:GetPanExtent()
+	return self.ScrollFrame:GetPanExtent() or self.ScrollStep
 end
 
 
 --[[ Properties ]]--
 
 Scroll.OnSizeChanged = Scroll.Layout
+Scroll.Update = Scroll.UpdateChildren
 Scroll.ScrollStep = 30
 Scroll.Gutter = 14

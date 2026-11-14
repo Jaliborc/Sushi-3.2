@@ -84,8 +84,10 @@ function Group:Add(object, ...)
 		object = class(self, ...)
 	elseif kind == 'function' then
 		object = object(self, ...)
-	elseif object.SetParent then
-		object:SetParent(self)
+	end
+
+	if object.SetParent then
+		object:SetParent(self:GetContent())
 	end
 
 	if object.SetCall then

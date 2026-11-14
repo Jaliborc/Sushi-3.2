@@ -29,12 +29,8 @@ function Header:Construct()
 	string:SetJustifyH('LEFT')
 	string:SetPoint('TOPLEFT')
 
-	local line = b:CreateTexture()
-	line:SetAtlas('Options_HorizontalDivider', true)
-	line:SetPoint('BOTTOMRIGHT')
-	line:SetPoint('BOTTOMLEFT')
-
-	b.Line = line
+	b.Line = b:CreateTexture()
+	b.Line:SetAtlas('Options_HorizontalDivider', true)
 	b:SetFontString(string)
 	return b
 end
@@ -92,8 +88,12 @@ function Header:SetNormalFontObject(font)
 	self:UpdateHeight()
 end
 
-function Header:SetUnderlined(enable)
-	self.Line:SetShown(enable)
+function Header:SetUnderlined(offset)
+	local off = tonumber(offset) or 0
+
+	self.Line:SetShown(offset)
+	self.Line:SetPoint('BOTTOMLEFT', off, -off)
+	self.Line:SetPoint('BOTTOMRIGHT', 0, -off)
 	self:UpdateHeight()
 end
 

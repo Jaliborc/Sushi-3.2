@@ -255,6 +255,11 @@ function Group:GetBackdrop()
 	return self.backdrop
 end
 
+function Group:GetBackdropRegion()
+	local bg = self.bg
+	return bg and (bg.NineSlice and bg.NineSlice.Center or bg.Bg or bg) or self
+end
+
 
 --[[ Properties ]]--
 

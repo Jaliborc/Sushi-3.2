@@ -26,27 +26,31 @@ if not Scroll then return end
 
 function Scroll:Construct()
 	local f = self:Super(Scroll):Construct()
-	local scroll = CreateFrame('ScrollFrame', nil, f, 'ScrollFrameTemplate')
-	scroll:SetPoint('TOPLEFT')
-	scroll:SetPoint('BOTTOMRIGHT', -f.Gutter, 0)
+	local scroll = CreateFrame('ScrollFrame', nil, f)
 	scroll:EnableMouseWheel(true)
 	scroll:Show()
 
-	local bar = scroll.ScrollBar
+	local content = CreateFrame('Frame', nil, scroll)
+	local bar = CreateFrame('EventFrame', nil, scroll, 'MinimalScrollBar')
+	bar:SetPoint('BOTTOMLEFT', scroll, 'BOTTOMRIGHT', 6, 5)
+	bar:SetPoint('TOPLEFT', scroll, 'TOPRIGHT', 6, 0)
 	bar:SetHideIfUnscrollable(true)
 	bar.Track:ClearAllPoints()
 	bar.Track:SetAllPoints(bar)
 	bar.Forward:Hide()
 	bar.Back:Hide()
 
-	local content = CreateFrame('Frame', nil, scroll)
+	scroll.ScrollBar = bar
 	scroll:SetScrollChild(content)
 	scroll:HookScript('OnVerticalScroll', function(_, offset)
 		f:FireCalls('OnScroll', offset)
 	end)
 
+	ScrollUtil.InitScrollFrameWithScrollBar(scroll, bar)
+
 	f.ScrollFrame, f.Content = scroll, content
 	f:SetScrollStep(f.ScrollStep)
+	f:FitBackdrop()
 	return f
 end
 
@@ -75,6 +79,11 @@ function Scroll:GetContent()
 	return self.Content
 end
 
+function Scroll:SetBackdrop(template)
+	self:Super(Scroll):SetBackdrop(template)
+	self:FitBackdrop()
+end
+
 
 --[[ API ]]--
 
@@ -101,6 +110,14 @@ end
 
 function Scroll:GetScrollStep()
 	return self.ScrollFrame:GetPanExtent() or self.ScrollStep
+end
+
+function Scroll:FitBackdrop()
+	local region = self:GetBackdropRegion()
+
+	self.ScrollFrame:ClearAllPoints()
+	self.ScrollFrame:SetPoint('TOPLEFT', region, 'TOPLEFT')
+	self.ScrollFrame:SetPoint('BOTTOMRIGHT', region, 'BOTTOMRIGHT', -self.Gutter, 0)
 end
 
 

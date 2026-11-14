@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Header = LibStub('Sushi-3.2').Clickable:NewSushi('Header', 2, 'Button')
+local Header = LibStub('Sushi-3.2').Clickable:NewSushi('Header', 3, 'Button')
 if not Header then return end
 
 
@@ -30,10 +30,9 @@ function Header:Construct()
 	string:SetPoint('TOPLEFT')
 
 	local line = b:CreateTexture()
-	line:SetColorTexture(1,1,1, .2)
+	line:SetAtlas('Options_HorizontalDivider', true)
 	line:SetPoint('BOTTOMRIGHT')
 	line:SetPoint('BOTTOMLEFT')
-	line:SetHeight(1.2)
 
 	b.Line = line
 	b:SetFontString(string)

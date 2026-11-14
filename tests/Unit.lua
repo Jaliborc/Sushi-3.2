@@ -91,3 +91,28 @@ function Tests:ScrollFit()
 
   scroll:Release()
 end
+
+function Tests:FauxScrollOffset()
+  local scroll = Sushi.FauxScroll(UIParent, 3, 27)
+  scroll:SetChildren(function()
+    scroll:SetNumEntries(5)
+
+    for i = scroll:First(), scroll:Last() do
+      scroll:Add('RedButton', 'Entry ' .. i)
+    end
+  end)
+
+  if scroll.Scroll then
+    AreEqual(scroll:First(), 1)
+
+    scroll.Scroll:SetVerticalScroll(27)
+    AreEqual(scroll:First(), 2)
+    AreEqual(scroll:Last(), 4)
+
+    scroll.Scroll:SetVerticalScroll(54)
+    AreEqual(scroll:First(), 3)
+    AreEqual(scroll:Last(), 5)
+  end
+
+  scroll:Release()
+end

@@ -48,15 +48,15 @@ function Scroll:Construct()
 
 	ScrollUtil.InitScrollFrameWithScrollBar(scroll, bar)
 
-	f.ScrollFrame, f.Content = scroll, content
-	f:SetScrollStep(f.ScrollStep)
+	f.Scroll, f.Content = scroll, content
+	f:SetScrollStep(30)
 	f:FitBackdrop()
 	return f
 end
 
 function Scroll:Reset()
 	self:Super(Scroll):Reset()
-	self.ScrollFrame:SetVerticalScroll(0)
+	self.Scroll:SetVerticalScroll(0)
 end
 
 
@@ -64,7 +64,12 @@ end
 
 function Scroll:UpdateChildren(force)
 	self:Super(Scroll):UpdateChildren(force)
-	self.ScrollFrame:SetVerticalScroll(0)
+	self.Scroll:SetVerticalScroll(0)
+end
+
+function Scroll:SetBackdrop(template)
+	self:Super(Scroll):SetBackdrop(template)
+	self:FitBackdrop()
 end
 
 function Scroll:GetLimit()
@@ -79,45 +84,40 @@ function Scroll:GetContent()
 	return self.Content
 end
 
-function Scroll:SetBackdrop(template)
-	self:Super(Scroll):SetBackdrop(template)
-	self:FitBackdrop()
-end
-
 
 --[[ API ]]--
 
 function Scroll:ScrollTo(value)
-	self.ScrollFrame:SetVerticalScroll(value)
+	self.Scroll:SetVerticalScroll(value)
 end
 
 function Scroll:GetScroll()
-	return self.ScrollFrame:GetVerticalScroll() or 0
+	return self.Scroll:GetVerticalScroll() or 0
 end
 
 function Scroll:GetScrollRange()
-	return self.ScrollFrame:GetVerticalScrollRange() or 0
+	return self.Scroll:GetVerticalScrollRange() or 0
 end
 
 function Scroll:SetScrollStep(step)
-	self.ScrollFrame:SetPanExtent(step)
+	self.Scroll:SetPanExtent(step)
 
-	local range = self.ScrollFrame:GetVerticalScrollRange()
+	local range = self.Scroll:GetVerticalScrollRange()
 	if range > 0 then
-		self.ScrollFrame.ScrollBar:SetPanExtentPercentage(min(step / range, 1))
+		self.Scroll.ScrollBar:SetPanExtentPercentage(min(step / range, 1))
 	end
 end
 
 function Scroll:GetScrollStep()
-	return self.ScrollFrame:GetPanExtent() or self.ScrollStep
+	return self.Scroll:GetPanExtent() or self.ScrollStep
 end
 
 function Scroll:FitBackdrop()
 	local region = self:GetBackdropRegion()
 
-	self.ScrollFrame:ClearAllPoints()
-	self.ScrollFrame:SetPoint('TOPLEFT', region, 'TOPLEFT')
-	self.ScrollFrame:SetPoint('BOTTOMRIGHT', region, 'BOTTOMRIGHT', -self.Gutter, 0)
+	self.Scroll:ClearAllPoints()
+	self.Scroll:SetPoint('TOPLEFT', region, 'TOPLEFT')
+	self.Scroll:SetPoint('BOTTOMRIGHT', region, 'BOTTOMRIGHT', -self.Gutter, 0)
 end
 
 
@@ -125,5 +125,4 @@ end
 
 Scroll.OnSizeChanged = Scroll.Layout
 Scroll.Update = Scroll.UpdateChildren
-Scroll.ScrollStep = 30
 Scroll.Gutter = 14

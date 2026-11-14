@@ -87,7 +87,6 @@ group:SetChildren(function()
 	end
 end)
 
-
 local expand2 = Sushi.ExpandHeader(group, 'Expandable Header')
 expand2:SetPoint('TOPLEFT', group, 'BOTTOMLEFT', 0, -5)
 expand2:SetChecked(true)
@@ -102,7 +101,6 @@ header2:SetWidth(100)
 local scroller = Sushi.Scroll(Panel)
 scroller:SetSize(160, 220)
 scroller:SetPoint('TOPLEFT', group, 'TOPRIGHT', 15, 0)
-scroller:SetBackdrop('TooltipBackdropTemplate')
 scroller:SetChildren(function(scroll)
 	for i = 1, 12 do
 		scroll:Add('RedButton', 'Scroll entry #' .. tostring(i))
@@ -116,7 +114,7 @@ scrollerShort:SetChildren(function(scroll)
 	scroll:Add('RedButton', 'Fits, so no bar')
 end)
 
-local faux = Sushi.FauxScroll(Panel, 3, 22)
+local faux = Sushi.FauxScroll(Panel, 3, 27)
 faux:SetPoint('TOPLEFT', scroller, 'TOPRIGHT', 5, 0)
 faux:SetChildren(function()
 	faux:SetNumEntries(5)
@@ -126,12 +124,32 @@ faux:SetChildren(function()
 	end
 end)
 
-local options1 = Sushi.OptionsGroup(Panel, 'Subcategory')
-options1:SetSubtitle('Parented to an existing frame')
+local options1 = Sushi.OptionsGroup(Panel, 'Options Group')
+options1:SetSubtitle('Parented to an existing frame if you wish. Remove parent to create your own category.')
+options1:SetChildren(function(group)
+	local button = group:Add('RedButton', 'Say Hello')
+	button:SetCall('OnClick', function()
+		print('Hello from the options group!')
+	end)
 
-local options2 = Sushi.OptionsGroup('Sushi-3.2 Options Group')
-local options3 = Sushi.OptionsGroup(options2, 'Subcategory')
-options3:SetFooter('This is a footer')
+	local check = group:Add('Check', 'A demo check')
+	check:SetCall('OnInput', function(check, checked)
+		print('Demo check is now ' .. tostring(checked))
+	end)
+
+	local slider = group:Add('Slider', 'A demo slider', 30)
+	slider:SetRange(0, 100, 'None')
+	slider:SetCall('OnInput', function(slider, value)
+		print('Demo slider is now ' .. tostring(value))
+	end)
+
+	local choice = group:Add('DropChoice', 'A demo choice', 1)
+	choice:AddChoices{ {key = 1, text = 'First'}, {key = 2, text = 'Second'}, {key = 3, text = 'Third'} }
+	choice:SetCall('OnInput', function(choice, key)
+		print('Demo choice is now ' .. tostring(key))
+	end)
+end)
+
 
 -- Dropdown
 local dropTitle = Sushi.DropButton(Panel, {text = 'Drop Buttons', isTitle = true})

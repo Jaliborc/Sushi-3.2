@@ -1,43 +1,46 @@
 <Ui>
-  <!-- Core -->
-  <Script file="core\Callable.lua"/>
-  <Script file="core\Tipped.lua"/>
-  <Script file="core\Labeled.lua"/>
+	<!-- Core -->
+	<Script file="core\Callable.lua"/>
+	<Script file="core\Tipped.lua"/>
+	<Script file="core\Labeled.lua"/>
 
-  <!-- Buttons -->
-  <Script file="buttons\Clickable.lua"/>
-  <Script file="buttons\Texted.lua"/>
-  <Script file="buttons\Help.lua"/>
-  <Script file="buttons\Red.lua"/>
-  <Script file="buttons\Gray.lua"/>
-  <Script file="buttons\Header.lua"/>
-  <Script file="buttons\ExpandHeader.lua"/>
+	<!-- Buttons -->
+	<Script file="buttons\Clickable.lua"/>
+	<Script file="buttons\Texted.lua"/>
+	<Script file="buttons\Help.lua"/>
+	<Script file="buttons\Red.lua"/>
+	<Script file="buttons\Gray.lua"/>
+	<Script file="buttons\Header.lua"/>
+	<Script file="buttons\ExpandHeader.lua"/>
 
-  <!-- CheckButtons -->
-  <Script file="checks\Check.lua"/>
-  <Script file="checks\Expand.lua"/>
-  <Script file="checks\Icon.lua"/>
-  <Script file="checks\Color.lua"/>
+	<!-- CheckButtons -->
+	<Script file="checks\Check.lua"/>
+	<Script file="checks\Expand.lua"/>
+	<Script file="checks\Icon.lua"/>
+	<Script file="checks\Color.lua"/>
 
-  <!-- EditBoxes -->
-  <Script file="edits\Editable.lua"/>
-  <Script file="edits\Box.lua"/>
-  <Script file="edits\Dark.lua"/>
+	<!-- EditBoxes -->
+	<Script file="edits\Editable.lua"/>
+	<Script file="edits\Box.lua"/>
+	<Script file="edits\Dark.lua"/>
 
-  <!-- Misc -->
-  <Script file="misc\Glowbox.lua"/>
-  <Script file="misc\Slider.lua"/>
+	<!-- Misc -->
+	<Script file="core\Canvas.lua"/>
+	<Script file="misc\Glowbox.lua"/>
+	<Script file="misc\Slider.lua"/>
 
-  <!-- Groups -->
-  <Script file="groups\Group.lua"/>
-  <Script file="groups\Scroll.lua"/>
-  <Script file="groups\FauxScroll.lua"/>
-  <Script file="groups\Options.lua"/>
-  <Script file="groups\ScrollingOptions.lua"/>
-  <Script file="groups\Popup.lua"/>
+	<!-- Groups -->
+	<Script file="groups\Group.lua"/>
+	<Script file="groups\Scroll.lua"/>
+	<Script file="groups\FauxScroll.lua"/>
+	<Script file="groups\Popup.lua"/>
 
-  <!-- Dropdowns -->
-  <Script file="drops\Button.lua"/>
-  <Script file="drops\Dropdown.lua"/>
-  <Script file="drops\Choice.lua"/>
+	<!-- Dropdowns -->
+	<Script file="drops\Button.lua"/>
+	<Script file="drops\Dropdown.lua"/>
+	<Script file="drops\Choice.lua"/>
+
+	<!-- Options -->
+	<Script file="options\Options.lua"/>
+	<Script file="options\ScrollingOptions.lua"/>
 </Ui>

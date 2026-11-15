@@ -5,114 +5,114 @@ local Sushi = LibStub('Sushi-3.2')
 local AreEqual, IsFalse, IsTrue = WoWUnit.AreEqual, WoWUnit.IsFalse, WoWUnit.IsTrue
 
 function Tests:CallableReset()
-  local c = Sushi.Callable:NewClass('Frame')
-  c.default = 1
+	local c = Sushi.Callable:NewClass('Frame')
+	c.default = 1
 
-  local f = c()
-  f.var = 2
-  f.Static = 3
-  f:Release()
+	local f = c()
+	f.var = 2
+	f.Static = 3
+	f:Release()
 
-  AreEqual(f.default, 1)
-  AreEqual(f.var, nil)
-  AreEqual(f.Static, 3)
+	AreEqual(f.default, 1)
+	AreEqual(f.var, nil)
+	AreEqual(f.Static, 3)
 end
 
 function Tests:GroupAdd()
-  local group = Sushi.Group()
-  group:Add('HelpButton')
-  group:Add(CreateFrame('Frame', nil, group))
+	local group = Sushi.Group()
+	group:Add('HelpButton')
+	group:Add(CreateFrame('Frame', nil, group))
 end
 
 function Tests:GroupResize()
-  local group = Sushi.Group(nil, function(group)
-    group:Add('HelpButton')
-    group:AddBreak()
+	local group = Sushi.Group(nil, function(group)
+		group:Add('HelpButton')
+		group:AddBreak()
 
-    IsTrue(group:GetWidth() > 0 and group:GetHeight() > 0)
-  end)
+		IsTrue(group:GetWidth() > 0 and group:GetHeight() > 0)
+	end)
 end
 
 function Tests:GroupContent()
-  local group = Sushi.Group()
+	local group = Sushi.Group()
 
-  AreEqual(group:GetContent(), group)
-  group:Release()
+	AreEqual(group:GetContent(), group)
+	group:Release()
 end
 
 function Tests:ScrollRange()
-  local scroll = Sushi.Scroll(UIParent, function(scroll)
-    for i = 1, 12 do
-      scroll:Add('RedButton', 'Entry ' .. i)
-    end
-  end)
-  scroll:SetSize(300, 200)
-  scroll:Show()
+	local scroll = Sushi.Scroll(UIParent, function(scroll)
+		for i = 1, 12 do
+			scroll:Add('RedButton', 'Entry ' .. i)
+		end
+	end)
+	scroll:SetSize(300, 200)
+	scroll:Show()
 
-  if scroll.ScrollFrame then
-    AreEqual(scroll:GetWidth(), 300)
-    AreEqual(scroll:GetHeight(), 200)
-    IsTrue(scroll:GetScrollRange() > 0)
-  end
+	if scroll.ScrollFrame then
+		AreEqual(scroll:GetWidth(), 300)
+		AreEqual(scroll:GetHeight(), 200)
+		IsTrue(scroll:GetScrollRange() > 0)
+	end
 
-  scroll:Release()
+	scroll:Release()
 end
 
 function Tests:ScrollClamp()
-  local scroll = Sushi.Scroll(UIParent, function(scroll)
-    for i = 1, 12 do
-      scroll:Add('RedButton', 'Entry ' .. i)
-    end
-  end)
-  scroll:SetSize(300, 200)
-  scroll:Show()
+	local scroll = Sushi.Scroll(UIParent, function(scroll)
+		for i = 1, 12 do
+			scroll:Add('RedButton', 'Entry ' .. i)
+		end
+	end)
+	scroll:SetSize(300, 200)
+	scroll:Show()
 
-  if scroll.ScrollFrame then
-    scroll:ScrollTo(-50)
-    AreEqual(scroll:GetScroll(), 0)
+	if scroll.ScrollFrame then
+		scroll:ScrollTo(-50)
+		AreEqual(scroll:GetScroll(), 0)
 
-    scroll:ScrollTo(9999)
-    AreEqual(scroll:GetScroll(), scroll:GetScrollRange())
-  end
+		scroll:ScrollTo(9999)
+		AreEqual(scroll:GetScroll(), scroll:GetScrollRange())
+	end
 
-  scroll:Release()
+	scroll:Release()
 end
 
 function Tests:ScrollFit()
-  local scroll = Sushi.Scroll(UIParent, function(scroll)
-    scroll:Add('HelpButton')
-  end)
-  scroll:SetSize(300, 200)
-  scroll:Show()
+	local scroll = Sushi.Scroll(UIParent, function(scroll)
+		scroll:Add('HelpButton')
+	end)
+	scroll:SetSize(300, 200)
+	scroll:Show()
 
-  if scroll.ScrollFrame then
-    AreEqual(scroll:GetScrollRange(), 0)
-  end
+	if scroll.ScrollFrame then
+		AreEqual(scroll:GetScrollRange(), 0)
+	end
 
-  scroll:Release()
+	scroll:Release()
 end
 
 function Tests:FauxScrollOffset()
-  local scroll = Sushi.FauxScroll(UIParent, 3, 27)
-  scroll:SetChildren(function()
-    scroll:SetNumEntries(5)
+	local scroll = Sushi.FauxScroll(UIParent, 3, 27)
+	scroll:SetChildren(function()
+		scroll:SetNumEntries(5)
 
-    for i = scroll:First(), scroll:Last() do
-      scroll:Add('RedButton', 'Entry ' .. i)
-    end
-  end)
+		for i = scroll:First(), scroll:Last() do
+			scroll:Add('RedButton', 'Entry ' .. i)
+		end
+	end)
 
-  if scroll.Scroll then
-    AreEqual(scroll:First(), 1)
+	if scroll.Scroll then
+		AreEqual(scroll:First(), 1)
 
-    scroll.Scroll:SetVerticalScroll(27)
-    AreEqual(scroll:First(), 2)
-    AreEqual(scroll:Last(), 4)
+		scroll.Scroll:SetVerticalScroll(27)
+		AreEqual(scroll:First(), 2)
+		AreEqual(scroll:Last(), 4)
 
-    scroll.Scroll:SetVerticalScroll(54)
-    AreEqual(scroll:First(), 3)
-    AreEqual(scroll:Last(), 5)
-  end
+		scroll.Scroll:SetVerticalScroll(54)
+		AreEqual(scroll:First(), 3)
+		AreEqual(scroll:Last(), 5)
+	end
 
-  scroll:Release()
+	scroll:Release()
 end

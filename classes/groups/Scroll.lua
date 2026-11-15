@@ -56,16 +56,11 @@ end
 
 function Scroll:Reset()
 	self:Super(Scroll):Reset()
-	self.Scroll:SetVerticalScroll(0)
+	self:ScrollTo(0)
 end
 
 
 --[[ Overrides ]]--
-
-function Scroll:UpdateChildren(force)
-	self:Super(Scroll):UpdateChildren(force)
-	self.Scroll:SetVerticalScroll(0)
-end
 
 function Scroll:SetBackdrop(template)
 	self:Super(Scroll):SetBackdrop(template)

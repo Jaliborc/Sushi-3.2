@@ -32,42 +32,20 @@ end
 
 function Canvas:New(parent, source, width,height)
 	local f = self:Super(Canvas):New(parent)
-	f:SetSize(width or self.Size, height or self.Size)
-
-	local region = f:SetSource(source)
-
-	if width or height then
-		width = width or height
-		height = height or width
-	elseif region then
-		width,height = region:GetSize()
-	end
-
+	f:SetSize(width or height or self.Size, height or width or self.Size)
+	f:SetSource(source)
 	return f
 end
 
 
 --[[ API ]]--
 
-function Canvas:SetSize(width,height)
-	self:Super(Canvas):SetSize(width,height)
-	self.width, self.height = width,height
-end
-
-function Canvas:SetWidth(width)
-	self:SetSize(width, self:GetHeight())
-end
-
-function Canvas:SetHeight(height)
-	self:SetSize(self:GetWidth(), height)
-end
-
 function Canvas:SetSource(source)
 	self:Clear()
 	self.source = source
 
 	if type(source) == 'function' then
-		source(self)
+		return source(self)
 	elseif type(source) == 'string' then
 		if self.AtlasInfo(source) then
 			return self:Atlas(source)
@@ -110,7 +88,7 @@ function Canvas:Rect(x,y, width,height, r,g,b,a, rotation)
 	local texture = self:NewTexture()
 	texture:SetColorTexture(self:SourceColor(r,g,b,a))
 
-	return self:ApplyRegion(texture, x,y, width or self.Size, height or width or self.Size, rotation)
+	return self:ApplyRegion(texture, x,y, width,height, rotation)
 end
 
 function Canvas:Circle(x,y, radius, r,g,b,a)
@@ -121,7 +99,7 @@ function Canvas:Texture(path, x,y, width,height, coords, r,g,b,a, rotation)
 	local texture = self:NewTexture()
 	texture:SetTexture(path)
 
-	return self:ApplyRegion(texture, x,y, width or self.Size, height or width or self.Size, rotation, coords, r,g,b,a)
+	return self:ApplyRegion(texture, x,y, width, height, rotation, coords, r,g,b,a)
 end
 
 function Canvas:Atlas(name, x,y, width,height, coords, r,g,b,a, rotation)
@@ -132,9 +110,6 @@ function Canvas:Atlas(name, x,y, width,height, coords, r,g,b,a, rotation)
 	if auto then
 		width = info and info.width or self.Size
 		height = info and info.height or width
-	else
-		width = width or height
-		height = height or width
 	end
 
 	if info then
@@ -170,19 +145,18 @@ function Canvas:NewTexture()
 end
 
 function Canvas:ApplyRegion(region, x,y, width,height, rotation, coords, r,g,b,a)
+	region:SetSize(width or height or self:GetWidth(), height or width or self:GetHeight())
 	region:SetPoint('TOPLEFT', self, 'TOPLEFT', x or 0, -(y or 0))
-	region:SetSize(width, height)
 	region:Show()
-
-	if coords then
-		region:SetTexCoord(coords[1] or coords.left or 0, coords[2] or coords.right or 1,
-		                    coords[3] or coords.top or 0, coords[4] or coords.bottom or 1)
-	else
-		region:SetTexCoord(0,1,0,1)
-	end
 
 	if region.SetRotation then
 		region:SetRotation(rotation and math.rad(rotation) or 0)
+	end
+
+	if region.SetTexCoord then
+		coords = coords or self.None
+		region:SetTexCoord(coords[1] or coords.left or 0, coords[2] or coords.right or 1,
+		                   coords[3] or coords.top or 0, coords[4] or coords.bottom or 1)
 	end
 
 	if region.SetVertexColor then
@@ -205,6 +179,8 @@ end
 
 Canvas.AtlasInfo = C_Texture and C_Texture.GetAtlasInfo and C_Texture.GetAtlasInfo or nop
 Canvas.TemplateInfo = C_XMLUtil and C_XMLUtil.GetTemplateInfo or nop
+
+Canvas.None = {}
 Canvas.Size = 37
 Canvas.Disk = [[Interface\CharacterFrame\TempPortraitAlphaMask]]
 Canvas.Templates = setmetatable({}, {__index = function(t,k)

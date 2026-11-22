@@ -17,14 +17,15 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Icon = LibStub('Sushi-3.2').Check:NewSushi('IconCheck', 1, 'CheckButton')
+local Lib = LibStub('Sushi-3.2')
+local Icon = Lib.Check:NewSushi('IconCheck', 1, 'CheckButton')
 if not Icon then return end
 
 function Icon:Construct()
 	local b = self:Super(Icon):Construct()
-	local icon = b:CreateTexture(nil, 'BACKGROUND')
+	local icon = Lib.Canvas(b)
+	icon:SetFrameLevel(b:GetFrameLevel())
 	icon:SetPoint('LEFT', 2, 2)
-	icon:SetSize(37, 37)
 
 	local normal = b:GetNormalTexture()
 	normal:ClearAllPoints()
@@ -43,11 +44,11 @@ function Icon:New(parent, icon, text)
 end
 
 function Icon:SetIcon(icon)
-	self.Icon:SetTexture(icon)
+	self.Icon:SetSource(icon)
 end
 
 function Icon:GetIcon()
-	return self.Icon:GetTexture()
+	return self.Icon:GetSource()
 end
 
 Icon.WidthOff = 52

@@ -1,0 +1,213 @@
+--[[
+Copyright 2008-2026 João Cardoso
+Sushi is distributed under the terms of the GNU General Public License (or the Lesser GPL).
+This file is part of Sushi.
+
+Sushi is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Sushi is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Sushi. If not, see <http://www.gnu.org/licenses/>.
+--]]
+
+local Canvas = LibStub('Sushi-3.2').Callable:NewSushi('Canvas', 1, 'Frame')
+if not Canvas then return end
+
+
+--[[ Construct ]]--
+
+function Canvas:Construct()
+	local f = self:Super(Canvas):Construct()
+	f.Textures, f.Regions = {}, {}
+	f.numTextures = 0
+	return f
+end
+
+function Canvas:New(parent, source, width,height)
+	local f = self:Super(Canvas):New(parent)
+	f:SetSize(width or self.Size, height or self.Size)
+
+	local region = f:SetSource(source)
+
+	if width or height then
+		width = width or height
+		height = height or width
+	elseif region then
+		width,height = region:GetSize()
+	end
+
+	return f
+end
+
+
+--[[ API ]]--
+
+function Canvas:SetSize(width,height)
+	self:Super(Canvas):SetSize(width,height)
+	self.width, self.height = width,height
+end
+
+function Canvas:SetWidth(width)
+	self:SetSize(width, self:GetHeight())
+end
+
+function Canvas:SetHeight(height)
+	self:SetSize(self:GetWidth(), height)
+end
+
+function Canvas:SetSource(source)
+	self:Clear()
+	self.source = source
+
+	if type(source) == 'function' then
+		source(self)
+	elseif type(source) == 'string' then
+		if self.AtlasInfo(source) then
+			return self:Atlas(source)
+		elseif self.TemplateInfo(source) then
+			return self:Template(source)
+		else
+			return self:Texture(source)
+		end
+	end
+end
+
+function Canvas:GetSource()
+	return self.source
+end
+
+function Canvas:SetDesaturation(amount)
+	self.desaturation = amount
+	for _, texture in ipairs(self.Regions) do
+		texture:SetDesaturation(amount)
+	end
+end
+
+function Canvas:GetDesaturation()
+	return self.desaturation or 1
+end
+
+function Canvas:Clear()
+	for index = 1, self.numTextures do
+		self.Textures[index]:Hide()
+	end
+
+	wipe(self.Regions)
+	self.numTextures, self.source = 0
+end
+
+
+--[[ Regions ]]--
+
+function Canvas:Rect(x,y, width,height, r,g,b,a, rotation)
+	local texture = self:NewTexture()
+	texture:SetColorTexture(self:SourceColor(r,g,b,a))
+
+	return self:ApplyRegion(texture, x,y, width or self.Size, height or width or self.Size, rotation)
+end
+
+function Canvas:Circle(x,y, radius, r,g,b,a)
+	return self:Texture(Canvas.Disk, x - radius, y - radius, radius * 2, radius * 2, nil, r,g,b,a)
+end
+
+function Canvas:Texture(path, x,y, width,height, coords, r,g,b,a, rotation)
+	local texture = self:NewTexture()
+	texture:SetTexture(path)
+
+	return self:ApplyRegion(texture, x,y, width or self.Size, height or width or self.Size, rotation, coords, r,g,b,a)
+end
+
+function Canvas:Atlas(name, x,y, width,height, coords, r,g,b,a, rotation)
+	local texture = self:NewTexture()
+	local info = self.AtlasInfo(name)
+	local auto = not width and not height
+
+	if auto then
+		width = info and info.width or self.Size
+		height = info and info.height or width
+	else
+		width = width or height
+		height = height or width
+	end
+
+	if info then
+		texture:SetAtlas(name, auto)
+	else
+		texture:SetTexture(name)
+	end
+
+	return self:ApplyRegion(texture, x,y, width,height, rotation, coords, r,g,b,a)
+end
+
+function Canvas:Template(name, x,y, width,height)
+	local frame = self.Templates[name]:Acquire()
+	frame:SetFrameLevel(self:GetFrameLevel())
+	frame:SetParent(self)
+
+	return self:ApplyRegion(frame, x,y, width,height)
+end
+
+
+--[[ Helpers ]]--
+
+function Canvas:NewTexture()
+	self.numTextures = self.numTextures + 1
+	local texture = self.Textures[self.numTextures]
+	if not texture then
+		texture = self:CreateTexture(nil, 'ARTWORK', nil, min(self.numTextures-9, 7))
+		self.Textures[self.numTextures] = texture
+	end
+
+	texture:SetDesaturation(self:GetDesaturation())
+	return texture
+end
+
+function Canvas:ApplyRegion(region, x,y, width,height, rotation, coords, r,g,b,a)
+	region:SetPoint('TOPLEFT', self, 'TOPLEFT', x or 0, -(y or 0))
+	region:SetSize(width, height)
+	region:Show()
+
+	if coords then
+		region:SetTexCoord(coords[1] or coords.left or 0, coords[2] or coords.right or 1,
+		                    coords[3] or coords.top or 0, coords[4] or coords.bottom or 1)
+	else
+		region:SetTexCoord(0,1,0,1)
+	end
+
+	if region.SetRotation then
+		region:SetRotation(rotation and math.rad(rotation) or 0)
+	end
+
+	if region.SetVertexColor then
+		region:SetVertexColor(self:SourceColor(r,g,b,a))
+	end
+
+	tinsert(self.Regions, region)
+	return region
+end
+
+function Canvas:SourceColor(r,g,b,a)
+	if type(r) == 'table' then
+		return r[1] or r.r or 1, r[2] or r.g or 1, r[3] or r.b or 1, r[4] or r.a or 1
+	end
+	return r or 1, g or 1, b or 1, a or 1
+end
+
+
+--[[ Properties ]]--
+
+Canvas.AtlasInfo = C_Texture and C_Texture.GetAtlasInfo and C_Texture.GetAtlasInfo or nop
+Canvas.TemplateInfo = C_XMLUtil and C_XMLUtil.GetTemplateInfo or nop
+Canvas.Size = 37
+Canvas.Disk = [[Interface\CharacterFrame\TempPortraitAlphaMask]]
+Canvas.Templates = setmetatable({}, {__index = function(t,k)
+	t[k] = CreateFramePool('Frame', UIParent, k)
+	return t[k]
+end})

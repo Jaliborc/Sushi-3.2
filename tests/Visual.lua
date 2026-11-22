@@ -7,7 +7,8 @@ Panel:Hide()
 Settings.RegisterAddOnCategory(
 	Settings.RegisterCanvasLayoutCategory(Panel, 'Sushi-3.2'))
 
--- Singletons
+
+-- Buttons
 local helpButton = Sushi.HelpButton(Panel)
 helpButton:SetTip('Help', 'An help button.')
 helpButton:SetPoint('TOPLEFT', 10, -10)
@@ -26,6 +27,7 @@ end)
 local grayButton = Sushi.GrayButton(Panel, 'Gray Button')
 grayButton:SetPoint('LEFT', redButton, 'RIGHT', 5, 0)
 
+-- Checks
 local check = Sushi.Check(Panel, 'Check Button')
 check:SetPoint('LEFT', grayButton, 'RIGHT', 5, 0)
 
@@ -44,9 +46,10 @@ expand:SetPoint('LEFT', check, 'RIGHT', 5, 0)
 local icon = Sushi.IconCheck(Panel, 'Interface/Icons/ability_bullrush', 'Icon Check')
 icon:SetPoint('TOPLEFT', color, 'TOPRIGHT', 5, 0)
 
-local glow = Sushi.Glowbox(Panel, 'This is a glow box.')
-glow:SetPoint('BOTTOM', expand, 'TOP', 0, 30)
+local templateIcon = Sushi.IconCheck(Panel, 'EncounterSectionIconTemplate', 'Template Icon')
+templateIcon:SetPoint('TOPLEFT', icon, 'BOTTOMLEFT', 0, -5)
 
+-- Edits
 local boxEdit = Sushi.BoxEdit(Panel, 'Box Edit', 'Some user text')
 boxEdit:SetPoint('TOPLEFT', 20, -75)
 boxEdit:SetCall('OnInput', function(boxEdit, value)
@@ -67,6 +70,7 @@ local dark4 = Sushi.DarkEdit(Panel, 20, '[%s]')
 dark4:SetPoint('LEFT', dark3, 'RIGHT', 5, 0)
 dark4:SetEnabled(false)
 
+-- Inputs
 local slider = Sushi.Slider(Panel, 'Slider', 30)
 slider:SetPoint('TOPLEFT', 20, -130)
 slider:SetRange(0, 100, 'None')
@@ -74,7 +78,6 @@ slider:SetRange(0, 100, 'None')
 local choice = Sushi.DropChoice(Panel, 'Dropdown Choice', 2)
 choice:AddChoices{ {key = 1, text = 'Hi'}, {key = 2, text = 'Hey'}, {key = 3, text = 'Hello'} }
 choice:SetPoint('TOPLEFT', slider, 'TOPRIGHT', 10, -2)
-
 
 -- Groups
 local group = Sushi.Group(Panel)
@@ -124,18 +127,16 @@ faux:SetChildren(function()
 	end
 end)
 
-local options1 = Sushi.OptionsGroup(Panel, 'Options Group')
-options1:SetSubtitle('Parented to an existing frame if you wish. Remove parent to create your own category.')
-options1:SetChildren(function(group)
-	local button = group:Add('RedButton', 'Say Hello')
-	button:SetCall('OnClick', function()
-		print('Hello from the options group!')
-	end)
+local glow = Sushi.Glowbox(Panel, 'This is a glow box.')
+glow:SetPoint('BOTTOM', header2, 'TOP')
 
-	local check = group:Add('Check', 'A demo check')
-	check:SetCall('OnInput', function(check, checked)
-		print('Demo check is now ' .. tostring(checked))
-	end)
+
+-- Options Panels
+local options = Sushi.OptionsGroup(Panel, 'Options Group')
+options:SetSubtitle('Parented to an existing frame if you wish. Remove parent to create your own category.')
+options:SetChildren(function(group)
+	group:Add('RedButton', 'Say Hello')
+	group:Add('Check', 'A demo check')
 
 	local slider = group:Add('Slider', 'A demo slider', 30)
 	slider:SetRange(0, 100, 'None')
@@ -150,27 +151,25 @@ options1:SetChildren(function(group)
 	end)
 end)
 
+Sushi.ScrollingOptions(Panel, 'Scrolling Options'):SetChildren(function(group)
+	group:Add('Header', 'Category One', 'GameFontNormalLarge'):SetKeys {top = 30, bottom = 20}
+	group:Add('RedButton', 'Say Hello')
 
--- Dropdown
-local dropTitle = Sushi.DropButton(Panel, {text = 'Drop Buttons', isTitle = true})
-dropTitle:SetPoint('TOPLEFT', 20, -310)
+	for i = 1, 20 do
+		group:Add('Check', 'Demo check ' .. tostring(i))
+	end
 
-local dropButton1 = Sushi.DropButton(Panel, {text = 'Uncheckable', notCheckable = true})
-dropButton1:SetPoint('TOPLEFT', dropTitle, 'BOTTOMLEFT', 0, 0)
+	group:Add('Header', 'Category Two', 'GameFontNormalLarge'):SetKeys {top = 30, bottom = 20}
 
-local dropButton2 = Sushi.DropButton(Panel, {text = 'Disabled', disabled = true})
-dropButton2:SetPoint('TOPLEFT', dropButton1, 'BOTTOMLEFT', 0, 0)
+	local slider = group:Add('Slider', 'A demo slider', 30)
+	slider:SetRange(0, 100, 'None')
+	slider:SetCall('OnInput', function(slider, value)
+		print('Demo slider is now ' .. tostring(value))
+	end)
 
-local dropButton3 = Sushi.DropButton(Panel, {text = 'Not Radio', isNotRadio = true, func = print})
-dropButton3:SetPoint('TOPLEFT', dropButton2, 'BOTTOMLEFT', 0, 0)
-
-local drop = Sushi.Dropdown(Panel)
-drop:SetPoint('TOPLEFT', dropTitle, 'TOPRIGHT', 15, 0)
-drop:SetChildren(function()
-	drop:Add{ text = 'Dropdown', isTitle = true }
-	drop:Add{ text = 'It Can', isNotRadio = true }
-	drop:Add{ text = 'Do All That', isNotRadio = true, checked = true }
-	drop:Add{ text = 'Dropdowns Do', isNotRadio = true, sublevel = {
-		{text = 'Yeah...'}, {text = 'Even This', sublevel = {{text = 'Forever'}}}} }.bottom = 8
-	drop:Add('RedButton', 'And More').left = 16
+	local choice = group:Add('DropChoice', 'A demo choice', 1)
+	choice:AddChoices{ {key = 1, text = 'First'}, {key = 2, text = 'Second'}, {key = 3, text = 'Third'} }
+	choice:SetCall('OnInput', function(choice, key)
+		print('Demo choice is now ' .. tostring(key))
+	end)
 end)

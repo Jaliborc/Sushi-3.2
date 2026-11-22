@@ -1,120 +1,123 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Explore the classes, inheritance and widget relationships in the Sushi-3.2 World of Warcraft UI library.">
+  <meta name="theme-color" content="#fcfaf8">
+  <title>Sushi documentation</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./atlas.js"></script>
+</head>
+<body>
+  <svg class="symbol-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="i-github" viewBox="0 0 24 24">
+      <path fill="currentColor" stroke="none" d="M12 .8a11.2 11.2 0 0 0-3.54 21.82c.56.1.77-.24.77-.54v-2.1c-3.13.68-3.79-1.33-3.79-1.33-.51-1.31-1.25-1.66-1.25-1.66-1.02-.69.08-.68.08-.68 1.13.08 1.72 1.16 1.72 1.16 1 1.72 2.62 1.22 3.26.94.1-.73.39-1.22.71-1.5-2.5-.28-5.14-1.25-5.14-5.57 0-1.23.44-2.23 1.16-3.02-.12-.28-.5-1.43.11-2.98 0 0 .95-.3 3.08 1.15a10.7 10.7 0 0 1 5.6 0c2.14-1.45 3.08-1.15 3.08-1.15.61 1.55.23 2.7.12 2.98.72.79 1.15 1.79 1.15 3.02 0 4.33-2.64 5.29-5.15 5.57.4.35.76 1.03.76 2.08v3.1c0 .3.2.65.77.54A11.2 11.2 0 0 0 12 .8Z"/>
+    </symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.2"/><path d="m15 15 4 4"/></symbol>
+    <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M5 12h14m-7-7v14"/></symbol>
+    <symbol id="i-fit" viewBox="0 0 24 24"><path d="M9 4H4v5m11-5h5v5M4 15v5h5m11-5v5h-5"/><rect x="9" y="9" width="6" height="6" rx="1"/></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24"><path d="M13 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9Zm0 0v6h6M8 13h8m-8 4h5"/></symbol>
+    <symbol id="i-nodes" viewBox="0 0 24 24"><rect x="3" y="3" width="6" height="6" rx="1"/><rect x="15" y="15" width="6" height="6" rx="1"/><path d="M9 6h6a3 3 0 0 1 3 3v6"/></symbol>
+    <symbol id="i-cursor" viewBox="0 0 24 24"><path d="M12 3v18M3 12h18M9 6l3-3 3 3M9 18l3 3 3-3M6 9l-3 3 3 3m12-6 3 3-3 3"/></symbol>
+    <symbol id="i-external-link" viewBox="0 0 24 24"><path d="M13 5h6v6m0-6-9 9m7-1v5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h5"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+    <symbol id="i-code" viewBox="0 0 24 24"><path d="m8 6-6 6 6 6m8-12 6 6-6 6m-2-15-4 18"/></symbol>
+  </svg>
 
-  <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="Sushi-3.0 : Now with extra wasabi!" />
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand-group">
+        <a href="./" class="brand" aria-label="Sushi documentation home">
+          <img class="brand-mark" src="./sushi-icon.png" width="30" height="30" alt="">
+          <span>Sushi</span>
+        </a>
+        <div class="version-picker">
+          <button id="version-button" class="brand-version" type="button" aria-label="Sushi version 3.2" aria-haspopup="menu" aria-expanded="false" aria-controls="version-menu">
+            <span id="version-number">3.2</span><svg class="icon" aria-hidden="true"><use href="#i-chevron"></use></svg>
+          </button>
+          <div id="version-menu" class="version-menu" role="menu" aria-label="Sushi version" hidden></div>
+        </div>
+      </div>
+      <a class="repo-link" href="https://github.com/Jaliborc/Sushi-3.2" target="_blank" rel="noopener noreferrer">
+        <svg class="icon" aria-hidden="true"><use href="#i-github"></use></svg>
+        GitHub repository
+      </a>
+    </div>
+  </header>
 
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-
-    <title>Sushi-3.0</title>
-  </head>
-
-  <body>
-
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/Jaliborc/Sushi-3.0">View on GitHub</a>
-
-          <h1 id="project_title">Sushi-3.0</h1>
-          <h2 id="project_tagline">Now with extra wasabi!</h2>
-
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/Jaliborc/Sushi-3.0/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/Jaliborc/Sushi-3.0/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
+  <main>
+    <div class="intro">
+      <p>An object-oriented Lua library to build and extend World of Warcraft widgets with composable layouts, custom events, and a chainable API.</p>
+      <div class="stats" aria-label="Graph statistics">
+        <div><strong id="class-count"></strong><span>Classes</span></div>
+        <div><strong id="relationship-count"></strong><span>Relationships</span></div>
+      </div>
     </div>
 
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h2>What is Sushi?</h2>
+    <div class="workspace">
+      <section class="graph" aria-label="Class graph">
+        <div class="graph-toolbar">
+          <div class="search">
+            <svg class="icon" aria-hidden="true"><use href="#i-search"></use></svg>
+            <label for="class-search" class="sr-only">Find a class</label>
+            <input id="class-search" placeholder="Find a class…" type="search" autocomplete="off" aria-controls="search-results" aria-expanded="false" role="combobox" aria-autocomplete="list">
+            <kbd aria-hidden="true">/</kbd>
+            <div id="search-results" role="listbox" hidden></div>
+          </div>
+          <div class="edge-filters" role="group" aria-label="Show relationships">
+            <button type="button" data-filter="all" aria-pressed="true">All<span class="wide-label"> links</span></button>
+            <button type="button" data-filter="inheritance" aria-pressed="false"><i class="line-sample" aria-hidden="true"></i> Inherits</button>
+            <button type="button" data-filter="composition" aria-pressed="false"><i class="line-sample dashed" aria-hidden="true"></i> Uses</button>
+          </div>
+        </div>
 
-<p>Sushi is a GUI framework for the game World of Warcraft, designed to be:</p>
+        <div id="viewport" class="viewport" tabindex="0" aria-label="Interactive class graph. Drag to pan, scroll to zoom, or use the arrow keys and plus or minus.">
+          <div id="world" class="world">
+            <svg id="edges" class="edge-layer" width="1194" height="628" viewBox="0 0 1194 628" aria-label="Class relationships">
+              <defs>
+                <marker id="arrow-composition" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1 6.5 4 1 7" fill="none" stroke="#ba695b" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"/></marker>
+                <marker id="arrow-active" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1 6.5 4 1 7" fill="none" stroke="#b4473b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+              </defs>
+            </svg>
+            <div id="nodes" class="node-layer" aria-label="Classes"></div>
+          </div>
+          <div class="pan-hint" aria-hidden="true">
+            <svg class="icon"><use href="#i-cursor"></use></svg>
+            <span><strong>Drag</strong> to pan <b>·</b> <strong>Scroll</strong> to zoom</span>
+          </div>
+          <div class="zoom-controls" role="group" aria-label="Graph zoom">
+            <button id="zoom-out" type="button" title="Zoom out" aria-label="Zoom out"><svg class="icon" aria-hidden="true"><use href="#i-minus"></use></svg></button>
+            <span id="zoom-level" aria-label="Current zoom"></span>
+            <button id="zoom-in" type="button" title="Zoom in" aria-label="Zoom in"><svg class="icon" aria-hidden="true"><use href="#i-plus"></use></svg></button>
+            <button id="fit" type="button" title="Fit graph" aria-label="Fit graph"><svg class="icon" aria-hidden="true"><use href="#i-fit"></use></svg></button>
+          </div>
+        </div>
 
-<ul>
-<li>Versatile and easily extendable.</li>
-<li>Completely object oriented.</li>
-<li>Similar to Blizzard's API and hence, easy to learn.</li>
-<li>Wrapped in seaweed for extra flavor.</li>
-</ul><h2>Why Sushi?</h2>
-
-<p>Why not? While there are some popular GUI frameworks out there, they tend to share one large problem: instead of being <em>object driven</em>, has it was to expect from a GUI framework, they are <em>data driven</em>.</p>
-
-<p>While it may appear to be an interesting idea, this makes the libraries hardly flexible: they force the developer to follow a given layout. The inexistence of inherence turns the creation of new widget classes into a burdening process. On top of that, they tend to have an incredible high amount of memory, cpu usage and code complexity for how <em>little</em> they achieve.</p>
-
-<p>They become good at just one thing: building configuration menus. Commonly, improperly designed configuration menus, as they are incapable to react to the application needs. Sushi, on the other hand, is good for everything. And even better with soy sauce.</p>
-
-<h2>What's in the Box?</h2>
-
-<p>Basically, Sushi is composed of a collection of frame classes. Here is the complete list as of January 2012:</p>
-
-<p><img src="https://github.com/jaliborc/Sushi-3.0/wiki/Images/Sushi-Graph.png" alt="Tasty"></p>
-
-<h2>How to Use</h2>
-
-<p>For instance, imagine you wish to create a Dropdown. After properly including Sushi in your addon <em>(see below)</em>, simply call the <code>SushiDropdown</code> class:</p>
-
-<pre><code>local myDropdown = SushiDropdown()
-myDropdown:SetPoint('CENTER')
-myDropdown:SetLabel('My Awesome Dropdown')
-
-myDropdown:AddLine('Salmon')
-myDropdown:AddLine('Grouper')
-myDropdown:AddLine('None')
-
-myDropdown:SetCall('OnInput', function(self, v)
-    if v == 'None' then
-        print('Not hungry?')
-    else
-        print('You cannot have it.')
-    end
-end)
-</code></pre>
-
-<h3>Notice!</h3>
-
-<ul>
-<li>All classes are named as in the graph above, but preceded by <code>Sushi</code>.</li>
-<li>All functionality is available as methods, never as attributes.</li>
-<li>
-<code>SetCall</code> work exactly alike the native <code>SetScript</code>, except it is a method defined by Sushi.</li>
-</ul><h2>Installation</h2>
-
-<p>Sushi is installed exactly has any other library for World of Warcraft:</p>
-
-<ol>
-<li>Download <a href="https://github.com/Jaliborc/Sushi-3.0">Sushi</a>, <a href="https://github.com/Jaliborc/Poncho-1.0">Poncho</a> and <a href="https://github.com/p3lim/LibStub">LibStub</a>.</li>
-<li>Include the three folders in the directory of your add-on.</li>
-<li>Add these three lines to your <em>.toc</em> file, before any other loading line:</li>
-</ol><p><code>LibStub\LibStub.lua</code></p>
-
-<p><code>Poncho-1.0\Poncho-1.0.xml</code></p>
-
-<p><code>Sushi-3.0\Sushi-3.0.xml</code></p>
-
-<h2>More Information</h2>
-
-<ul>
-<li>See <a href="https://github.com/Jaliborc/Sushi-3.0/wiki/Class-Reference">Class Reference</a> for a complete list of every class.</li>
-<li>Read the <a href="https://github.com/Jaliborc/Sushi-3.0/wiki/Best-practices">Best Practices</a> section.</li>
-<li>For questions or additional help, post <a href="https://github.com/Jaliborc/Sushi-3.0/issues/new">an issue</a>.</li>
-</ul>
+        <div id="families" class="families" role="group" aria-label="Highlight a class family"></div>
       </section>
+
+      <aside id="inspector" class="inspector" aria-label="Class and relationship reference">
+        <div class="inspector-label">
+          <svg class="icon" aria-hidden="true"><use id="inspector-icon" href="#i-file"></use></svg>
+          <span id="inspector-label">Class reference</span>
+        </div>
+        <div id="inspector-heading" class="inspector-heading"></div>
+        <div class="inspector-tabs" role="tablist" aria-label="Class details">
+          <button id="tab-docs" role="tab" aria-selected="true" aria-controls="details" type="button">Documentation</button>
+          <button id="tab-links" role="tab" aria-selected="false" aria-controls="details" tabindex="-1" type="button">Relationships <span id="link-count"></span></button>
+        </div>
+        <div id="details" class="inspector-content" role="tabpanel" aria-labelledby="tab-docs" tabindex="0"></div>
+        <footer class="inspector-footer" id="inspector-footer"></footer>
+      </aside>
     </div>
 
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">Sushi-3.0 maintained by <a href="https://github.com/Jaliborc">Jaliborc</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
-      </footer>
+    <div class="page-footer">
+      <span><span id="source-version">Sushi-3.2</span> <span class="divider">/</span> <a id="commit-link" target="_blank" rel="noopener noreferrer"></a></span>
+      <span class="footer-byline">By João L. Cardoso</span>
     </div>
-
-    
-
-  </body>
+  </main>
+  <div id="announcement" class="sr-only" role="status" aria-live="polite"></div>
+</body>
 </html>

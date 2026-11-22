@@ -7,12 +7,11 @@
 
 An object-oriented Lua library to build and extend World of Warcraft widgets with composable layouts, custom events, and a chainable API.
 
-[**Browse the interactive class reference**](https://jaliborc.github.io/Sushi-3.2/) · Explore classes, inheritance, and widget relationships.
-
-Requires [LibStub](https://www.wowace.com/projects/libstub) and [Poncho-2.0](https://github.com/jaliborc/poncho-2.0).
+> [**Browse the interactive class reference**](https://jaliborc.github.io/Sushi-3.2/) · Explore classes, inheritance, and widget relationships.
 
 ## How to Use
-Create a dropdown choice menu with `Sushi.DropChoice`.
+Sushi requires [LibStub](https://www.wowace.com/projects/libstub) and [Poncho-2.0](https://github.com/jaliborc/poncho-2.0), so first make sure you have both installed or embedded in you addon.  
+Here's an example - you can create a dropdown choice menu with `LibStub('Sushi-3.2').DropChoice`:
 
 ```lua
 local menu = LibStub('Sushi-3.2').DropChoice(MyParent, 'Choose your Sushi', 'salmon')
@@ -37,5 +36,5 @@ end)
 * `SetCall` works much like the native `SetScript`, except it is a method defined by the library. Multiple functions can be assigned to a single event.
 * If you release the frame `menu`, all attributes assigned to it and properties modified through class methods will be cleared.
 
-## :warning: Reminder!
+## Reminder
 If you use this library, please list it as one of your dependencies in the CurseForge admin system. It's a big help! :+1:

@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Canvas = LibStub('Sushi-3.2').Callable:NewSushi('Canvas', 1, 'Frame')
+local Canvas = LibStub('Sushi-3.2').Backdrop:NewSushi('Canvas', 1, 'Frame')
 if not Canvas then return end
 
 
@@ -165,9 +165,6 @@ end
 
 --[[ Properties ]]--
 
-Canvas.AtlasInfo = C_Texture and C_Texture.GetAtlasInfo and C_Texture.GetAtlasInfo or nop
-Canvas.TextureInfo = C_UIFileAsset and C_UIFileAsset.IsKnownFile or nop
-
+Canvas.Disk = [[Interface\CharacterFrame\TempPortraitAlphaMask]]
 Canvas.None = {}
 Canvas.Size = 37
-Canvas.Disk = [[Interface\CharacterFrame\TempPortraitAlphaMask]]

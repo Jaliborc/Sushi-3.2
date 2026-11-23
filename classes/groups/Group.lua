@@ -18,7 +18,7 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
 local Lib = LibStub('Sushi-3.2')
-local Group = Lib.Callable:NewSushi('Group', 5, 'Frame')
+local Group = Lib.Backdrop:NewSushi('Group', 5, 'Frame')
 if not Group then return end
 
 
@@ -33,15 +33,14 @@ function Group:Construct()
 	return f
 end
 
-function Group:New(parent, children)
-	local f = self:Super(Group):New(parent)
+function Group:New(parent, children, backdrop)
+	local f = self:Super(Group):New(parent, backdrop)
 	f:SetSize(self.Size, self.Size)
 	f:SetChildren(children)
 	return f
 end
 
 function Group:Reset()
-	self:SetBackdrop(nil)
 	self:ReleaseChildren()
 	self:Super(Group):Reset()
 end
@@ -224,55 +223,9 @@ function Group:GetLimit()
 end
 
 
---[[ Backdrop ]]--
-
-function Group:SetBackdrop(backdrop)
-	if self.pool then
-		self.pool:Release(self.bg)
-	end
-
-	local legacy = type(backdrop) == 'table'
-	local template = legacy and 'BackdropTemplate' or type(backdrop) == 'string' and backdrop
-
-	if template then
-		local pool = self.Pools[template] or CreateFramePool('Frame', UIParent, template)
-		local bg = pool:Acquire()
-		bg:SetParent(self)
-		bg:SetFrameLevel(self:GetFrameLevel())
-		bg:SetPoint('BOTTOMRIGHT', 0, -10)
-		bg:SetPoint('TOPLEFT', 0, 10)
-		bg:EnableMouse(true)
-		bg:Show()
-
-		self.pool, self.bg = pool, bg
-		self.Pools[template] = pool
-	else
-		self.pool, self.bg = nil
-	end
-
-	if legacy then
-		self.bg:SetBackdrop(backdrop)
-		self.bg:SetBackdropColor(backdrop.color:GetRGBA())
-		self.bg:SetBackdropBorderColor(backdrop.edgeColor:GetRGBA())
-	end
-
-	self.backdrop = backdrop
-	return self
-end
-
-function Group:GetBackdrop()
-	return self.backdrop
-end
-
-function Group:GetBackdropRegion()
-	local bg = self.bg
-	return bg and (bg.NineSlice and bg.NineSlice.Center or bg.Bg or bg) or self
-end
-
-
 --[[ Properties ]]--
 
 Group.orientation, Group.resizing = 'VERTICAL', 'VERTICAL'
 Group.Update = Group.UpdateChildren
-Group.Pools, Group.Break = {}, {}
+Group.Break = {}
 Group.Size = 200

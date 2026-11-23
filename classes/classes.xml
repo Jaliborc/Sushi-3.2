@@ -26,6 +26,7 @@
 	<Script file="edits\Dark.lua"/>
 
 	<!-- Misc -->
+	<Script file="misc\Backdrop.lua"/>
 	<Script file="misc\Canvas.lua"/>
 	<Script file="misc\Glowbox.lua"/>
 	<Script file="misc\Slider.lua"/>

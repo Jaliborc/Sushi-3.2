@@ -18,7 +18,7 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
 local Lib = LibStub('Sushi-3.2')
-local Group = Lib.Callable:NewSushi('Group', 4, 'Frame')
+local Group = Lib.Callable:NewSushi('Group', 5, 'Frame')
 if not Group then return end
 
 
@@ -226,13 +226,15 @@ end
 
 --[[ Backdrop ]]--
 
-function Group:SetBackdrop(template)
+function Group:SetBackdrop(backdrop)
 	if self.pool then
 		self.pool:Release(self.bg)
 	end
 
-	if template and template ~= 'NONE' then -- backwards compatibility
-		local template = self.Backdrops[template] or template -- backwards compatibility
+	local legacy = type(backdrop) == 'table'
+	local template = legacy and 'BackdropTemplate' or type(backdrop) == 'string' and backdrop
+
+	if template then
 		local pool = self.Pools[template] or CreateFramePool('Frame', UIParent, template)
 		local bg = pool:Acquire()
 		bg:SetParent(self)
@@ -248,7 +250,14 @@ function Group:SetBackdrop(template)
 		self.pool, self.bg = nil
 	end
 
-	self.backdrop = template
+	if legacy then
+		self.bg:SetBackdrop(backdrop)
+		self.bg:SetBackdropColor(backdrop.color:GetRGBA())
+		self.bg:SetBackdropBorderColor(backdrop.edgeColor:GetRGBA())
+	end
+
+	self.backdrop = backdrop
+	return self
 end
 
 function Group:GetBackdrop()
@@ -267,6 +276,3 @@ Group.orientation, Group.resizing = 'VERTICAL', 'VERTICAL'
 Group.Update = Group.UpdateChildren
 Group.Pools, Group.Break = {}, {}
 Group.Size = 200
-Group.Backdrops = { -- backwards compatibility
-	DIALOG  = 'DialogBorderDarkTemplate',
-	TOOLTIP = 'TooltipBackdropTemplate'}

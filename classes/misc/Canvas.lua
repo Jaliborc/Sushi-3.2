@@ -26,7 +26,6 @@ if not Canvas then return end
 function Canvas:Construct()
 	local f = self:Super(Canvas):Construct()
 	f.Textures, f.Regions = {}, {}
-	f.numTextures = 0
 	return f
 end
 
@@ -49,10 +48,10 @@ function Canvas:SetSource(source)
 	elseif type(source) == 'string' then
 		if self.AtlasInfo(source) then
 			return self:Atlas(source)
-		elseif self.TemplateInfo(source) then
-			return self:Template(source)
-		else
+		elseif self.TextureInfo(source) then
 			return self:Texture(source)
+		else
+			return self:Text(source)
 		end
 	end
 end
@@ -73,8 +72,8 @@ function Canvas:GetDesaturation()
 end
 
 function Canvas:Clear()
-	for index = 1, self.numTextures do
-		self.Textures[index]:Hide()
+	for i, region in ipairs(self.Regions) do
+		region:Hide()
 	end
 
 	wipe(self.Regions)
@@ -106,29 +105,18 @@ function Canvas:Atlas(name, x,y, width,height, coords, r,g,b,a, rotation)
 	local texture = self:NewTexture()
 	local info = self.AtlasInfo(name)
 	local auto = not width and not height
-
 	if auto then
-		width = info and info.width or self.Size
-		height = info and info.height or width
+		width = info and info.width 
+		height = info and info.height
 	end
 
-	if info then
-		texture:SetAtlas(name, auto)
-	else
-		texture:SetTexture(name)
-	end
-
+	texture:SetAtlas(name, auto)
 	return self:ApplyRegion(texture, x,y, width,height, rotation, coords, r,g,b,a)
 end
 
-function Canvas:Template(name, x,y, width,height)
-	local frame = self.Templates[name]:Acquire()
-	frame:SetFrameLevel(self:GetFrameLevel())
-	frame:SetParent(self)
-
-	return self:ApplyRegion(frame, x,y, width,height)
+function Canvas:Text() -- todo implement FontString creation and management
+	
 end
-
 
 --[[ Helpers ]]--
 
@@ -178,12 +166,8 @@ end
 --[[ Properties ]]--
 
 Canvas.AtlasInfo = C_Texture and C_Texture.GetAtlasInfo and C_Texture.GetAtlasInfo or nop
-Canvas.TemplateInfo = C_XMLUtil and C_XMLUtil.GetTemplateInfo or nop
+Canvas.TextureInfo = C_UIFileAsset and C_UIFileAsset.IsKnownFile or nop
 
 Canvas.None = {}
 Canvas.Size = 37
 Canvas.Disk = [[Interface\CharacterFrame\TempPortraitAlphaMask]]
-Canvas.Templates = setmetatable({}, {__index = function(t,k)
-	t[k] = CreateFramePool('Frame', UIParent, k)
-	return t[k]
-end})

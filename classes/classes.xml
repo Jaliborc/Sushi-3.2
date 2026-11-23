@@ -12,6 +12,7 @@
 	<Script file="buttons\Gray.lua"/>
 	<Script file="buttons\Header.lua"/>
 	<Script file="buttons\ExpandHeader.lua"/>
+	<Script file="buttons\ChoiceButton.lua"/>
 
 	<!-- CheckButtons -->
 	<Script file="checks\Check.lua"/>
@@ -25,7 +26,7 @@
 	<Script file="edits\Dark.lua"/>
 
 	<!-- Misc -->
-	<Script file="core\Canvas.lua"/>
+	<Script file="misc\Canvas.lua"/>
 	<Script file="misc\Glowbox.lua"/>
 	<Script file="misc\Slider.lua"/>
 

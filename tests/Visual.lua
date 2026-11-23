@@ -7,11 +7,19 @@ Panel:Hide()
 Settings.RegisterAddOnCategory(
 	Settings.RegisterCanvasLayoutCategory(Panel, 'Sushi-3.2'))
 
+-- Header
+local title = Sushi.Header(Panel, 'Widget Examples', GameFontHighlightHuge, 6)
+title:SetPoint('TOPLEFT', 7, -22)
+Panel:HookScript('OnSizeChanged', function()
+	if Panel:GetWidth() > 0 then
+		title:UpdateWidth()
+	end
+end)
 
 -- Buttons
 local helpButton = Sushi.HelpButton(Panel)
 helpButton:SetTip('Help', 'An help button.')
-helpButton:SetPoint('TOPLEFT', 10, -10)
+helpButton:SetPoint('TOPLEFT', 10, -61)
 helpButton:SetText('Hello')
 
 local redButton = Sushi.RedButton(Panel, 'Red Button')
@@ -33,7 +41,7 @@ check:SetPoint('LEFT', grayButton, 'RIGHT', 5, 0)
 
 local check2 = Sushi.Check(Panel)
 check2:SetText('A really long disabled button')
-check2:SetPoint('TOPLEFT', 10, -36)
+check2:SetPoint('TOPLEFT', 10, -87)
 check2:SetEnabled(false)
 check2:SetChecked(true)
 
@@ -46,12 +54,9 @@ expand:SetPoint('LEFT', check, 'RIGHT', 5, 0)
 local icon = Sushi.IconCheck(Panel, 'Interface/Icons/ability_bullrush', 'Icon Check')
 icon:SetPoint('TOPLEFT', color, 'TOPRIGHT', 5, 0)
 
-local templateIcon = Sushi.IconCheck(Panel, 'EncounterSectionIconTemplate', 'Template Icon')
-templateIcon:SetPoint('TOPLEFT', icon, 'BOTTOMLEFT', 0, -5)
-
 -- Edits
 local boxEdit = Sushi.BoxEdit(Panel, 'Box Edit', 'Some user text')
-boxEdit:SetPoint('TOPLEFT', 20, -75)
+boxEdit:SetPoint('TOPLEFT', 20, -126)
 boxEdit:SetCall('OnInput', function(boxEdit, value)
 	print('Box edit changed value to ' .. value)
 end)
@@ -72,7 +77,7 @@ dark4:SetEnabled(false)
 
 -- Inputs
 local slider = Sushi.Slider(Panel, 'Slider', 30)
-slider:SetPoint('TOPLEFT', 20, -130)
+slider:SetPoint('TOPLEFT', 20, -181)
 slider:SetRange(0, 100, 'None')
 
 local choice = Sushi.DropChoice(Panel, 'Dropdown Choice', 2)
@@ -81,7 +86,7 @@ choice:SetPoint('TOPLEFT', slider, 'TOPRIGHT', 10, -2)
 
 -- Groups
 local group = Sushi.Group(Panel)
-group:SetPoint('TOPLEFT', 20, -175)
+group:SetPoint('TOPLEFT', 20, -226)
 group:SetChildren(function()
 	for i = 1, 12 do
 		group:Add('HelpButton').left = 0
@@ -127,8 +132,7 @@ faux:SetChildren(function()
 	end
 end)
 
-local glow = Sushi.Glowbox(Panel, 'This is a glow box.')
-glow:SetPoint('BOTTOM', header2, 'TOP')
+Sushi.Glowbox(header2, 'This is a glow box.', 'TOP', 0,-30)
 
 
 -- Options Panels

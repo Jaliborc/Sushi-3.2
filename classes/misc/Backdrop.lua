@@ -18,7 +18,7 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
 local Lib = LibStub('Sushi-3.2')
-local Backdrop = Lib.Callable:NewSushi('Backdrop', 1, 'Frame')
+local Backdrop = Lib.Callable:NewSushi('Backdrop', 2, 'Frame')
 if not Backdrop then return end
 
 
@@ -42,11 +42,11 @@ end
 
 function Backdrop:SetBackdrop(backdrop)
 	if self.pool then
-		self.pool:Release(self.proxy)
+		self.pool:Release(self.bg)
 	end
 
 	self.backdrop = backdrop
-	self.pool, self.proxy = nil
+	self.pool, self.bg = nil
 	self.Bg:SetTexture(nil)
 
 	local legacy = type(backdrop) == 'table'
@@ -67,19 +67,17 @@ function Backdrop:SetBackdrop(backdrop)
 		local bg = pool:Acquire()
 		bg:SetParent(self)
 		bg:SetFrameLevel(self:GetFrameLevel())
-		bg:SetPoint('BOTTOMRIGHT', 0, -10)
-		bg:SetPoint('TOPLEFT', 0, 10)
-		bg:EnableMouse(true)
+		bg:SetAllPoints()
 		bg:Show()
 
-		self.pool, self.proxy = pool, bg
+		self.pool, self.bg = pool, bg
 		self.Pools[template] = pool
 	end
 
 	if legacy then
-		self.proxy:SetBackdrop(backdrop)
-		self.proxy:SetBackdropColor(backdrop.color:GetRGBA())
-		self.proxy:SetBackdropBorderColor(backdrop.edgeColor:GetRGBA())
+		self.bg:SetBackdrop(backdrop)
+		self.bg:SetBackdropColor(backdrop.color:GetRGBA())
+		self.bg:SetBackdropBorderColor(backdrop.edgeColor:GetRGBA())
 	end
 
 	return self

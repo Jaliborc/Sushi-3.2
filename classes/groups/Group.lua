@@ -134,6 +134,8 @@ function Group:Layout(force)
 		return
 	end
 
+	local px = self.paddingLeft + self.paddingRight
+	local py = self.paddingTop + self.paddingBottom
 	local w, h, x, y = 0, 0, 0, 0
 	local function breakLine()
 		y = y + h
@@ -149,9 +151,9 @@ function Group:Layout(force)
 
 			if child.centered then
 				if self:GetResizing() == 'HORIZONTAL' then
-					top = (self:GetHeight() - child:GetHeight()) / 2
+					top = (self:GetHeight() - child:GetHeight() - py) / 2
 				else
-					left = (self:GetWidth() - child:GetWidth()) / 2
+					left = (self:GetWidth() - child:GetWidth() - px) / 2
 				end
 			end
 
@@ -164,7 +166,7 @@ function Group:Layout(force)
 
 			local a,b = self:Orient(x + left, y + top)
 			child:ClearAllPoints()
-			child:SetPoint('TOPLEFT', a, -b)
+			child:SetPoint('TOPLEFT', self.paddingLeft + a, -self.paddingTop - b)
 
 			h = max(h, height)
 			x = x + width
@@ -175,10 +177,10 @@ function Group:Layout(force)
 
 	x, y = self:Orient(max(x, w), y + h)
 	if self:GetResizing() == 'HORIZONTAL' then
-		self:GetContent():SetSize(x, max(y, self:GetHeight()))
+		self:GetContent():SetSize(x+px, max(y+py, self:GetHeight()))
 		self:FireCalls('OnResize')
 	elseif self:GetResizing() == 'VERTICAL' then
-		self:GetContent():SetSize(max(x, self:GetWidth()), y)
+		self:GetContent():SetSize(max(x+px, self:GetWidth()), y+py)
 		self:FireCalls('OnResize')
 	end
 end
@@ -219,12 +221,15 @@ function Group:GetResizing()
 end
 
 function Group:GetLimit()
-	return self:GetResizing() ~= self:GetOrientation() and self:Orient(self:GetSize())
+	return max(0, self:GetResizing() ~= self:GetOrientation() and self:Orient(
+		self:GetWidth() - self.paddingLeft - self.paddingRight,
+		self:GetHeight() - self.paddingTop - self.paddingBottom))
 end
 
 
 --[[ Properties ]]--
 
+Group.paddingTop, Group.paddingBottom, Group.paddingLeft, Group.paddingRight = 10,10,0,0
 Group.orientation, Group.resizing = 'VERTICAL', 'VERTICAL'
 Group.Update = Group.UpdateChildren
 Group.Break = {}

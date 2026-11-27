@@ -1,4 +1,4 @@
-local Header = LibStub('Sushi-3.2').Clickable:NewSushi('ExpandHeader', 1, 'Button', 'SettingsExpandableSectionTemplate')
+local Header = LibStub('Sushi-3.3').Clickable:NewSushi('ExpandHeader', 1, 'Button', 'SettingsExpandableSectionTemplate')
 if not Header then return end
 
 

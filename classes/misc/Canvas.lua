@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Canvas = LibStub('Sushi-3.2').Backdrop:NewSushi('Canvas', 1, 'Frame')
+local Canvas = LibStub('Sushi-3.3').Backdrop:NewSushi('Canvas', 1, 'Frame')
 if not Canvas then return end
 
 
@@ -25,7 +25,7 @@ if not Canvas then return end
 
 function Canvas:Construct()
 	local f = self:Super(Canvas):Construct()
-	f.Textures, f.Regions = {}, {}
+	f.Textures, f.FontStrings, f.Regions = {}, {}, {}
 	return f
 end
 
@@ -62,8 +62,10 @@ end
 
 function Canvas:SetDesaturation(amount)
 	self.desaturation = amount
-	for _, texture in ipairs(self.Regions) do
-		texture:SetDesaturation(amount)
+	for _, region in ipairs(self.Regions) do
+		if region.SetDesaturation then
+			region:SetDesaturation(amount)
+		end
 	end
 end
 
@@ -77,7 +79,7 @@ function Canvas:Clear()
 	end
 
 	wipe(self.Regions)
-	self.numTextures, self.source = 0
+	self.numTextures, self.numFontStrings, self.source = 0, 0
 end
 
 
@@ -114,22 +116,59 @@ function Canvas:Atlas(name, x,y, width,height, coords, r,g,b,a, rotation)
 	return self:ApplyRegion(texture, x,y, width,height, rotation, coords, r,g,b,a)
 end
 
-function Canvas:Text() -- todo implement FontString creation and management
-	
+function Canvas:Text(text, x,y, width,height, font, r,g,b,a, justifyH,justifyV)
+	local fontString = self:NewFontString()
+	fontString:SetFontObject(self:ResolveFont(font))
+	fontString:SetText(text or '')
+	fontString:SetJustifyH(justifyH or 'LEFT')
+	fontString:SetJustifyV(justifyV or 'MIDDLE')
+	fontString:SetTextColor(self:SourceColor(r,g,b,a))
+	fontString:SetWidth(width or self:GetWidth())
+	if height then fontString:SetHeight(height) end
+	fontString:ClearAllPoints()
+	fontString:SetPoint('TOPLEFT', self, 'TOPLEFT', x or 0, -(y or 0))
+	fontString:Show()
+
+	tinsert(self.Regions, fontString)
+	return fontString
 end
 
 --[[ Helpers ]]--
 
 function Canvas:NewTexture()
-	self.numTextures = self.numTextures + 1
+	self.numTextures = (self.numTextures or 0) + 1
 	local texture = self.Textures[self.numTextures]
 	if not texture then
-		texture = self:CreateTexture(nil, 'ARTWORK', nil, min(self.numTextures-9, 7))
+		texture = self:CreateTexture(nil, 'ARTWORK', nil, max(0, min(self.numTextures-9, 7)))
 		self.Textures[self.numTextures] = texture
 	end
 
 	texture:SetDesaturation(self:GetDesaturation())
 	return texture
+end
+
+function Canvas:NewFontString()
+	self.numFontStrings = (self.numFontStrings or 0) + 1
+	local fontString = self.FontStrings[self.numFontStrings]
+	if not fontString then
+		fontString = self:CreateFontString(nil, 'ARTWORK')
+		self.FontStrings[self.numFontStrings] = fontString
+	end
+
+	return fontString
+end
+
+function Canvas:ResolveFont(font)
+	if type(font) == 'string' then
+		font = _G[font]
+	end
+
+	local default = self.DefaultFont
+	if type(default) == 'string' then
+		default = _G[default]
+	end
+
+	return font or default or _G.GameFontHighlight
 end
 
 function Canvas:ApplyRegion(region, x,y, width,height, rotation, coords, r,g,b,a)
@@ -165,6 +204,7 @@ end
 
 --[[ Properties ]]--
 
+Canvas.DefaultFont = 'GameFontHighlight'
 Canvas.Disk = [[Interface\CharacterFrame\TempPortraitAlphaMask]]
 Canvas.None = {}
 Canvas.Size = 37

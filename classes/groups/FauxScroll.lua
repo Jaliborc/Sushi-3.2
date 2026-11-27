@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Scroll = LibStub('Sushi-3.2').Group:NewSushi('FauxScroll', 1, 'Frame', nil, true)
+local Scroll = LibStub('Sushi-3.3').Group:NewSushi('FauxScroll', 1, 'Frame', nil, true)
 if not Scroll then return end
 
 

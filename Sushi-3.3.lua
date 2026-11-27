@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Lib = LibStub:NewLibrary('Sushi-3.2', 1)
+local Lib = LibStub:NewLibrary('Sushi-3.3', 1)
 if not Lib then return end
 
 local Base = Lib.Base or LibStub('Poncho-2.0')()
@@ -31,7 +31,7 @@ local function chain(func)
 end
 
 function Base:NewSushi(name, version, type, template, global)
-	local class = Lib[name] or self:NewClass(type, (global or self:GetClassName()) and ('Sushi-3.2-' .. name), template)
+	local class = Lib[name] or self:NewClass(type, (global or self:GetClassName()) and ('Sushi-3.3-' .. name), template)
 	local old = rawget(class, '__version') or 0
 	if old >= version then
 		return

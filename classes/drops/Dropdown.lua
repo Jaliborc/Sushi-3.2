@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Drop, old = LibStub('Sushi-3.2').Group:NewSushi('Dropdown', 5, 'Frame')
+local Drop, old = LibStub('Sushi-3.3').Group:NewSushi('Dropdown', 1, 'Frame')
 if not Drop then return end
 
 

@@ -17,8 +17,8 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Sushi = LibStub('Sushi-3.2')
-local Choice = Sushi.Labeled:NewSushi('DropChoice', 2, 'DropdownButton', 'WowStyle1DropdownTemplate')
+local Sushi = LibStub('Sushi-3.3')
+local Choice = Sushi.Labeled:NewSushi('DropChoice', 1, 'DropdownButton', 'WowStyle1DropdownTemplate')
 if not Choice then return end
 
 

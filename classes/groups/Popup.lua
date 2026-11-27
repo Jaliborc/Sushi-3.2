@@ -17,11 +17,8 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Popup, old = LibStub('Sushi-3.2').Group:NewSushi('Popup', 12)
+local Popup, old = LibStub('Sushi-3.3').Group:NewSushi('Popup', 1)
 if not Popup then return end
-Popup.Active = Popup.Active or {}
-Popup.Size = 420
-Popup.Max = 6
 
 local Magnifier = (WOW_PROJECT_ID == WOW_PROJECT_MAINLINE or WOW_PROJECT_ID == 18) and 'communities-icon-searchmagnifyingglass' or 'shop-games-magnifyingglass'
 local Locale, Go2Browser = GetLocale()
@@ -110,6 +107,7 @@ end
 function Popup:Construct()
 	local f = self:Super(Popup):Construct()
 	f:SetScript('OnKeyDown', f.OnKeyDown)
+	f:EnableMouse(true)
 
 	local money = CreateFrame('Frame', tostring(f)..'MoneyInput', f, 'MoneyInputFrameTemplate')
 	money.top, money.bottom, money.centered = 0, 6, true
@@ -243,3 +241,10 @@ if old <= 10 then
 	hooksecurefunc('StaticPopup_OnHide', function() Popup:Organize() end)
 	hooksecurefunc('StaticPopup_Show', function() Popup:Organize() end)
 end
+
+
+--[[ Properties ]]--
+
+Popup.paddingTop, Popup.paddingBottom = 10,10
+Popup.Active = Popup.Active or {}
+Popup.Size, Popup.Max = 420, 6

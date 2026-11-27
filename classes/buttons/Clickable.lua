@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Clickable = LibStub('Sushi-3.2').Tipped:NewSushi('Clickable', 1)
+local Clickable = LibStub('Sushi-3.3').Tipped:NewSushi('Clickable', 1)
 if not Clickable then return end
 
 function Clickable:Construct()
@@ -31,11 +31,11 @@ function Clickable:Reset()
 	self:SetEnabled(true)
 end
 
-function Clickable:OnClick(button)
+function Clickable:OnClick(mouse)
 	local value = self.GetValue and self:GetValue()
 	PlaySound(self.Sound)
 
-	self:FireCalls('OnClick', button, value)
+	self:FireCalls('OnClick', mouse, value)
 	self:FireCalls('OnInput', value)
 	self:FireCalls('OnUpdate')
 end

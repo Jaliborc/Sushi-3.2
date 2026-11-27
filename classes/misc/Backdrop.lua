@@ -17,8 +17,8 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Lib = LibStub('Sushi-3.2')
-local Backdrop = Lib.Callable:NewSushi('Backdrop', 2, 'Frame')
+local Lib = LibStub('Sushi-3.3')
+local Backdrop = Lib.Callable:NewSushi('Backdrop', 1, 'Frame')
 if not Backdrop then return end
 
 

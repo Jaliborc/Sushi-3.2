@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local MoneyEdit = LibStub('Sushi-3.2').Callable:NewSushi('MoneyEdit', 1, 'Frame')
+local MoneyEdit = LibStub('Sushi-3.3').Callable:NewSushi('MoneyEdit', 1, 'Frame')
 if not MoneyEdit then return end
 
 

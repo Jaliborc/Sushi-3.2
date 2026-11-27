@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Options = LibStub('Sushi-3.2').Group:NewSushi('OptionsGroup', 5, 'Frame')
+local Options = LibStub('Sushi-3.3').Group:NewSushi('OptionsGroup', 1, 'Frame')
 if not Options then return end
 
 

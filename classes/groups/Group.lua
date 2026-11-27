@@ -17,8 +17,8 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Lib = LibStub('Sushi-3.2')
-local Group = Lib.Backdrop:NewSushi('Group', 5, 'Frame')
+local Lib = LibStub('Sushi-3.3')
+local Group = Lib.Backdrop:NewSushi('Group', 1, 'Frame')
 if not Group then return end
 
 
@@ -78,8 +78,8 @@ function Group:Add(object, ...)
 
 	if kind == 'string' then
 		local class = Lib[object]
-		assert(class, 'Sushi-3.2 class `' .. object .. '` was not found.')
-		assert(type(class) == 'table', 'Sushi-3.2 class name `' .. object .. '` is a reserved keyword')
+		assert(class, 'Sushi-3.3 class `' .. object .. '` was not found.')
+		assert(type(class) == 'table', 'Sushi-3.3 class name `' .. object .. '` is a reserved keyword')
 		object = class(self, ...)
 	elseif kind == 'function' then
 		object = object(self, ...)
@@ -221,15 +221,15 @@ function Group:GetResizing()
 end
 
 function Group:GetLimit()
-	return max(0, self:GetResizing() ~= self:GetOrientation() and self:Orient(
-		self:GetWidth() - self.paddingLeft - self.paddingRight,
-		self:GetHeight() - self.paddingTop - self.paddingBottom))
+	return self:GetResizing() ~= self:GetOrientation() and self:Orient(
+		max(0, self:GetWidth() - self.paddingLeft - self.paddingRight),
+		max(0, self:GetHeight() - self.paddingTop - self.paddingBottom))
 end
 
 
 --[[ Properties ]]--
 
-Group.paddingTop, Group.paddingBottom, Group.paddingLeft, Group.paddingRight = 10,10,0,0
+Group.paddingTop, Group.paddingBottom, Group.paddingLeft, Group.paddingRight = 0,0,0,0
 Group.orientation, Group.resizing = 'VERTICAL', 'VERTICAL'
 Group.Update = Group.UpdateChildren
 Group.Break = {}

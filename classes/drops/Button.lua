@@ -17,8 +17,8 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Sushi = LibStub('Sushi-3.2')
-local Button = Sushi.Clickable:NewSushi('DropButton', 4, 'CheckButton', 'UIDropDownMenuButtonTemplate', true)
+local Sushi = LibStub('Sushi-3.3')
+local Button = Sushi.Clickable:NewSushi('DropButton', 1, 'CheckButton', 'UIDropDownMenuButtonTemplate', true)
 if not Button then return end
 
 local Modern = LE_EXPANSION_LEVEL_CURRENT > LE_EXPANSION_WRATH_OF_THE_LICH_KING

@@ -17,8 +17,8 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Sushi = LibStub('Sushi-3.2')
-local Box = Sushi.Callable:NewSushi('Glowbox', 3, 'Frame', 'GlowBoxTemplate', true)
+local Sushi = LibStub('Sushi-3.3')
+local Box = Sushi.Callable:NewSushi('Glowbox', 1, 'Frame', 'GlowBoxTemplate', true)
 if Box then Sushi.HelpTip = Box else return end
 
 local Sides = {'BOTTOM', 'LEFT', 'TOP', 'RIGHT'}

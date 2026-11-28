@@ -22,6 +22,7 @@ if not Lib then return end
 
 local Base = Lib.Base or LibStub('Poncho-2.0')()
 local Meta = Lib.Meta or CopyTable(getmetatable(Base))
+local None = Lib.None or setmetatable({}, {__newindex = function() error('None table is immutable.', 2) end, __metatable = false})
 
 local function chain(func)
 	return function(self,...)
@@ -61,3 +62,4 @@ end
 
 Lib.Base = Base
 Lib.Meta = Meta
+Lib.None = None

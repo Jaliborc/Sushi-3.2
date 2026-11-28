@@ -49,16 +49,18 @@ function Backdrop:SetBackdrop(backdrop)
 	self.pool, self.bg = nil
 	self.Bg:SetTexture(nil)
 
-	local legacy = type(backdrop) == 'table'
-	local template = legacy and 'BackdropTemplate'
+	local isTable = type(backdrop) == 'table'
+	local input = isTable and (backdrop.template or backdrop.atlas or backdrop.texture or 'BackdropTemplate') or backdrop
+	local padding = isTable and backdrop.padding or Lib.None
+	local template
 
-	if type(backdrop) == 'string' then
-		if self.TemplateInfo(backdrop) then
-			template = backdrop
-		elseif self.AtlasInfo(backdrop) then
-			self.Bg:SetAtlas(backdrop)
-		elseif self.TextureInfo(backdrop) then
-			self.Bg:SetTexture(backdrop)
+	if type(input) == 'string' then
+		if self.TemplateInfo(input) then
+			template = input
+		elseif self.AtlasInfo(input) then
+			self.Bg:SetAtlas(input)
+		elseif self.TextureInfo(input) then
+			self.Bg:SetTexture(input)
 		end
 	end
 
@@ -67,19 +69,20 @@ function Backdrop:SetBackdrop(backdrop)
 		local bg = pool:Acquire()
 		bg:SetParent(self)
 		bg:SetFrameLevel(self:GetFrameLevel())
-		bg:SetAllPoints()
 		bg:Show()
+
+		if template == 'BackdropTemplate' then
+			bg:SetBackdrop(backdrop)
+			bg:SetBackdropColor((backdrop.color or HIGHLIGHT_FONT_COLOR):GetRGBA())
+			bg:SetBackdropBorderColor((backdrop.edgeColor or HIGHLIGHT_FONT_COLOR):GetRGBA())
+		end
 
 		self.pool, self.bg = pool, bg
 		self.Pools[template] = pool
 	end
 
-	if legacy then
-		self.bg:SetBackdrop(backdrop)
-		self.bg:SetBackdropColor(backdrop.color:GetRGBA())
-		self.bg:SetBackdropBorderColor(backdrop.edgeColor:GetRGBA())
-	end
-
+	(self.bg or self.Bg):SetPoint('BOTTOMRIGHT', -(padding.right or 0), -(padding.bottom or 0));
+	(self.bg or self.Bg):SetPoint('TOPLEFT', padding.left or 0, padding.top or 0);
 	return self
 end
 

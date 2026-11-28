@@ -116,21 +116,23 @@ function Canvas:Atlas(name, x,y, width,height, coords, r,g,b,a, rotation)
 	return self:ApplyRegion(texture, x,y, width,height, rotation, coords, r,g,b,a)
 end
 
-function Canvas:Text(text, x,y, width,height, font, r,g,b,a, justifyH,justifyV)
-	local fontString = self:NewFontString()
-	fontString:SetFontObject(self:ResolveFont(font))
-	fontString:SetText(text or '')
-	fontString:SetJustifyH(justifyH or 'LEFT')
-	fontString:SetJustifyV(justifyV or 'MIDDLE')
-	fontString:SetTextColor(self:SourceColor(r,g,b,a))
-	fontString:SetWidth(width or self:GetWidth())
-	if height then fontString:SetHeight(height) end
-	fontString:ClearAllPoints()
-	fontString:SetPoint('TOPLEFT', self, 'TOPLEFT', x or 0, -(y or 0))
-	fontString:Show()
+function Canvas:Text(text, x,y, font, width,height, justifyH,justifyV, rotation)
+	local string = self:NewFontString()
+	string:SetFontObject(font or GameFontNormal)
+	string:SetJustifyH(justifyH or 'CENTER')
+	string:SetJustifyV(justifyV or 'MIDDLE')
+	string:SetWidth(width or self:GetWidth())
+	string:SetText(text or '')
 
-	tinsert(self.Regions, fontString)
-	return fontString
+	if height then
+		string:SetHeight(height)
+	end
+
+	string:SetPoint('TOPLEFT', self, 'TOPLEFT', x or 0, -(y or 0))
+	string:Show()
+
+	tinsert(self.Regions, string)
+	return string
 end
 
 --[[ Helpers ]]--
@@ -156,19 +158,6 @@ function Canvas:NewFontString()
 	end
 
 	return fontString
-end
-
-function Canvas:ResolveFont(font)
-	if type(font) == 'string' then
-		font = _G[font]
-	end
-
-	local default = self.DefaultFont
-	if type(default) == 'string' then
-		default = _G[default]
-	end
-
-	return font or default or _G.GameFontHighlight
 end
 
 function Canvas:ApplyRegion(region, x,y, width,height, rotation, coords, r,g,b,a)
@@ -204,7 +193,6 @@ end
 
 --[[ Properties ]]--
 
-Canvas.DefaultFont = 'GameFontHighlight'
 Canvas.Disk = [[Interface\CharacterFrame\TempPortraitAlphaMask]]
 Canvas.None = {}
 Canvas.Size = 37

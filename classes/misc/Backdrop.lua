@@ -81,8 +81,8 @@ function Backdrop:SetBackdrop(backdrop)
 		self.Pools[template] = pool
 	end
 
-	(self.bg or self.Bg):SetPoint('BOTTOMRIGHT', -(padding.right or 0), -(padding.bottom or 0));
-	(self.bg or self.Bg):SetPoint('TOPLEFT', padding.left or 0, padding.top or 0);
+	(self.bg or self.Bg):SetPoint('BOTTOMRIGHT', padding.right or 0, -(padding.bottom or 0));
+	(self.bg or self.Bg):SetPoint('TOPLEFT', -(padding.left or 0), padding.top or 0);
 	return self
 end
 

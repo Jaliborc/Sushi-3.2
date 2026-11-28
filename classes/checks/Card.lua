@@ -52,22 +52,26 @@ function CardCheck:Construct()
 	b.Light, b.Wash = light, wash
 	b.Art, b.Title, b.Text = art, title, text
 	b:SetFontString(title)
-	b:SetScript('OnSizeChanged', b.OnSizeChanged)
+	b:SetScript('OnSizeChanged', b.Layout)
 	b:SetScript('OnDisable', b.UpdateState)
 	b:SetScript('OnEnable', b.UpdateState)
 	return b
 end
 
+function CardCheck:CreateRect(parent, layer, r, g, b, a)
+	local texture = parent:CreateTexture(nil, layer)
+	texture:SetColorTexture(r, g, b, a or 1)
+	return texture
+end
+
 function CardCheck:New(parent, title, text, art, checked, orientation)
 	local b = self:Super(CardCheck):New(parent)
-	b.orientation = orientation or self.orientation
-	b.Art:SetSize(b.Art.Size, b.Art.Size)
-	b.Wash:Hide()
+	b:SetOrientation(orientation)
 	b:SetWidth(b.orientation == 'VERTICAL' and 160 or 320)
 	b:SetText(title or '')
 	b:SetDescription(text)
-	b:SetArt(art)
 	b:SetChecked(checked)
+	b:SetArt(art)
 	return b
 end
 
@@ -76,26 +80,20 @@ end
 
 function CardCheck:OnEnter()
 	self:Super(CardCheck):OnEnter()
-	self.Wash:Show()
 	self:UpdateState()
+	self.Wash:Show()
 end
 
 function CardCheck:OnLeave()
 	self:Super(CardCheck):OnLeave()
-	self.Wash:Hide()
 	self:UpdateState()
+	self.Wash:Hide()
 end
 
 function CardCheck:OnClick(mouse)
 	self:SetChecked(self:GetChecked())
 	self:FireCalls('OnCheck', mouse, self:GetChecked())
 	self:Super(CardCheck):OnClick(mouse)
-end
-
-function CardCheck:OnSizeChanged(width)
-	if self.layoutWidth ~= width then
-		self:Layout()
-	end
 end
 
 
@@ -130,9 +128,6 @@ function CardCheck:GetArt()
 	return self.Art:GetSource()
 end
 
-
---[[ Orientation ]]--
-
 function CardCheck:SetOrientation(orientation)
 	self.orientation = orientation
 	self:Layout()
@@ -153,72 +148,54 @@ function CardCheck:UpdateState()
 	self.Art:SetDesaturation(checked and 0 or 1)
 	self.Check:SetShown(checked)
 	self.Light:SetShown(checked)
-	self.Art:SetAlpha(alpha)
 	self.Check:SetAlpha(alpha)
 	self.Title:SetAlpha(alpha)
 	self.Text:SetAlpha(alpha)
 end
 
-
---[[ Layout ]]--
-
 function CardCheck:Layout()
 	local width = self:GetWidth()
 	local artWidth, artHeight = self.Art:GetSize()
 	local checkWidth, checkHeight = self.Check:GetSize()
-	local vertical = self:GetOrientation() == 'VERTICAL'
-	local words = width - self.Padding * 2
-	if not vertical then
-		words = words - artWidth - self.Gap * 2 - checkWidth
+	local isVertical = self:GetOrientation() == 'VERTICAL'
+	local words = width - 24
+	if not isVertical then
+		words = words - artWidth - 14 * 2 - checkWidth
 	end
 
-	self.layoutWidth = width
-	self.Art:ClearAllPoints()
-	self.Check:ClearAllPoints()
-	self.Title:ClearAllPoints()
-	self.Text:ClearAllPoints()
-
-	self.Title:SetJustifyH(vertical and 'CENTER' or 'LEFT')
-	self.Text:SetJustifyH(vertical and 'CENTER' or 'LEFT')
-	self.Title:SetWidth(math.max(40, words))
-	self.Text:SetWidth(math.max(40, words))
+	self.Title:SetWidth(max(40, words))
+	self.Title:SetJustifyH(isVertical and 'CENTER' or 'LEFT')
+	self.Text:SetJustifyH(isVertical and 'CENTER' or 'LEFT')
 	self.Text:SetPoint('TOPLEFT', self.Title, 'BOTTOMLEFT', 0, -3)
+	self.Text:SetWidth(max(40, words))
 
-	local wordsHeight = self.Title:GetStringHeight() + 3 + self.Text:GetStringHeight()
-	local contentHeight
+	self.Title:ClearAllPoints()
+	self.Check:ClearAllPoints()
+	self.Art:ClearAllPoints()
 
-	if vertical then
+	local textHeight = self.Title:GetStringHeight() + 3 + self.Text:GetStringHeight()
+	local height = isVertical and
+	               artHeight + textHeight + checkHeight + 14 or
+				   math.max(artHeight, textHeight, checkHeight)
+
+	if isVertical then
+		self.Title:SetPoint('TOP', self.Art, 'BOTTOM', 0, -14)
+		self.Check:SetPoint('BOTTOM', 0, 6)
 		self.Art:SetPoint('TOP', 0, -8)
-		self.Title:SetPoint('TOP', self.Art, 'BOTTOM', 0, -self.Gap)
-		self.Check:SetPoint('BOTTOM', 0, 8)
-		contentHeight = artHeight + wordsHeight + checkHeight + self.Gap * 2
 	else
-		contentHeight = math.max(artHeight, wordsHeight, checkHeight)
-		self.Art:SetPoint('LEFT', self.Padding, 0)
-		self.Check:SetPoint('RIGHT', -self.Padding, 0)
-		self.Title:SetPoint('TOPLEFT', self.Padding + artWidth + self.Gap, -8 - math.floor((contentHeight - wordsHeight) / 2))
+		self.Title:SetPoint('TOPLEFT', artWidth + 26, -floor((height - textHeight) / 2 + 8), 0)
+		self.Check:SetPoint('RIGHT', -12, 0)
+		self.Art:SetPoint('LEFT', 12, 0)
 	end
 
-	self:SetHeight(math.floor(contentHeight + 16 + 0.5))
+	self:SetHeight(floor(height + 17))
 	self:FireCalls('OnResize')
-end
-
-
---[[ Helpers ]]--
-
-function CardCheck:CreateRect(parent, layer, r, g, b, a)
-	local texture = parent:CreateTexture(nil, layer)
-	texture:SetColorTexture(r, g, b, a or 1)
-	return texture
 end
 
 
 --[[ Properties ]]--
 
-CardCheck.left, CardCheck.right = 3, 3
 CardCheck.orientation = 'HORIZONTAL'
-CardCheck.Gap = 14
-CardCheck.Padding = 12
 CardCheck.SetLabel, CardCheck.GetLabel = CardCheck.SetText, CardCheck.GetText
 CardCheck.SetValue, CardCheck.GetValue = CardCheck.SetChecked, CardCheck.GetChecked
 CardCheck.ArtBackdrop = {

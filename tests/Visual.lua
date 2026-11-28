@@ -155,57 +155,40 @@ options:SetChildren(function(group)
 	end)
 end)
 
-local sushiCards = {
+local cards = {
 	{'Salmon Nigiri', 'Fresh salmon over rice.', function(art)
-		art:SetSize(64, 64)
-		art:Rect(15, 27, 34, 22, .95, .94, .84)
-		art:Circle(15, 38, 11, .95, .94, .84)
-		art:Circle(49, 38, 11, .95, .94, .84)
-		art:Rect(8, 19, 48, 16, 1, .56, .36):SetDrawLayer('ARTWORK', 1)
+		art:SetSize(74, 64)
+		art:Rect(20, 27, 34, 22, .95, .94, .84)
+		art:Circle(20, 38, 11, .95, .94, .84)
+		art:Circle(54, 38, 11, .95, .94, .84)
+		art:Rect(13, 19, 48, 16, 1, .56, .36)
 
 		for i = 0, 3 do
-			art:Rect(14 + i * 10, 19, 2, 16, 1, .86, .7, -25):SetDrawLayer('ARTWORK', 2)
+			art:Rect(19 + i * 10, 19, 2, 16, 1, .86, .7, -25)
 		end
-	end},
+	end, true},
 	{'Tuna Maki', 'Tuna wrapped in nori.', function(art)
-		art:SetSize(64, 64)
-		art:Circle(32, 32, 25, .24, .42, .31)
-		art:Circle(32, 32, 20, .95, .94, .84):SetDrawLayer('ARTWORK', 1)
-		art:Rect(23, 23, 18, 18, .85, .28, .36, 15):SetDrawLayer('ARTWORK', 2)
-		art:Rect(33, 27, 7, 12, .62, .86, .42, 15):SetDrawLayer('ARTWORK', 3)
+		art:SetSize(74, 64)
+		art:Circle(37, 32, 25, .24, .42, .31)
+		art:Circle(37, 32, 20, .95, .94, .84)
+		art:Rect(28, 23, 18, 18, .85, .28, .36, 15)
+		art:Rect(38, 27, 7, 12, .62, .86, .42, 15)
 	end},
 	{'Tamago Nigiri', 'Sweet Japanese omelette.', function(art)
-		art:SetSize(64, 64)
-		art:Rect(15, 27, 34, 22, .95, .94, .84)
-		art:Circle(15, 38, 11, .95, .94, .84)
-		art:Circle(49, 38, 11, .95, .94, .84)
-		art:Rect(8, 19, 48, 18, 1, .83, .28):SetDrawLayer('ARTWORK', 1)
-		art:Rect(8, 23, 48, 2, 1, .95, .55):SetDrawLayer('ARTWORK', 2)
-		art:Rect(27, 19, 10, 30, .24, .42, .31):SetDrawLayer('ARTWORK', 3)
+		art:SetSize(74, 64)
+		art:Rect(20, 27, 34, 22, .95, .94, .84)
+		art:Circle(20, 38, 11, .95, .94, .84)
+		art:Circle(54, 38, 11, .95, .94, .84)
+		art:Rect(13, 19, 48, 18, 1, .83, .28)
+		art:Rect(13, 23, 48, 2, 1, .95, .55)
+		art:Rect(32, 19, 10, 30, .24, .42, .31)
 	end},
 }
 
-local sushiChecked = {HORIZONTAL = {true, false, false}, VERTICAL = {false, true, false}}
-
-local function addSushiCards(group, orientation)
-	local checked = sushiChecked[orientation]
-	for i, card in ipairs(sushiCards) do
-		local button = group:Add('CardCheck', card[1], card[2], card[3], checked[i], orientation)
-		button:SetCall('OnInput', function(_, value)
-			checked[i] = value
-		end)
-	end
-end
-
 Sushi.ScrollingOptions(Panel, 'Scrolling Options'):SetChildren(function(group)
-	group:Add('Header', 'Category One', 'GameFontNormalLarge'):SetKeys {top = 30, bottom = 20}
+	group:Add('Header', 'Header with GameFontNormalLarge', 'GameFontNormalLarge'):SetKeys {top = 30, bottom = 20}
 	group:Add('RedButton', 'Say Hello')
-
-	for i = 1, 20 do
-		group:Add('Check', 'Demo check ' .. tostring(i))
-	end
-
-	group:Add('Header', 'Category Two', 'GameFontNormalLarge'):SetKeys {top = 30, bottom = 20}
+	group:Add('Check', 'A demo check')
 
 	local choice = group:Add('DropChoice', 'A demo choice', 1)
 	choice:AddChoices{ {key = 1, text = 'First'}, {key = 2, text = 'Second'}, {key = 3, text = 'Third'} }
@@ -220,13 +203,27 @@ Sushi.ScrollingOptions(Panel, 'Scrolling Options'):SetChildren(function(group)
 	end)
 
 	group:Add('Header', 'Horizontal Card Checks', 'GameFontNormalLarge'):SetKeys {top = 30, bottom = 20}
-	addSushiCards(group, 'HORIZONTAL')
+	
+	for i, card in ipairs(cards) do
+		group:Add('CardCheck', card[1], card[2], card[3], card[4], 'HORIZONTAL')
+		     :SetCall('OnInput', function(_, value)
+		     	card[4] = value
+		     end)
+	end
 
 	group:Add('Header', 'Vertical Card Checks', 'GameFontNormalLarge'):SetKeys {top = 30, bottom = 20}
-	local cards = group:Add('Group')
-	cards:SetWidth(math.min(498, math.max(166, group:GetWidth() - group.Gutter)))
-	cards:SetOrientation('HORIZONTAL')
-	cards:SetChildren(function(cards)
-		addSushiCards(cards, 'VERTICAL')
+	
+	local set = group:Add('Group')
+	set:SetKeys {left = 10, bottom = 20}
+	set:SetBackdrop {atlas='options_frame_child', padding={top=3,bottom=3,right=3,left=3}}
+	set:SetOrientation('HORIZONTAL')
+	set:SetResizing('HORIZONTAL')
+	set:SetChildren(function(set)
+		for i, card in ipairs(cards) do
+			set:Add('CardCheck', card[1], card[2], card[3], card[4], 'VERTICAL')
+				:SetCall('OnInput', function(_, value)
+					card[4] = value
+				end)
+		end
 	end)
 end)

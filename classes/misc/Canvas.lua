@@ -25,7 +25,7 @@ if not Canvas then return end
 
 function Canvas:Construct()
 	local f = self:Super(Canvas):Construct()
-	f.Textures, f.FontStrings, f.Regions = {}, {}, {}
+	f.Textures, f.Strings, f.Regions = {}, {}, {}
 	return f
 end
 
@@ -79,7 +79,7 @@ function Canvas:Clear()
 	end
 
 	wipe(self.Regions)
-	self.numTextures, self.numFontStrings, self.source = 0, 0
+	self.numTextures, self.numStrings, self.source = 0, 0
 end
 
 
@@ -93,7 +93,9 @@ function Canvas:Rect(x,y, width,height, r,g,b,a, rotation)
 end
 
 function Canvas:Circle(x,y, radius, r,g,b,a)
-	return self:Texture(Canvas.Disk, x - radius, y - radius, radius * 2, radius * 2, nil, r,g,b,a)
+	local texture = self:Rect(x - radius, y - radius, radius * 2, radius * 2, r,g,b,a)
+	texture:AddMaskTexture(texture.Disk)
+	return texture
 end
 
 function Canvas:Texture(path, x,y, width,height, coords, r,g,b,a, rotation)
@@ -141,27 +143,33 @@ function Canvas:NewTexture()
 	self.numTextures = (self.numTextures or 0) + 1
 	local texture = self.Textures[self.numTextures]
 	if not texture then
-		texture = self:CreateTexture(nil, 'ARTWORK', nil, max(0, min(self.numTextures-9, 7)))
+		texture = self:CreateTexture()
+		texture.Disk = self:CreateMaskTexture()
+		texture.Disk:SetTexture([[Interface\CharacterFrame\TempPortraitAlphaMask]])
+		texture.Disk:SetAllPoints(texture)
+
 		self.Textures[self.numTextures] = texture
 	end
 
 	texture:SetDesaturation(self:GetDesaturation())
+	texture:RemoveMaskTexture(texture.Disk)
 	return texture
 end
 
 function Canvas:NewFontString()
-	self.numFontStrings = (self.numFontStrings or 0) + 1
-	local fontString = self.FontStrings[self.numFontStrings]
-	if not fontString then
-		fontString = self:CreateFontString(nil, 'ARTWORK')
-		self.FontStrings[self.numFontStrings] = fontString
+	self.numStrings = (self.numStrings or 0) + 1
+	local string = self.Strings[self.numStrings]
+	if not string then
+		string = self:CreateFontString()
+		self.Strings[self.numStrings] = string
 	end
 
-	return fontString
+	return string
 end
 
 function Canvas:ApplyRegion(region, x,y, width,height, rotation, coords, r,g,b,a)
 	region:SetSize(width or height or self:GetWidth(), height or width or self:GetHeight())
+	region:SetDrawLayer('ARTWORK', max(-8, min(#self.Regions-8, 7)))
 	region:SetPoint('TOPLEFT', self, 'TOPLEFT', x or 0, -(y or 0))
 	region:Show()
 
@@ -193,6 +201,5 @@ end
 
 --[[ Properties ]]--
 
-Canvas.Disk = [[Interface\CharacterFrame\TempPortraitAlphaMask]]
 Canvas.None = {}
 Canvas.Size = 37

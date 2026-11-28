@@ -167,7 +167,7 @@ local cards = {
 			art:Rect(19 + i * 10, 19, 2, 16, 1, .86, .7, -25)
 		end
 	end, true},
-	{'Tuna Maki', 'Tuna wrapped in nori.', function(art)
+	{'Eel Maki', 'Conger eel and cucumber wrapped in nori.', function(art)
 		art:SetSize(74, 64)
 		art:Circle(37, 32, 25, .24, .42, .31)
 		art:Circle(37, 32, 20, .95, .94, .84)

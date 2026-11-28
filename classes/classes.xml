@@ -18,16 +18,17 @@
 	<Script file="checks\Card.lua"/>
 	<Script file="checks\Expand.lua"/>
 	<Script file="checks\Icon.lua"/>
-	<Script file="checks\Color.lua"/>
 
 	<!-- EditBoxes -->
 	<Script file="edits\Editable.lua"/>
 	<Script file="edits\Box.lua"/>
 	<Script file="edits\Dark.lua"/>
+	<Script file="edits\Money.lua"/>
 
 	<!-- Misc -->
 	<Script file="misc\Backdrop.lua"/>
 	<Script file="misc\Canvas.lua"/>
+	<Script file="misc\Color.lua"/>
 	<Script file="misc\Glowbox.lua"/>
 	<Script file="misc\Slider.lua"/>
 

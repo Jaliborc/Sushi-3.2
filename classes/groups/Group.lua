@@ -18,7 +18,7 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
 local Lib = LibStub('Sushi-3.3')
-local Group = Lib.Backdrop:NewSushi('Group', 2, 'Frame')
+local Group = Lib.Backdrop:NewSushi('Group', 1, 'Frame')
 if not Group then return end
 
 

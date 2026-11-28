@@ -18,7 +18,7 @@ along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
 local Lib = LibStub('Sushi-3.3')
-local Group = Lib.Backdrop:NewSushi('Group', 1, 'Frame')
+local Group = Lib.Backdrop:NewSushi('Group', 2, 'Frame')
 if not Group then return end
 
 
@@ -134,8 +134,6 @@ function Group:Layout(force)
 		return
 	end
 
-	local px = self.paddingLeft + self.paddingRight
-	local py = self.paddingTop + self.paddingBottom
 	local w, h, x, y = 0, 0, 0, 0
 	local function breakLine()
 		y = y + h
@@ -151,9 +149,9 @@ function Group:Layout(force)
 
 			if child.centered then
 				if self:GetResizing() == 'HORIZONTAL' then
-					top = (self:GetHeight() - child:GetHeight() - py) / 2
+					top = (self:GetHeight() - child:GetHeight()) / 2
 				else
-					left = (self:GetWidth() - child:GetWidth() - px) / 2
+					left = (self:GetWidth() - child:GetWidth()) / 2
 				end
 			end
 
@@ -166,7 +164,7 @@ function Group:Layout(force)
 
 			local a,b = self:Orient(x + left, y + top)
 			child:ClearAllPoints()
-			child:SetPoint('TOPLEFT', self.paddingLeft + a, -self.paddingTop - b)
+			child:SetPoint('TOPLEFT', a, -b)
 
 			h = max(h, height)
 			x = x + width
@@ -177,10 +175,10 @@ function Group:Layout(force)
 
 	x, y = self:Orient(max(x, w), y + h)
 	if self:GetResizing() == 'HORIZONTAL' then
-		self:GetContent():SetSize(x+px, max(y+py, self:GetHeight()))
+		self:GetContent():SetSize(x, max(y, self:GetHeight()))
 		self:FireCalls('OnResize')
 	elseif self:GetResizing() == 'VERTICAL' then
-		self:GetContent():SetSize(max(x+px, self:GetWidth()), y+py)
+		self:GetContent():SetSize(max(x, self:GetWidth()), y)
 		self:FireCalls('OnResize')
 	end
 end
@@ -221,15 +219,12 @@ function Group:GetResizing()
 end
 
 function Group:GetLimit()
-	return self:GetResizing() ~= self:GetOrientation() and self:Orient(
-		max(0, self:GetWidth() - self.paddingLeft - self.paddingRight),
-		max(0, self:GetHeight() - self.paddingTop - self.paddingBottom))
+	return self:GetResizing() ~= self:GetOrientation() and self:Orient(self:GetSize())
 end
 
 
 --[[ Properties ]]--
 
-Group.paddingTop, Group.paddingBottom, Group.paddingLeft, Group.paddingRight = 0,0,0,0
 Group.orientation, Group.resizing = 'VERTICAL', 'VERTICAL'
 Group.Update = Group.UpdateChildren
 Group.Break = {}

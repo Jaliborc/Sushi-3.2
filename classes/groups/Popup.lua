@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Sushi. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Popup, old = LibStub('Sushi-3.3').Group:NewSushi('Popup', 1)
+local Popup, old = LibStub('Sushi-3.3').Group:NewSushi('Popup', 2)
 if not Popup then return end
 
 local Magnifier = (WOW_PROJECT_ID == WOW_PROJECT_MAINLINE or WOW_PROJECT_ID == 18) and 'communities-icon-searchmagnifyingglass' or 'shop-games-magnifyingglass'
@@ -166,6 +166,14 @@ function Popup:New(input)
 end
 
 function Popup:Populate()
+	if not self.TopSpacer then
+		self.TopSpacer = CreateFrame('Frame', nil, self)
+		self.BottomSpacer = CreateFrame('Frame', nil, self)
+		self.TopSpacer:SetSize(1, 10)
+		self.BottomSpacer:SetSize(1, 10)
+	end
+
+	self:Add(self.TopSpacer)
 	if self.text then
 		self:Add('Header', self.text, GameFontHighlightLeft):SetJustifyH('CENTER')
 	end
@@ -195,7 +203,10 @@ function Popup:Populate()
 		buttons:SetWidth(136 * ((self.button1 and 1 or 0) + (self.button2 and 1 or 0)))
 		buttons:SetOrientation('HORIZONTAL')
 	end
+
+	self:Add(self.BottomSpacer)
 end
+
 
 function Popup:Accept()
 	self.edit = self.textInput and self.textInput:GetText()
@@ -236,7 +247,7 @@ function Popup:OnKeyDown(key)
 	self:SetPropagateKeyboardInput(true)
 end
 
-if old <= 10 then
+if old == 0 then
 	hooksecurefunc('StaticPopupSpecial_Hide', function() Popup:Organize() end)
 	hooksecurefunc('StaticPopup_OnHide', function() Popup:Organize() end)
 	hooksecurefunc('StaticPopup_Show', function() Popup:Organize() end)
@@ -245,6 +256,5 @@ end
 
 --[[ Properties ]]--
 
-Popup.paddingTop, Popup.paddingBottom = 10,10
 Popup.Active = Popup.Active or {}
 Popup.Size, Popup.Max = 420, 6

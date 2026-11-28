@@ -145,7 +145,7 @@ function Popup:New(input)
 	f.id, f.edit, f.money, f.sound = id, info.editBox, info.moneyInput or info.money, info.close
 	f.button1, f.button2, f.moneyInput, f.hideOnEscape = info.button1, info.button2, info.moneyInput, f.hideOnEscape
 	f.text = (info.text or '') .. (not f.moneyInput and f.money and ('|n'..GetMoneyString(f.money, true)) or '')
-	f:SetBackdrop('DialogBorderDarkTemplate')
+	f:SetBackdrop{template = 'DialogBorderDarkTemplate', padding = {top = 10, bottom = 10}}
 	f:SetCall('OnAccept', info.OnAccept)
 	f:SetCall('OnCancel', info.OnCancel)
 	f:SetChildren(self.Populate)
@@ -236,7 +236,7 @@ function Popup:OnKeyDown(key)
 	self:SetPropagateKeyboardInput(true)
 end
 
-if old <= 10 then
+if old == 0 then
 	hooksecurefunc('StaticPopupSpecial_Hide', function() Popup:Organize() end)
 	hooksecurefunc('StaticPopup_OnHide', function() Popup:Organize() end)
 	hooksecurefunc('StaticPopup_Show', function() Popup:Organize() end)

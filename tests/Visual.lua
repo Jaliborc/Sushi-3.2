@@ -1,11 +1,11 @@
-if not WoWUnit or WoWUnit:HasGroup('Sushi-3.2') then return end
+if not WoWUnit or WoWUnit:HasGroup('Sushi-3.3') then return end
 
-local Sushi = LibStub('Sushi-3.2')
+local Sushi = LibStub('Sushi-3.3')
 local Panel = CreateFrame('Frame', nil, SettingsPanel)
 Panel:Hide()
 
 Settings.RegisterAddOnCategory(
-	Settings.RegisterCanvasLayoutCategory(Panel, 'Sushi-3.2'))
+	Settings.RegisterCanvasLayoutCategory(Panel, 'Sushi-3.3'))
 
 -- Header
 local title = Sushi.Header(Panel, 'Widget Examples', GameFontHighlightHuge, 6)
@@ -19,15 +19,15 @@ end)
 -- Buttons
 local helpButton = Sushi.HelpButton(Panel)
 helpButton:SetTip('Help', 'An help button.')
-helpButton:SetPoint('TOPLEFT', 10, -61)
+helpButton:SetPoint('TOPLEFT', 10, -66)
 helpButton:SetText('Hello')
 
 local redButton = Sushi.RedButton(Panel, 'Red Button')
 redButton:SetPoint('LEFT', helpButton, 'RIGHT', 5, 0)
 redButton:SetCall('OnClick', function()
-	Sushi.Popup {text = 'This is a Popup message.', button1 = OKAY, whileDead = 1, showAlert = 1, exclusive = 1}
+	Sushi.Popup {text = 'This Popup has an alert.', button1 = OKAY, whileDead = 1, showAlert = 1, exclusive = 1}
 	Sushi.Popup {
-		id = 'Unit Test', text = 'This is another Popup.', button1 = OKAY, whileDead = 1,
+		id = 'Unit Test', text = 'This has money.', button1 = OKAY, whileDead = 1,
 		hasEditBox = 1, editBoxWidth = 260, editBoxText = 'With an editbox'
 	}
 end)
@@ -41,7 +41,7 @@ check:SetPoint('LEFT', grayButton, 'RIGHT', 5, 0)
 
 local check2 = Sushi.Check(Panel)
 check2:SetText('A really long disabled button')
-check2:SetPoint('TOPLEFT', 10, -87)
+check2:SetPoint('TOPLEFT', 10, -92)
 check2:SetEnabled(false)
 check2:SetChecked(true)
 
@@ -56,7 +56,7 @@ icon:SetPoint('TOPLEFT', color, 'TOPRIGHT', 5, 0)
 
 -- Edits
 local boxEdit = Sushi.BoxEdit(Panel, 'Box Edit', 'Some user text')
-boxEdit:SetPoint('TOPLEFT', 20, -126)
+boxEdit:SetPoint('TOPLEFT', 20, -131)
 boxEdit:SetCall('OnInput', function(boxEdit, value)
 	print('Box edit changed value to ' .. value)
 end)
@@ -77,7 +77,7 @@ dark4:SetEnabled(false)
 
 -- Inputs
 local slider = Sushi.Slider(Panel, 'Slider', 30)
-slider:SetPoint('TOPLEFT', 20, -181)
+slider:SetPoint('TOPLEFT', 20, -186)
 slider:SetRange(0, 100, 'None')
 
 local choice = Sushi.DropChoice(Panel, 'Dropdown Choice', 2)
@@ -86,7 +86,7 @@ choice:SetPoint('TOPLEFT', slider, 'TOPRIGHT', 10, -2)
 
 -- Groups
 local group = Sushi.Group(Panel)
-group:SetPoint('TOPLEFT', 20, -226)
+group:SetPoint('TOPLEFT', 20, -231)
 group:SetChildren(function()
 	for i = 1, 12 do
 		group:Add('HelpButton').left = 0
@@ -142,16 +142,16 @@ options:SetChildren(function(group)
 	group:Add('RedButton', 'Say Hello')
 	group:Add('Check', 'A demo check')
 
-	local slider = group:Add('Slider', 'A demo slider', 30)
-	slider:SetRange(0, 100, 'None')
-	slider:SetCall('OnInput', function(slider, value)
-		print('Demo slider is now ' .. tostring(value))
-	end)
-
 	local choice = group:Add('DropChoice', 'A demo choice', 1)
 	choice:AddChoices{ {key = 1, text = 'First'}, {key = 2, text = 'Second'}, {key = 3, text = 'Third'} }
 	choice:SetCall('OnInput', function(choice, key)
 		print('Demo choice is now ' .. tostring(key))
+	end)
+
+	local slider = group:Add('Slider', 'A demo slider', 30)
+	slider:SetRange(0, 100, 'None')
+	slider:SetCall('OnInput', function(slider, value)
+		print('Demo slider is now ' .. tostring(value))
 	end)
 end)
 
@@ -165,15 +165,15 @@ Sushi.ScrollingOptions(Panel, 'Scrolling Options'):SetChildren(function(group)
 
 	group:Add('Header', 'Category Two', 'GameFontNormalLarge'):SetKeys {top = 30, bottom = 20}
 
-	local slider = group:Add('Slider', 'A demo slider', 30)
-	slider:SetRange(0, 100, 'None')
-	slider:SetCall('OnInput', function(slider, value)
-		print('Demo slider is now ' .. tostring(value))
-	end)
-
 	local choice = group:Add('DropChoice', 'A demo choice', 1)
 	choice:AddChoices{ {key = 1, text = 'First'}, {key = 2, text = 'Second'}, {key = 3, text = 'Third'} }
 	choice:SetCall('OnInput', function(choice, key)
 		print('Demo choice is now ' .. tostring(key))
+	end)
+
+	local slider = group:Add('Slider', 'A demo slider', 30)
+	slider:SetRange(0, 100, 'None')
+	slider:SetCall('OnInput', function(slider, value)
+		print('Demo slider is now ' .. tostring(value))
 	end)
 end)

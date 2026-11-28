@@ -30,6 +30,7 @@ function Icon:Construct()
 	local normal = b:GetNormalTexture()
 	normal:ClearAllPoints()
 	normal:SetPoint('BOTTOMRIGHT', icon, 10, -10)
+	normal:SetDrawLayer('OVERLAY')
 
 	b.Icon = icon
 	b:SetHeight(45)

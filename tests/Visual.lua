@@ -155,6 +155,48 @@ options:SetChildren(function(group)
 	end)
 end)
 
+local sushiCards = {
+	{'Salmon Nigiri', 'Fresh salmon over rice.', function(art)
+		art:SetSize(64, 64)
+		art:Rect(15, 27, 34, 22, .95, .94, .84)
+		art:Circle(15, 38, 11, .95, .94, .84)
+		art:Circle(49, 38, 11, .95, .94, .84)
+		art:Rect(8, 19, 48, 16, 1, .56, .36):SetDrawLayer('ARTWORK', 1)
+
+		for i = 0, 3 do
+			art:Rect(14 + i * 10, 19, 2, 16, 1, .86, .7, -25):SetDrawLayer('ARTWORK', 2)
+		end
+	end},
+	{'Tuna Maki', 'Tuna wrapped in nori.', function(art)
+		art:SetSize(64, 64)
+		art:Circle(32, 32, 25, .24, .42, .31)
+		art:Circle(32, 32, 20, .95, .94, .84):SetDrawLayer('ARTWORK', 1)
+		art:Rect(23, 23, 18, 18, .85, .28, .36, 15):SetDrawLayer('ARTWORK', 2)
+		art:Rect(33, 27, 7, 12, .62, .86, .42, 15):SetDrawLayer('ARTWORK', 3)
+	end},
+	{'Tamago Nigiri', 'Sweet Japanese omelette.', function(art)
+		art:SetSize(64, 64)
+		art:Rect(15, 27, 34, 22, .95, .94, .84)
+		art:Circle(15, 38, 11, .95, .94, .84)
+		art:Circle(49, 38, 11, .95, .94, .84)
+		art:Rect(8, 19, 48, 18, 1, .83, .28):SetDrawLayer('ARTWORK', 1)
+		art:Rect(8, 23, 48, 2, 1, .95, .55):SetDrawLayer('ARTWORK', 2)
+		art:Rect(27, 19, 10, 30, .24, .42, .31):SetDrawLayer('ARTWORK', 3)
+	end},
+}
+
+local sushiChecked = {HORIZONTAL = {true, false, false}, VERTICAL = {false, true, false}}
+
+local function addSushiCards(group, orientation)
+	local checked = sushiChecked[orientation]
+	for i, card in ipairs(sushiCards) do
+		local button = group:Add('CardCheck', card[1], card[2], card[3], checked[i], orientation)
+		button:SetCall('OnInput', function(_, value)
+			checked[i] = value
+		end)
+	end
+end
+
 Sushi.ScrollingOptions(Panel, 'Scrolling Options'):SetChildren(function(group)
 	group:Add('Header', 'Category One', 'GameFontNormalLarge'):SetKeys {top = 30, bottom = 20}
 	group:Add('RedButton', 'Say Hello')
@@ -175,5 +217,16 @@ Sushi.ScrollingOptions(Panel, 'Scrolling Options'):SetChildren(function(group)
 	slider:SetRange(0, 100, 'None')
 	slider:SetCall('OnInput', function(slider, value)
 		print('Demo slider is now ' .. tostring(value))
+	end)
+
+	group:Add('Header', 'Horizontal Card Checks', 'GameFontNormalLarge'):SetKeys {top = 30, bottom = 20}
+	addSushiCards(group, 'HORIZONTAL')
+
+	group:Add('Header', 'Vertical Card Checks', 'GameFontNormalLarge'):SetKeys {top = 30, bottom = 20}
+	local cards = group:Add('Group')
+	cards:SetWidth(math.min(498, math.max(166, group:GetWidth() - group.Gutter)))
+	cards:SetOrientation('HORIZONTAL')
+	cards:SetChildren(function(cards)
+		addSushiCards(cards, 'VERTICAL')
 	end)
 end)

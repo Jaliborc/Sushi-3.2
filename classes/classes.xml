@@ -12,10 +12,10 @@
 	<Script file="buttons\Gray.lua"/>
 	<Script file="buttons\Header.lua"/>
 	<Script file="buttons\ExpandHeader.lua"/>
-	<Script file="buttons\ChoiceButton.lua"/>
 
 	<!-- CheckButtons -->
 	<Script file="checks\Check.lua"/>
+	<Script file="checks\Card.lua"/>
 	<Script file="checks\Expand.lua"/>
 	<Script file="checks\Icon.lua"/>
 	<Script file="checks\Color.lua"/>
